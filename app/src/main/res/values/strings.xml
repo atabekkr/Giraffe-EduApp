@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Giraffe</string>
+    <string name="save">Save</string>
+    <string name="login_title1">What is your name?</string>
+    <string name="login_title2">Please write your name so we can get to know each other better!</string>
+    <string name="login_hint_text">Write your name</string>
+    <string name="welcome_to_school_education">Welcome to school education.</string>
+</resources>
