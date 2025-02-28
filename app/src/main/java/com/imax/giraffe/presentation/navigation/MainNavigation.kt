@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.imax.giraffe.presentation.screen.HomeScreen
+import com.imax.giraffe.presentation.screen.ListeningTestScreen
 import com.imax.giraffe.presentation.screen.LoginScreen
 import kotlinx.serialization.Serializable
 
@@ -15,12 +16,15 @@ sealed class Screen {
 
     @Serializable
     data object Home : Screen()
+
+    @Serializable
+    data object ListeningTest : Screen()
 }
 
 @Composable
 fun MainNav(
     modifier: Modifier = Modifier,
-    navHostController: NavHostController,
+    navHostController: NavHostController
 ) {
     NavHost(
         modifier = modifier,
@@ -33,7 +37,12 @@ fun MainNav(
             }
         }
         composable<Screen.Home> {
-            HomeScreen()
+            HomeScreen { navigateTo ->
+                navHostController.navigate(navigateTo)
+            }
+        }
+        composable<Screen.ListeningTest> {
+            ListeningTestScreen()
         }
     }
 }

@@ -33,11 +33,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.imax.giraffe.R
+import com.imax.giraffe.presentation.navigation.Screen
 import com.imax.giraffe.presentation.ui.theme.gray
 import com.imax.giraffe.presentation.ui.theme.grayTypography
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
+fun HomeScreen(
+    modifier: Modifier = Modifier,
+    onNavigateToHome: (Screen) -> Unit
+) {
     Column(
         modifier = modifier
             .paint(
@@ -155,7 +159,12 @@ fun HomeScreen(modifier: Modifier = Modifier) {
         ) {
             Card(
                 colors = CardDefaults.cardColors(containerColor = Color.White),
-                shape = RoundedCornerShape(20.dp)
+                shape = RoundedCornerShape(20.dp),
+                onClick = {
+                    onNavigateToHome.invoke(
+                        Screen.ListeningTest
+                    )
+                }
             ) {
                 Column(
                     modifier = Modifier.padding(bottom = 16.dp)
