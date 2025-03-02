@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.imax.giraffe.R
 import com.imax.giraffe.presentation.navigation.Screen
-import com.imax.giraffe.presentation.ui.components.OutlinedTextField
+import com.imax.giraffe.presentation.ui.components.MyOutlinedTextField
 import com.imax.giraffe.presentation.ui.components.StandardButton
 import com.imax.giraffe.presentation.ui.theme.grayTypography
 import com.imax.giraffe.presentation.ui.theme.mainTypography
@@ -56,7 +56,7 @@ fun LoginScreen(
             ),
             textAlign = TextAlign.Center
         )
-        OutlinedTextField()
+        MyOutlinedTextField()
         Spacer(modifier = modifier.weight(1f))
         StandardButton(
             text = stringResource(R.string.save)

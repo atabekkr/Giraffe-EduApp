@@ -1,6 +1,8 @@
 package com.imax.giraffe.presentation.ui.components
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -26,11 +28,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.imax.giraffe.R
 import com.imax.giraffe.presentation.ui.theme.primaryColor
 
 @Composable
@@ -117,6 +121,31 @@ fun SentenceCard(
                 Spacer(modifier = Modifier.height(36.dp))
                 Divider(color = Color.Gray, thickness = 1.dp)
             }
+        }
+    }
+}
+
+@Composable
+fun LionIcon(
+    modifier: Modifier = Modifier
+) {
+    Card(
+        shape = RoundedCornerShape(30.dp), // Закругленные углы
+        border = BorderStroke(4.dp, primaryColor), // Белая рамка
+        modifier = modifier
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .border(4.dp, Color.White, shape = RoundedCornerShape(30.dp)),
+            contentAlignment = Alignment.Center
+        ) {
+            Image(
+                painter = painterResource(R.drawable.pic_lion_1), // Замените на своё изображение
+                contentDescription = "Lion Icon",
+                modifier = Modifier.fillMaxSize().padding(8.dp),
+                contentScale = ContentScale.Fit // Подгоняет изображение
+            )
         }
     }
 }

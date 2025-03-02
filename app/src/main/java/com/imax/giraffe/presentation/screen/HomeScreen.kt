@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -40,10 +41,11 @@ import com.imax.giraffe.presentation.ui.theme.grayTypography
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    onNavigateToHome: (Screen) -> Unit
+    onNavigateToScreen: (Screen) -> Unit
 ) {
     Column(
         modifier = modifier
+            .fillMaxSize()
             .paint(
                 painterResource(R.drawable.background2),
                 contentScale = ContentScale.Crop
@@ -155,13 +157,17 @@ fun HomeScreen(
         }
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.spacedBy(
+                24.dp,
+                alignment = Alignment.CenterHorizontally
+            )
         ) {
             Card(
+                modifier = Modifier.weight(1f),
                 colors = CardDefaults.cardColors(containerColor = Color.White),
                 shape = RoundedCornerShape(20.dp),
                 onClick = {
-                    onNavigateToHome.invoke(
+                    onNavigateToScreen.invoke(
                         Screen.ListeningTest
                     )
                 }
@@ -190,6 +196,7 @@ fun HomeScreen(
                 }
             }
             Card(
+                modifier = Modifier.weight(1f),
                 colors = CardDefaults.cardColors(containerColor = Color.White),
                 shape = RoundedCornerShape(20.dp)
             ) {
@@ -221,9 +228,13 @@ fun HomeScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 24.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.spacedBy(
+                24.dp,
+                alignment = Alignment.CenterHorizontally
+            )
         ) {
             Card(
+                modifier = Modifier.weight(1f),
                 colors = CardDefaults.cardColors(containerColor = Color.White),
                 shape = RoundedCornerShape(20.dp)
             ) {
@@ -251,6 +262,7 @@ fun HomeScreen(
                 }
             }
             Card(
+                modifier = Modifier.weight(1f),
                 colors = CardDefaults.cardColors(containerColor = Color.White),
                 shape = RoundedCornerShape(20.dp)
             ) {
