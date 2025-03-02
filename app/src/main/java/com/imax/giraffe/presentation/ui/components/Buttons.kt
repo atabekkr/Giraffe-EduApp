@@ -38,3 +38,26 @@ fun StandardButton(
         Text(text, style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp))
     }
 }
+
+@Composable
+fun StandardButtonWithoutPadding(
+    modifier: Modifier = Modifier,
+    text: String,
+    onClick: () -> Unit,
+) {
+    Button(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(64.dp),
+        onClick = {
+            onClick.invoke()
+        },
+        shape = RoundedCornerShape(16.dp),
+        colors = ButtonDefaults.buttonColors(
+            contentColor = Color.White,
+            containerColor = primaryColor
+        )
+    ) {
+        Text(text, style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp))
+    }
+}

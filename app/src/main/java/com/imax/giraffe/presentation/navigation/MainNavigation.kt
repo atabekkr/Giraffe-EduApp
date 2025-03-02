@@ -29,7 +29,7 @@ fun MainNav(
     NavHost(
         modifier = modifier,
         navController = navHostController,
-        startDestination = Screen.Login
+        startDestination = Screen.ListeningTest
     ) {
         composable<Screen.Login> {
             LoginScreen { navigateTo ->
