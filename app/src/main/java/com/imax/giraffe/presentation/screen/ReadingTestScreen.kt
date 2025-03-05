@@ -4,7 +4,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -31,29 +30,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.imax.giraffe.R
 import com.imax.giraffe.presentation.ui.components.SentenceCard
-import com.imax.giraffe.presentation.ui.components.SoundCard
 import com.imax.giraffe.presentation.ui.components.StandardButtonWithoutPadding
 import com.imax.giraffe.presentation.ui.theme.grayTypography
 import com.imax.giraffe.presentation.ui.theme.primaryColor
 
-//@Composable
-//fun ListeningTestScreen() {
-//    AndroidView(
-//        modifier = Modifier.fillMaxSize(),
-//        factory = { context ->
-//            FrameLayout(context).apply {
-//                id = View.generateViewId() // Генерируем уникальный ID для контейнера фрагмента
-//                (context as? AppCompatActivity)?.supportFragmentManager?.commit {
-//                    replace(id, ListeningTestFragment())
-//                }
-//            }
-//        }
-//    )
-//}
-
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun ListeningTestScreen() {
+fun ReadingTestScreen() {
     val selectedWords = remember {
         mutableStateListOf(
             "Lions",
@@ -83,7 +66,7 @@ fun ListeningTestScreen() {
         ) {
             Column {
                 Text(
-                    text = "Listening! 🎧",
+                    text = "Reading! 🎧",
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.Black
@@ -101,58 +84,75 @@ fun ListeningTestScreen() {
             )
         }
 
-        // Кнопки с иконками
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 32.dp, top = 48.dp),
-            horizontalArrangement = Arrangement.spacedBy(24.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            SoundCard(iconRes = R.drawable.ic_sound, size = 132.dp) {
-
-            }
-            SoundCard(iconRes = R.drawable.ic_slow_sound, size = 96.dp) {
-
-            }
-        }
-
-        Spacer(modifier = Modifier.height(24.dp))
-
         SentenceCard(
+            modifier = Modifier.padding(top = 56.dp),
             selectedWords = selectedWords
         ) {
             selectedWords.clear()
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Кнопки со словами
-        FlowRow(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 12.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                .padding(top = 36.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            listOf(
-                "Lion",
-                "live",
-                "group",
-                "groups",
-                "called",
-                "in",
-                "prides.",
-                "at"
-            ).forEach { word ->
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
                 Button(
+                    modifier = Modifier.height(64.dp).weight(1f),
                     onClick = {
-                        selectedWords.add(word)
                     },
-                    shape = RoundedCornerShape(8.dp),
+                    shape = RoundedCornerShape(16.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = Color.White)
                 ) {
                     Text(
-                        text = word,
+                        text = "in",
+                        color = primaryColor,
+                        style = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Medium)
+                    )
+                }
+                Button(
+                    modifier = Modifier.height(64.dp).weight(1f),
+                    onClick = {
+                    },
+                    shape = RoundedCornerShape(16.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.White)
+                ) {
+                    Text(
+                        text = "under",
+                        color = primaryColor,
+                        style = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Medium)
+                    )
+                }
+            }
+
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                Button(
+                    modifier = Modifier.height(64.dp).weight(1f),
+                    onClick = {
+                    },
+                    shape = RoundedCornerShape(16.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.White)
+                ) {
+                    Text(
+                        text = "at",
+                        color = primaryColor,
+                        style = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Medium)
+                    )
+                }
+                Button(
+                    modifier = Modifier.height(64.dp).weight(1f),
+                    onClick = {
+                    },
+                    shape = RoundedCornerShape(16.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.White)
+                ) {
+                    Text(
+                        text = "on",
                         color = primaryColor,
                         style = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Medium)
                     )

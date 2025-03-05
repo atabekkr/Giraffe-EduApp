@@ -67,11 +67,12 @@ fun SoundCard(
 
 @Composable
 fun SentenceCard(
+    modifier: Modifier = Modifier,
     selectedWords: List<String>,
     onClear: () -> Unit
 ) {
     Card(
-        modifier = Modifier
+        modifier = modifier
             .width(342.dp)
             .height(142.dp),
         shape = RoundedCornerShape(16.dp),

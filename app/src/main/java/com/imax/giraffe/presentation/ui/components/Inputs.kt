@@ -93,7 +93,7 @@ fun WritingTestInput() {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 14.dp, end = 15.dp),
-            contentAlignment = Alignment.TopEnd // Размещаем кнопку в верхнем правом углу
+            contentAlignment = Alignment.TopEnd
         ) {
             OutlinedButton(
                 onClick = { },
