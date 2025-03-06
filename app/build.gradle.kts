@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     kotlin("plugin.serialization")
+    alias(libs.plugins.devtools.ksp)
+    alias(libs.plugins.dagger)
 }
 
 android {
@@ -64,5 +66,15 @@ dependencies {
 
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlinx.serialization)
+
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
+
+    //dagger-hilt
+    implementation(libs.dagger)
+    ksp(libs.dagger.compiler)
+
+    implementation(libs.androidx.hilt.navigation.compose)
 
 }

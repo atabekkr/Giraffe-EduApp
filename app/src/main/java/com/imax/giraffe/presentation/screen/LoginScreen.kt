@@ -61,7 +61,7 @@ fun LoginScreen(
         StandardButton(
             text = stringResource(R.string.save)
         ) {
-            onNavigateToHome.invoke(Screen.Home)
+            onNavigateToHome.invoke(Screen.ChooseGradeExplanation)
         }
     }
 }

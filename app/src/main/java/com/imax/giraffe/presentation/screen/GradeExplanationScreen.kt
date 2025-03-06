@@ -78,7 +78,7 @@ fun ChooseGradeExplanationScreen(
                             .clip(RoundedCornerShape(12.dp)) // Rounded corners
                             .background(primaryColor) // Background color
                             .clickable {
-
+                                onNavigateToScreen.invoke(Screen.ChooseGrade)
                             }
                     ) {
                         Icon(

@@ -13,6 +13,7 @@ import com.imax.giraffe.presentation.screen.ListeningTestScreen
 import com.imax.giraffe.presentation.screen.LoginScreen
 import com.imax.giraffe.presentation.screen.ReadingTestScreen
 import com.imax.giraffe.presentation.screen.SpeakingTestScreen
+import com.imax.giraffe.presentation.screen.SplashScreen
 import com.imax.giraffe.presentation.screen.WelcomeScreen
 import com.imax.giraffe.presentation.screen.WritingTestScreen
 import kotlinx.serialization.Serializable
@@ -20,6 +21,9 @@ import kotlinx.serialization.Serializable
 sealed class Screen {
     @Serializable
     data object Welcome : Screen()
+
+    @Serializable
+    data object Splash : Screen()
 
     @Serializable
     data object Login : Screen()
@@ -57,8 +61,13 @@ fun MainNav(
     NavHost(
         modifier = modifier,
         navController = navHostController,
-        startDestination = Screen.ReadingTest
+        startDestination = Screen.Splash
     ) {
+        composable<Screen.Splash> {
+            SplashScreen { navigateTo ->
+                navHostController.navigate(navigateTo)
+            }
+        }
         composable<Screen.Welcome> {
             WelcomeScreen { navigateTo ->
                 navHostController.navigate(navigateTo)

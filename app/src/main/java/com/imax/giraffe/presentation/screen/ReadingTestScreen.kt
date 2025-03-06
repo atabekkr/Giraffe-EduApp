@@ -34,7 +34,6 @@ import com.imax.giraffe.presentation.ui.components.StandardButtonWithoutPadding
 import com.imax.giraffe.presentation.ui.theme.grayTypography
 import com.imax.giraffe.presentation.ui.theme.primaryColor
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ReadingTestScreen() {
     val selectedWords = remember {

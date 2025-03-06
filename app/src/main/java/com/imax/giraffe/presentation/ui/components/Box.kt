@@ -20,9 +20,11 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.imax.giraffe.presentation.data.db.entities.Grade
 
 @Composable
 fun Grade(
+    grade: Grade,
     onClick: () -> Unit
 ) {
     Box(
@@ -50,7 +52,7 @@ fun Grade(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 32.dp),
-                    text = "Grade 4",
+                    text = grade.gradeName,
                     style = TextStyle(
                         color = Color.White,
                         fontSize = 30.sp,
