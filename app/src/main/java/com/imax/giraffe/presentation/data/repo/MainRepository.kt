@@ -9,4 +9,6 @@ class MainRepository @Inject constructor(
 
     suspend fun getGrades() = dao.getGrades()
 
+    suspend fun getListeningTests(gradeId: Int, levelId: Int) = dao.getListeningTests(gradeId, levelId)
+
 }

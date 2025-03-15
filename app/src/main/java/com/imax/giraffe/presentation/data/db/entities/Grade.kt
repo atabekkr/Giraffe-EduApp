@@ -16,5 +16,7 @@ data class Grade(
     @ColumnInfo("grade_animal_pic")
     val gradeAnimalPic: String,
     @ColumnInfo("grade_color")
-    val gradeColor: String?
+    val gradeColor: String?,
+    val levels: String,
+    val test: String
 )

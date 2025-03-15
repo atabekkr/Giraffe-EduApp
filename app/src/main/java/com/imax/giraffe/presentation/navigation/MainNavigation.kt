@@ -61,7 +61,7 @@ fun MainNav(
     NavHost(
         modifier = modifier,
         navController = navHostController,
-        startDestination = Screen.Splash
+        startDestination = Screen.ListeningTest
     ) {
         composable<Screen.Splash> {
             SplashScreen { navigateTo ->
@@ -99,7 +99,9 @@ fun MainNav(
             }
         }
         composable<Screen.ListeningTest> {
-            ListeningTestScreen()
+            ListeningTestScreen { navigateTo ->
+                navHostController.navigate(navigateTo)
+            }
         }
         composable<Screen.WritingTest> {
             WritingTestScreen()
