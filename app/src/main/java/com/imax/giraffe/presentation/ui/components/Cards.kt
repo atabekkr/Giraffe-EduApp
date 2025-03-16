@@ -1,6 +1,7 @@
 package com.imax.giraffe.presentation.ui.components
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -15,6 +16,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.InlineTextContent
+import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.ButtonDefaults
@@ -27,9 +30,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.Placeholder
+import androidx.compose.ui.text.PlaceholderVerticalAlign
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -144,9 +151,76 @@ fun LionIcon(
             Image(
                 painter = painterResource(R.drawable.pic_lion_1), // Замените на своё изображение
                 contentDescription = "Lion Icon",
-                modifier = Modifier.fillMaxSize().padding(8.dp),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(8.dp),
                 contentScale = ContentScale.Fit // Подгоняет изображение
             )
         }
     }
 }
+
+@Composable
+fun ReadingSentenceCard(
+    modifier: Modifier = Modifier,
+    firstPart: String?,
+    secondPart: String?
+) {
+    Card(
+        modifier = modifier
+            .width(342.dp)
+            .height(142.dp),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFF8F8F8))
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(start = 16.dp, end = 16.dp, bottom = 16.dp, top = 30.dp)
+        ) {
+            ReadingText(firstPart, secondPart)
+        }
+    }
+}
+
+@Composable
+fun ReadingText(firstPart: String?, secondPart: String?) {
+    val underlineWidth = 50.sp // Можно менять ширину подчёркивания
+
+    val annotatedString = buildAnnotatedString {
+        append(firstPart ?: "")
+        appendInlineContent("gap", " ")
+        append(secondPart ?: "")
+    }
+
+    val inlineContent = mapOf(
+        "gap" to InlineTextContent(
+            Placeholder(underlineWidth, 2.sp, PlaceholderVerticalAlign.TextBottom) // Ставим линию между текстом
+        ) {
+            Canvas(
+                modifier = Modifier
+                    .padding(horizontal = 8.dp)
+                    .width(50.dp)
+                    .height(2.dp)
+            ) {
+                drawLine(
+                    color = Color.Gray,
+                    start = Offset(0f, 0f),
+                    end = Offset(size.width, 0f),
+                    strokeWidth = size.height
+                )
+            }
+        }
+    )
+
+    Text(
+        text = annotatedString,
+        inlineContent = inlineContent,
+        fontSize = 20.sp,
+        lineHeight = 36.sp,
+        maxLines = 2,
+        fontWeight = FontWeight.Medium,
+        color = Color.Black
+    )
+}
+

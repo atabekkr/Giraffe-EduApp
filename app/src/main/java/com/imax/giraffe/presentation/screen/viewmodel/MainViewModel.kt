@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.imax.giraffe.presentation.data.db.entities.Grade
 import com.imax.giraffe.presentation.data.db.entities.Listening
+import com.imax.giraffe.presentation.data.db.entities.Reading
+import com.imax.giraffe.presentation.data.db.entities.Writing
 import com.imax.giraffe.presentation.data.repo.MainRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,11 +27,29 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    fun getGrade(gradeId: Int) = repository.getGrade(gradeId)
+
     private val _getListeningTestsResult = MutableStateFlow<List<Listening>?>(null)
     val getListeningTestsResult: StateFlow<List<Listening>?> = _getListeningTestsResult
     fun getListeningTests(gradeId: Int, levelId: Int) {
         viewModelScope.launch {
             _getListeningTestsResult.value = repository.getListeningTests(gradeId, levelId)
+        }
+    }
+
+    private val _getWritingTestsResult = MutableStateFlow<List<Writing>?>(null)
+    val getWritingTestsResult: StateFlow<List<Writing>?> = _getWritingTestsResult
+    fun getWritingTests(gradeId: Int, levelId: Int) {
+        viewModelScope.launch {
+            _getWritingTestsResult.value = repository.getWritingTests(gradeId, levelId)
+        }
+    }
+
+    private val _getReadingTestsResult = MutableStateFlow<List<Reading>?>(null)
+    val getReadingTestsResult: StateFlow<List<Reading>?> = _getReadingTestsResult
+    fun getReadingTests(gradeId: Int, levelId: Int) {
+        viewModelScope.launch {
+            _getReadingTestsResult.value = repository.getReadingTests(gradeId, levelId)
         }
     }
 

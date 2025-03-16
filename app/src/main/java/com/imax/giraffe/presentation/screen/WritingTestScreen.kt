@@ -1,5 +1,6 @@
 package com.imax.giraffe.presentation.screen
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,11 +13,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,25 +29,33 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.imax.giraffe.R
+import com.imax.giraffe.presentation.navigation.Screen
+import com.imax.giraffe.presentation.screen.dialog.ErrorDialog
+import com.imax.giraffe.presentation.screen.viewmodel.MainViewModel
 import com.imax.giraffe.presentation.ui.components.SoundCard
 import com.imax.giraffe.presentation.ui.components.StandardButtonWithoutPadding
 import com.imax.giraffe.presentation.ui.components.WritingTestInput
 import com.imax.giraffe.presentation.ui.theme.grayTypography
 
 @Composable
-fun WritingTestScreen() {
-    var input by rememberSaveable { mutableStateOf("") }
-    val selectedWords = remember {
-        mutableStateListOf(
-            "Lions",
-            "live",
-            "in",
-            "groups",
-            "called",
-            "prides."
-        )
+fun WritingTestScreen(
+    modifier: Modifier = Modifier,
+    viewModel: MainViewModel = hiltViewModel(),
+    onNavigateToScreen: (Screen) -> Unit
+) {
+    LaunchedEffect(viewModel) {
+        viewModel.getWritingTests(1, 2)
     }
+    val tests = viewModel.getWritingTestsResult.collectAsState().value
+
+    var index by remember { mutableIntStateOf(0) }
+    val writingTest = tests?.getOrNull(index)
+    var inputText by remember { mutableStateOf("") }
+
+    var showWrongDialog by remember { mutableStateOf(false) }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -56,6 +66,9 @@ fun WritingTestScreen() {
             .padding(horizontal = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        if (showWrongDialog) {
+            ErrorDialog { showWrongDialog = false }
+        }
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -101,13 +114,19 @@ fun WritingTestScreen() {
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        WritingTestInput()
+        WritingTestInput {
+            inputText = it
+        }
 
         Spacer(modifier = Modifier.weight(1f))
 
         StandardButtonWithoutPadding(
             modifier = Modifier.padding(bottom = 24.dp),
             text = "Check"
-        ) { }
+        ) {
+            Log.d("WritingTest", "WritingTestScreen: $inputText\n${writingTest?.text}")
+            if (inputText == writingTest?.text) index++
+            else showWrongDialog = true
+        }
     }
 }

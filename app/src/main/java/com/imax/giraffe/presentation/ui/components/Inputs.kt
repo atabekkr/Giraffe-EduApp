@@ -79,7 +79,9 @@ fun MyOutlinedTextField() {
 }
 
 @Composable
-fun WritingTestInput() {
+fun WritingTestInput(
+    inputText: (String) -> Unit
+) {
     var text by remember { mutableStateOf("") }
     val charLimit = 150
     Card(
@@ -121,6 +123,7 @@ fun WritingTestInput() {
                 onValueChange = {
                     if (it.length <= charLimit) {
                         text = it
+                        inputText(it)
                     }
                 },
                 placeholder = { Text("Write something...", fontSize = 20.sp) },

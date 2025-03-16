@@ -78,7 +78,7 @@ fun ListeningTestScreen(
     val listeningText = listeningTest?.text?.split(" ") ?: emptyList()
     val answer = remember { mutableStateListOf<String>() }
 
-    var showWrongDialog by remember { mutableStateOf(true) }
+    var showWrongDialog by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier

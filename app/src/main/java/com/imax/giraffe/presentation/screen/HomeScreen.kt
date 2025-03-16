@@ -122,7 +122,7 @@ fun HomeScreen(
                             .height(38.dp)
                             .clip(RoundedCornerShape(12.dp)) // Rounded corners
                             .background(Color(0xFFF9D87D)) // Background color
-                            .clickable { /* TODO: Handle click */ }
+                            .clickable { onNavigateToScreen.invoke(Screen.Feed) }
                     ) {
                         Text(
                             text = "Feed",
@@ -198,7 +198,12 @@ fun HomeScreen(
             Card(
                 modifier = Modifier.weight(1f),
                 colors = CardDefaults.cardColors(containerColor = Color.White),
-                shape = RoundedCornerShape(20.dp)
+                shape = RoundedCornerShape(20.dp),
+                onClick = {
+                    onNavigateToScreen.invoke(
+                        Screen.ReadingTest
+                    )
+                }
             ) {
                 Column(
                     modifier = Modifier.padding(bottom = 16.dp)
@@ -214,7 +219,7 @@ fun HomeScreen(
                         modifier = Modifier
                             .padding(top = 2.dp)
                             .align(Alignment.CenterHorizontally),
-                        text = "Listening",
+                        text = "Reading",
                         style = TextStyle(
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Medium,
@@ -236,7 +241,12 @@ fun HomeScreen(
             Card(
                 modifier = Modifier.weight(1f),
                 colors = CardDefaults.cardColors(containerColor = Color.White),
-                shape = RoundedCornerShape(20.dp)
+                shape = RoundedCornerShape(20.dp),
+                onClick = {
+                    onNavigateToScreen.invoke(
+                        Screen.WritingTest
+                    )
+                }
             ) {
                 Column(
                     modifier = Modifier.padding(bottom = 16.dp)
@@ -252,7 +262,7 @@ fun HomeScreen(
                         modifier = Modifier
                             .padding(top = 2.dp)
                             .align(Alignment.CenterHorizontally),
-                        text = "Listening",
+                        text = "Writing",
                         style = TextStyle(
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Medium,
@@ -264,7 +274,12 @@ fun HomeScreen(
             Card(
                 modifier = Modifier.weight(1f),
                 colors = CardDefaults.cardColors(containerColor = Color.White),
-                shape = RoundedCornerShape(20.dp)
+                shape = RoundedCornerShape(20.dp),
+                onClick = {
+                    onNavigateToScreen.invoke(
+                        Screen.SpeakingTest
+                    )
+                }
             ) {
                 Column(
                     modifier = Modifier.padding(bottom = 16.dp)
@@ -280,7 +295,7 @@ fun HomeScreen(
                         modifier = Modifier
                             .padding(top = 2.dp)
                             .align(Alignment.CenterHorizontally),
-                        text = "Listening",
+                        text = "Speaking",
                         style = TextStyle(
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Medium,
