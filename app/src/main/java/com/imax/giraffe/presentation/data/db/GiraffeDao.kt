@@ -15,13 +15,13 @@ interface GiraffeDao {
     @Query("SELECT * FROM Grades WHERE id = :gradeId")
     fun getGrade(gradeId: Int): Grade
 
-    @Query("SELECT * FROM Listening WHERE grade_id = :gradeId AND level_id = :levelId")
+    @Query("SELECT * FROM Listening WHERE grade_id = :gradeId AND topic_id = :levelId")
     suspend fun getListeningTests(gradeId: Int, levelId: Int): List<Listening>
 
-    @Query("SELECT * FROM Writing WHERE grade_id = :gradeId AND level_id = :levelId")
+    @Query("SELECT * FROM Writing WHERE grade_id = :gradeId AND topic_id = :levelId")
     suspend fun getWritingTests(gradeId: Int, levelId: Int): List<Writing>
 
-    @Query("SELECT * FROM Reading WHERE grade_id = :gradeId AND level_id = :levelId")
+    @Query("SELECT * FROM Reading WHERE grade_id = :gradeId AND topic_id = :levelId")
     suspend fun getReadingTests(gradeId: Int, levelId: Int): List<Reading>
 
 }

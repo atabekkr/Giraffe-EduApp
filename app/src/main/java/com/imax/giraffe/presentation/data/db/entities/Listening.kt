@@ -8,10 +8,10 @@ import androidx.room.PrimaryKey
 data class Listening(
     @PrimaryKey
     val id: Int,
-    @ColumnInfo(name = "grade_id")
+    @ColumnInfo("grade_id")
     val gradeId: Int,
-    @ColumnInfo(name = "level_id")
-    val levelId: Int,
+    @ColumnInfo(name = "topic_id")
+    val topicId: Int,
     val audio: String,
     val text: String
 )

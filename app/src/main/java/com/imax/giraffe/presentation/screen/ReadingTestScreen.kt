@@ -2,7 +2,6 @@ package com.imax.giraffe.presentation.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,11 +11,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.InlineTextContent
-import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -31,10 +27,7 @@ import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.Placeholder
-import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -61,31 +54,6 @@ fun ReadingTestScreen(
 
     var index by remember { mutableIntStateOf(0) }
     val readingTest = tests?.getOrNull(index)
-    val readingText = "${readingTest?.firstPart} _____ ${readingTest?.secondPart}"
-
-    val annotatedString = buildAnnotatedString {
-        append(readingTest?.firstPart ?: "")
-        appendInlineContent("gap", " ")
-        append(readingTest?.secondPart ?: "")
-    }
-
-    val inlineContent = mapOf(
-        "gap" to InlineTextContent(
-            Placeholder(50.sp, 18.sp, PlaceholderVerticalAlign.TextBottom) // Выравниваем по нижней границе текста
-        ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(bottom = 2.dp) // Поднимаем линию ближе к тексту
-            ) {
-                Divider(
-                    color = Color.Gray,
-                    thickness = 2.dp,
-                    modifier = Modifier.fillMaxWidth()
-                )
-            }
-        }
-    )
 
     Column(
         modifier = Modifier

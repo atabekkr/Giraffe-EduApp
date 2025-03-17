@@ -10,8 +10,8 @@ data class Reading(
     val id: Int,
     @ColumnInfo(name = "grade_id")
     val gradeId: Int,
-    @ColumnInfo(name = "level_id")
-    val levelId: Int,
+    @ColumnInfo(name = "topic_id")
+    val topicId: Int,
     @ColumnInfo(name = "first_part")
     val firstPart: String,
     @ColumnInfo(name = "second_part")
