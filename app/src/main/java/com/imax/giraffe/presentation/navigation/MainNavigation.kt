@@ -14,6 +14,7 @@ import com.imax.giraffe.presentation.screen.LoginScreen
 import com.imax.giraffe.presentation.screen.ReadingTestScreen
 import com.imax.giraffe.presentation.screen.SpeakingTestScreen
 import com.imax.giraffe.presentation.screen.SplashScreen
+import com.imax.giraffe.presentation.screen.TopicScreen
 import com.imax.giraffe.presentation.screen.WelcomeScreen
 import com.imax.giraffe.presentation.screen.WritingTestScreen
 import kotlinx.serialization.Serializable
@@ -33,6 +34,9 @@ sealed class Screen {
 
     @Serializable
     data object ChooseGrade : Screen()
+
+    @Serializable
+    data object Topic : Screen()
 
     @Serializable
     data object Home : Screen()
@@ -61,7 +65,7 @@ fun MainNav(
     NavHost(
         modifier = modifier,
         navController = navHostController,
-        startDestination = Screen.ListeningTest
+        startDestination = Screen.Splash
     ) {
         composable<Screen.Splash> {
             SplashScreen { navigateTo ->
@@ -85,6 +89,11 @@ fun MainNav(
         }
         composable<Screen.ChooseGrade> {
             ChooseGradeScreen { navigateTo ->
+                navHostController.navigate(navigateTo)
+            }
+        }
+        composable<Screen.Topic> {
+            TopicScreen { navigateTo ->
                 navHostController.navigate(navigateTo)
             }
         }

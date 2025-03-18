@@ -16,3 +16,12 @@ data class Grade(
     val test: String,
     val topic: String
 )
+data class Topic(
+    val name: String,
+    val pic: String
+)
+
+data class GradeTopic(
+    val topic1: Topic,
+    val topic2: Topic
+)

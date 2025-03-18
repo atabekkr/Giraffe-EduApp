@@ -3,6 +3,7 @@ package com.imax.giraffe.presentation.screen.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.imax.giraffe.presentation.data.db.entities.Grade
+import com.imax.giraffe.presentation.data.db.entities.GradeTopic
 import com.imax.giraffe.presentation.data.db.entities.Listening
 import com.imax.giraffe.presentation.data.db.entities.Reading
 import com.imax.giraffe.presentation.data.db.entities.Writing
@@ -27,7 +28,12 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun getGrade(gradeId: Int) = repository.getGrade(gradeId)
+    suspend fun getGrade(gradeId: Int) = repository.getGrade(gradeId)
+
+    val getGradeTopicResult = MutableStateFlow<GradeTopic?>(null)
+    suspend fun getGradeTopics(gradeId: Int) {
+        getGradeTopicResult.value = repository.getGradeTopics(gradeId)
+    }
 
     private val _getListeningTestsResult = MutableStateFlow<List<Listening>?>(null)
     val getListeningTestsResult: StateFlow<List<Listening>?> = _getListeningTestsResult

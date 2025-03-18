@@ -10,18 +10,22 @@ import androidx.compose.ui.draw.paint
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.imax.giraffe.R
 import com.imax.giraffe.presentation.navigation.Screen
+import com.imax.giraffe.presentation.screen.viewmodel.SplashViewModel
 import kotlinx.coroutines.delay
 
 
 @Composable
 fun SplashScreen(
     modifier: Modifier = Modifier,
+    viewModel: SplashViewModel = hiltViewModel(),
     onNavigateToScreen: (Screen) -> Unit
 ) {
     val lifeCycleOwner = LocalLifecycleOwner.current
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -33,7 +37,10 @@ fun SplashScreen(
     ) {
         LaunchedEffect(lifeCycleOwner) {
             delay(1000)
-            onNavigateToScreen.invoke(Screen.Welcome)
+            if (viewModel.isLogin())
+                onNavigateToScreen.invoke(Screen.Welcome)
+            else
+                onNavigateToScreen.invoke(Screen.Topic)
         }
     }
 
