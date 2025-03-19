@@ -46,21 +46,6 @@ import com.imax.giraffe.presentation.ui.components.StandardButtonWithoutPadding
 import com.imax.giraffe.presentation.ui.theme.grayTypography
 import com.imax.giraffe.presentation.ui.theme.primaryColor
 
-//@Composable
-//fun ListeningTestScreen() {
-//    AndroidView(
-//        modifier = Modifier.fillMaxSize(),
-//        factory = { context ->
-//            FrameLayout(context).apply {
-//                id = View.generateViewId() // Генерируем уникальный ID для контейнера фрагмента
-//                (context as? AppCompatActivity)?.supportFragmentManager?.commit {
-//                    replace(id, ListeningTestFragment())
-//                }
-//            }
-//        }
-//    )
-//}
-
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ListeningTestScreen(

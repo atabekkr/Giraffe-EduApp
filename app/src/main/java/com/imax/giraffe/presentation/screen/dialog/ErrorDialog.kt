@@ -1,11 +1,11 @@
 package com.imax.giraffe.presentation.screen.dialog
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
@@ -17,9 +17,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.imax.giraffe.R
-import com.imax.giraffe.presentation.ui.components.StandardButton
+import com.imax.giraffe.presentation.ui.components.StandardButtonWithoutPadding
 
 @Composable
 fun ErrorDialog(onDismiss: () -> Unit) {
@@ -29,15 +30,15 @@ fun ErrorDialog(onDismiss: () -> Unit) {
         containerColor = Color.Transparent,
         text = {
             Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                Spacer(modifier = Modifier.weight(1f)) // Отступ сверху
+
                 Card(
                     modifier = Modifier
                         .size(200.dp)
-                        .clip(RoundedCornerShape(32.dp))
-                        .background(Color.White),
+                        .clip(RoundedCornerShape(32.dp)),
                     colors = CardDefaults.cardColors(containerColor = Color.White)
                 ) {
                     Box(
@@ -51,11 +52,16 @@ fun ErrorDialog(onDismiss: () -> Unit) {
                         )
                     }
                 }
-//                Spacer(Modifier.weight(1f))
-                StandardButton("Try Again") {
+
+                Spacer(modifier = Modifier.weight(1f)) // Отступ снизу перед кнопкой
+
+                StandardButtonWithoutPadding(text = "Try Again") {
                     onDismiss()
                 }
+
+                Spacer(modifier = Modifier.height(16.dp)) // Дополнительный отступ снизу
             }
+
         },
         confirmButton = {},
         modifier = Modifier
@@ -63,4 +69,10 @@ fun ErrorDialog(onDismiss: () -> Unit) {
             .clip(RoundedCornerShape(16.dp))
 
     )
+}
+
+@Preview
+@Composable
+fun DialogPreview() {
+    ErrorDialog {  }
 }
