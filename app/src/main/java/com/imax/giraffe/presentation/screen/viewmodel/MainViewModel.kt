@@ -6,8 +6,10 @@ import com.imax.giraffe.presentation.data.db.entities.Grade
 import com.imax.giraffe.presentation.data.db.entities.GradeTopic
 import com.imax.giraffe.presentation.data.db.entities.Listening
 import com.imax.giraffe.presentation.data.db.entities.Reading
+import com.imax.giraffe.presentation.data.db.entities.Vocabulary
 import com.imax.giraffe.presentation.data.db.entities.Writing
 import com.imax.giraffe.presentation.data.repo.MainRepository
+import com.imax.giraffe.presentation.utils.LocalStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,7 +18,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val repository: MainRepository
+    private val repository: MainRepository,
+    private val localStorage: LocalStorage
 ) : ViewModel() {
 
     private val _getGradesState = MutableStateFlow<List<Grade>?>(null)
@@ -58,5 +61,23 @@ class MainViewModel @Inject constructor(
             _getReadingTestsResult.value = repository.getReadingTests(gradeId, levelId)
         }
     }
+
+    private val _getVocabularyResult = MutableStateFlow<Vocabulary?>(null)
+    val getVocabularyResult: StateFlow<Vocabulary?> = _getVocabularyResult
+    fun getVocabulary(gradeId: Int, levelId: Int) {
+        viewModelScope.launch {
+            _getVocabularyResult.value = repository.getVocabulary(gradeId, levelId)
+        }
+    }
+
+    fun setFirstTopicCompleted() {
+        localStorage.isFirstTopicCompleted = true
+    }
+
+    fun isFirstTopicCompleted() = localStorage.isFirstTopicCompleted
+
+    fun getTopicCompletedPercent() = localStorage.topicCompletedPercent
+
+    fun getFeedCount() = localStorage.feedCount
 
 }

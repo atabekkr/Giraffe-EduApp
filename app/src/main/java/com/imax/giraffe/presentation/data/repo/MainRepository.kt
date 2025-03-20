@@ -25,4 +25,6 @@ class MainRepository @Inject constructor(
 
     suspend fun getReadingTests(gradeId: Int, levelId: Int) = dao.getReadingTests(gradeId, levelId)
 
+    suspend fun getVocabulary(gradeId: Int, levelId: Int) = dao.getVocabulary(gradeId, levelId)
+
 }

@@ -40,9 +40,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.imax.giraffe.R
 import com.imax.giraffe.presentation.navigation.Screen
 import com.imax.giraffe.presentation.screen.viewmodel.MainViewModel
+import com.imax.giraffe.presentation.ui.theme.blockedTopic
+import com.imax.giraffe.presentation.ui.theme.disabledButton
 import com.imax.giraffe.presentation.ui.theme.gray
 import com.imax.giraffe.presentation.ui.theme.grayTypography
 import com.imax.giraffe.presentation.ui.theme.greenTypography
+import com.imax.giraffe.presentation.ui.theme.primaryColor
 import com.imax.giraffe.presentation.utils.getDrawableResourceId
 
 @Composable
@@ -142,13 +145,15 @@ fun TopicScreen(
                             .fillMaxWidth()
                             .padding(top = 60.dp)
                     ) {
+                        val feedCount = viewModel.getFeedCount()
+                        val feedButtonColor = if (feedCount == 0) disabledButton else primaryColor
                         Box(
                             contentAlignment = Alignment.Center,
                             modifier = Modifier
                                 .width(114.dp)
                                 .height(38.dp)
                                 .clip(RoundedCornerShape(12.dp))
-                                .background(Color(0xFFF9D87D))
+                                .background(disabledButton)
                                 .clickable { onNavigateToScreen.invoke(Screen.Feed) }
                         ) {
                             Text(
@@ -173,7 +178,7 @@ fun TopicScreen(
                                 )
                         ) {
                             Text(
-                                text = "0",
+                                text = "$feedCount",
                                 fontSize = 20.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = Color(0xFFFFBF08)
@@ -183,32 +188,36 @@ fun TopicScreen(
                 }
             }
         }
+        val firstTopicCompletedPercent = if (viewModel.isFirstTopicCompleted()) 100 else viewModel.getTopicCompletedPercent()
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 24.dp)
                 .clip(RoundedCornerShape(20.dp))
+                .background(Color.White)
         ) {
             val resId = getDrawableResourceId(topics?.topic1?.pic ?: "pic_grade1_topic1")
             Image(
                 painter = painterResource(resId),
                 contentDescription = null,
-                contentScale = ContentScale.FillBounds,
+                contentScale = ContentScale.FillBounds, // Оставляем пропорции
                 modifier = Modifier
-                    .matchParentSize() // Растянет картинку на всю область Box
+                    .align(Alignment.CenterEnd) // Выравниваем картинку вправо
+                    .size(200.dp) // Устанавливаем фиксированный размер, если нужно
             )
 
             Card(
                 modifier = Modifier
-                    .fillMaxWidth(), // Уменьшает размер, чтобы фон был виден
-                colors = CardDefaults.cardColors(containerColor = Color.Transparent), // Делаем фон карты прозрачным
+                    .fillMaxWidth()
+                    .padding(end = 100.dp), // Уменьшаем ширину, чтобы оставить место под картинку
+                colors = CardDefaults.cardColors(containerColor = Color.Transparent),
                 shape = RoundedCornerShape(20.dp)
             ) {
                 Column(
                     modifier = Modifier.padding(24.dp)
                 ) {
                     Text(
-                        text = topics?.topic1?.name.toString(),
+                        text = topics?.topic2?.name.toString(),
                         style = TextStyle(
                             color = Color.Black,
                             fontSize = 26.sp,
@@ -226,7 +235,7 @@ fun TopicScreen(
 
                     Text(
                         modifier = Modifier.padding(top = 60.dp),
-                        text = "50%",
+                        text = "$firstTopicCompletedPercent%",
                         style = TextStyle(
                             color = greenTypography,
                             fontSize = 32.sp,
@@ -236,25 +245,39 @@ fun TopicScreen(
                 }
             }
         }
+        val cardColor =
+            if (viewModel.isFirstTopicCompleted()) Color.White else blockedTopic.copy(alpha = 0.5f)
+        val secondTopicCompletedPercent = if (viewModel.isFirstTopicCompleted()) viewModel.getTopicCompletedPercent() else 0
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 24.dp)
                 .clip(RoundedCornerShape(20.dp))
+                .background(cardColor)
         ) {
+
             val resId = getDrawableResourceId(topics?.topic2?.pic ?: "pic_grade1_topic1")
             Image(
                 painter = painterResource(resId),
                 contentDescription = null,
-                contentScale = ContentScale.FillBounds,
+                contentScale = ContentScale.FillBounds, // Оставляем пропорции
                 modifier = Modifier
-                    .matchParentSize() // Растянет картинку на всю область Box
+                    .align(Alignment.CenterEnd) // Выравниваем картинку вправо
+                    .size(200.dp) // Устанавливаем фиксированный размер, если нужно
             )
+
+            if (!viewModel.isFirstTopicCompleted())
+                Image(
+                    painter = painterResource(R.drawable.ic_lock),
+                    contentDescription = "lock",
+                    modifier = Modifier.align(Alignment.Center)
+                )
 
             Card(
                 modifier = Modifier
-                    .fillMaxWidth(), // Уменьшает размер, чтобы фон был виден
-                colors = CardDefaults.cardColors(containerColor = Color.Transparent), // Делаем фон карты прозрачным
+                    .fillMaxWidth()
+                    .padding(end = 100.dp), // Уменьшаем ширину, чтобы оставить место под картинку
+                colors = CardDefaults.cardColors(containerColor = Color.Transparent),
                 shape = RoundedCornerShape(20.dp)
             ) {
                 Column(
@@ -279,7 +302,7 @@ fun TopicScreen(
 
                     Text(
                         modifier = Modifier.padding(top = 60.dp),
-                        text = "50%",
+                        text = "$secondTopicCompletedPercent%",
                         style = TextStyle(
                             color = greenTypography,
                             fontSize = 32.sp,
@@ -289,6 +312,7 @@ fun TopicScreen(
                 }
             }
         }
+
 
     }
 

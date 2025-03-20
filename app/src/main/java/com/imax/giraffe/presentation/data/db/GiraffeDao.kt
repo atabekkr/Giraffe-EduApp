@@ -5,6 +5,7 @@ import androidx.room.Query
 import com.imax.giraffe.presentation.data.db.entities.Grade
 import com.imax.giraffe.presentation.data.db.entities.Listening
 import com.imax.giraffe.presentation.data.db.entities.Reading
+import com.imax.giraffe.presentation.data.db.entities.Vocabulary
 import com.imax.giraffe.presentation.data.db.entities.Writing
 
 @Dao
@@ -23,5 +24,8 @@ interface GiraffeDao {
 
     @Query("SELECT * FROM Reading WHERE grade_id = :gradeId AND topic_id = :levelId")
     suspend fun getReadingTests(gradeId: Int, levelId: Int): List<Reading>
+
+    @Query("SELECT * FROM Vocabulary WHERE grade_id = :gradeId AND topic_id = :levelId")
+    suspend fun getVocabulary(gradeId: Int, levelId: Int): Vocabulary
 
 }
