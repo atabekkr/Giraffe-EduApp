@@ -16,6 +16,7 @@ data class Grade(
     val test: String,
     val topic: String
 )
+
 data class Topic(
     val name: String,
     val pic: String
@@ -24,4 +25,13 @@ data class Topic(
 data class GradeTopic(
     val topic1: Topic,
     val topic2: Topic
+)
+
+data class Levels(
+    val data: List<Level>
+)
+
+data class Level(
+    val name: String,
+    val pic: String
 )

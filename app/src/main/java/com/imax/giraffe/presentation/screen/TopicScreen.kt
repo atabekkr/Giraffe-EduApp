@@ -22,6 +22,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -39,26 +43,50 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.imax.giraffe.R
 import com.imax.giraffe.presentation.navigation.Screen
+import com.imax.giraffe.presentation.screen.dialog.StartMatchingDialog
 import com.imax.giraffe.presentation.screen.viewmodel.MainViewModel
+import com.imax.giraffe.presentation.screen.viewmodel.UserViewModel
 import com.imax.giraffe.presentation.ui.theme.blockedTopic
 import com.imax.giraffe.presentation.ui.theme.disabledButton
 import com.imax.giraffe.presentation.ui.theme.gray
 import com.imax.giraffe.presentation.ui.theme.grayTypography
 import com.imax.giraffe.presentation.ui.theme.greenTypography
+import com.imax.giraffe.presentation.ui.theme.mainTypography
 import com.imax.giraffe.presentation.ui.theme.primaryColor
+import com.imax.giraffe.presentation.utils.GradeContent
 import com.imax.giraffe.presentation.utils.getDrawableResourceId
 
 @Composable
 fun TopicScreen(
     modifier: Modifier = Modifier,
     viewModel: MainViewModel = hiltViewModel(),
+    userViewModel: UserViewModel = hiltViewModel(),
     onNavigateToScreen: (Screen) -> Unit
 ) {
 
+    val gradeId = userViewModel.getGradeId()
+
     LaunchedEffect(viewModel) {
-        viewModel.getGradeTopics(1)
+        viewModel.getGradeTopics(gradeId)
+        viewModel.getGradeLevels(gradeId)
+        viewModel.getGrade(gradeId)
     }
+
     val topics = viewModel.getGradeTopicResult.collectAsState().value
+    val level = "Level ${userViewModel.getLevelIndex() + 1}"
+    val grade = viewModel.getGradeResult.collectAsState().value
+    val levelIndex = userViewModel.getLevelIndex()
+
+    val username = userViewModel.getUserName()
+    val gradeContent = when (userViewModel.getGradeId()) {
+        1 -> GradeContent.GRADE1
+        2 -> GradeContent.GRADE2
+        3 -> GradeContent.GRADE3
+        4 -> GradeContent.GRADE4
+        else -> GradeContent.GRADE1
+    }
+
+    var showStartMatchingDialog by remember { mutableStateOf(false) }
 
     Column(
         modifier = modifier
@@ -69,6 +97,12 @@ fun TopicScreen(
             )
             .padding(horizontal = 24.dp)
     ) {
+        if (showStartMatchingDialog) {
+            StartMatchingDialog {
+                showStartMatchingDialog = false
+                onNavigateToScreen.invoke(Screen.Matching)
+            }
+        }
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -77,7 +111,7 @@ fun TopicScreen(
         ) {
             Column {
                 Text(
-                    text = "Hi Atabek!",
+                    text = "Hi $username!",
                     style = TextStyle(
                         color = Color.Black,
                         fontSize = 26.sp,
@@ -106,9 +140,11 @@ fun TopicScreen(
                 .fillMaxWidth()
                 .padding(top = 24.dp)
                 .clip(RoundedCornerShape(20.dp))
+                .background(Color.White)
         ) {
+            val resId = getDrawableResourceId(grade?.gradeAnimalPic)
             Image(
-                painter = painterResource(R.drawable.pic_grade_lion_bg2),
+                painter = painterResource(resId),
                 contentDescription = null,
                 contentScale = ContentScale.FillBounds,
                 modifier = Modifier
@@ -125,7 +161,7 @@ fun TopicScreen(
                     modifier = Modifier.padding(24.dp)
                 ) {
                     Text(
-                        text = "Lion. 4th Grade",
+                        text = gradeContent.gradeName,
                         style = TextStyle(
                             color = Color.Black,
                             fontSize = 26.sp,
@@ -133,7 +169,7 @@ fun TopicScreen(
                         ),
                     )
                     Text(
-                        text = "Level 1",
+                        text = level,
                         style = TextStyle(
                             color = gray,
                             fontSize = 18.sp,
@@ -198,6 +234,12 @@ fun TopicScreen(
                 .padding(top = 24.dp)
                 .clip(RoundedCornerShape(20.dp))
                 .background(Color.White)
+                .clickable {
+                    if (levelIndex != 0)
+                        onNavigateToScreen.invoke(Screen.Home)
+                    else
+                        showStartMatchingDialog = true
+                }
         ) {
             val resId = getDrawableResourceId(topics?.topic1?.pic ?: "pic_grade1_topic1")
             Image(
@@ -220,9 +262,9 @@ fun TopicScreen(
                     modifier = Modifier.padding(24.dp)
                 ) {
                     Text(
-                        text = topics?.topic2?.name.toString(),
+                        text = topics?.topic1?.name.toString(),
                         style = TextStyle(
-                            color = Color.Black,
+                            color = mainTypography,
                             fontSize = 26.sp,
                             fontWeight = FontWeight.Bold
                         ),
@@ -290,7 +332,7 @@ fun TopicScreen(
                     Text(
                         text = topics?.topic2?.name.toString(),
                         style = TextStyle(
-                            color = Color.Black,
+                            color = mainTypography,
                             fontSize = 26.sp,
                             fontWeight = FontWeight.Bold
                         ),

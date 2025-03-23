@@ -19,7 +19,7 @@ class DataModule {
     @Singleton
     fun provideDataBase(@ApplicationContext context: Context): GiraffeDatabase {
         return Room.databaseBuilder(context, GiraffeDatabase::class.java, "Giraffe.db")
-            .createFromAsset("Giraffe.db")
+            .createFromAsset("Giraffe_new_db.db")
             .fallbackToDestructiveMigration()
             .build()
     }

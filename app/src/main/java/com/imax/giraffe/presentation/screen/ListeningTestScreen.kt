@@ -44,6 +44,7 @@ import com.imax.giraffe.presentation.ui.components.SentenceCard
 import com.imax.giraffe.presentation.ui.components.SoundCard
 import com.imax.giraffe.presentation.ui.components.StandardButtonWithoutPadding
 import com.imax.giraffe.presentation.ui.theme.grayTypography
+import com.imax.giraffe.presentation.ui.theme.mainTypography
 import com.imax.giraffe.presentation.ui.theme.primaryColor
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -90,7 +91,7 @@ fun ListeningTestScreen(
                     text = "Listening! 🎧",
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color.Black
+                    color = mainTypography
                 )
                 Text(
                     text = "Boost your listening with Saribek.",

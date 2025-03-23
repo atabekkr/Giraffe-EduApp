@@ -5,12 +5,14 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.imax.giraffe.presentation.screen.AfterGradeChooseScreen
 import com.imax.giraffe.presentation.screen.ChooseGradeExplanationScreen
 import com.imax.giraffe.presentation.screen.ChooseGradeScreen
 import com.imax.giraffe.presentation.screen.FeedScreen
 import com.imax.giraffe.presentation.screen.HomeScreen
 import com.imax.giraffe.presentation.screen.ListeningTestScreen
 import com.imax.giraffe.presentation.screen.LoginScreen
+import com.imax.giraffe.presentation.screen.MatchingScreen
 import com.imax.giraffe.presentation.screen.ReadingTestScreen
 import com.imax.giraffe.presentation.screen.SpeakingTestScreen
 import com.imax.giraffe.presentation.screen.SplashScreen
@@ -36,7 +38,13 @@ sealed class Screen {
     data object ChooseGrade : Screen()
 
     @Serializable
+    data object AfterChooseGrade : Screen()
+
+    @Serializable
     data object Topic : Screen()
+
+    @Serializable
+    data object Matching : Screen()
 
     @Serializable
     data object Home : Screen()
@@ -65,7 +73,7 @@ fun MainNav(
     NavHost(
         modifier = modifier,
         navController = navHostController,
-        startDestination = Screen.ChooseGrade
+        startDestination = Screen.Matching
     ) {
         composable<Screen.Splash> {
             SplashScreen { navigateTo ->
@@ -93,8 +101,18 @@ fun MainNav(
                 navHostController.navigate(navigateTo)
             }
         }
+        composable<Screen.AfterChooseGrade> {
+            AfterGradeChooseScreen { navigateTo ->
+                navHostController.navigate(navigateTo)
+            }
+        }
         composable<Screen.Topic> {
             TopicScreen { navigateTo ->
+                navHostController.navigate(navigateTo)
+            }
+        }
+        composable<Screen.Matching> {
+            MatchingScreen { navigateTo ->
                 navHostController.navigate(navigateTo)
             }
         }

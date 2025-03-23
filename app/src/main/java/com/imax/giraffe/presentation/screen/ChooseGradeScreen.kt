@@ -16,7 +16,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -33,6 +32,7 @@ import com.imax.giraffe.presentation.screen.viewmodel.MainViewModel
 import com.imax.giraffe.presentation.screen.viewmodel.UserViewModel
 import com.imax.giraffe.presentation.ui.components.Grade
 import com.imax.giraffe.presentation.ui.theme.grayTypography
+import com.imax.giraffe.presentation.ui.theme.mainTypography
 import com.imax.giraffe.presentation.utils.GradeContent
 
 @Composable
@@ -68,7 +68,7 @@ fun ChooseGradeScreen(
                 Text(
                     text = "Hi $userName!",
                     style = TextStyle(
-                        color = Color.Black,
+                        color = mainTypography,
                         fontSize = 26.sp,
                         fontWeight = FontWeight.Bold
                     ),
@@ -90,7 +90,7 @@ fun ChooseGradeScreen(
                 contentDescription = "Giraffe"
             )
         }
-        LazyColumn {
+        LazyColumn(modifier = Modifier.padding(top = 20.dp)) {
             grades?.let {
                 items(it) { grade ->
                     val gradeContent = when (grade.id) {
@@ -105,8 +105,9 @@ fun ChooseGradeScreen(
                         gradeContent.color,
                         gradeContent.picId
                     ) {
+                        userViewModel.setGradeId(grade.id)
                         onNavigateToScreen.invoke(
-                            Screen.Home
+                            Screen.AfterChooseGrade
                         )
                     }
                 }

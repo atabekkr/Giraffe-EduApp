@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.imax.giraffe.presentation.data.db.entities.Grade
 import com.imax.giraffe.presentation.data.db.entities.GradeTopic
+import com.imax.giraffe.presentation.data.db.entities.Levels
 import com.imax.giraffe.presentation.data.db.entities.Listening
 import com.imax.giraffe.presentation.data.db.entities.Reading
 import com.imax.giraffe.presentation.data.db.entities.Vocabulary
@@ -31,11 +32,19 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    suspend fun getGrade(gradeId: Int) = repository.getGrade(gradeId)
+    val getGradeResult = MutableStateFlow<Grade?>(null)
+    suspend fun getGrade(gradeId: Int) {
+        getGradeResult.emit(repository.getGrade(gradeId))
+    }
 
     val getGradeTopicResult = MutableStateFlow<GradeTopic?>(null)
     suspend fun getGradeTopics(gradeId: Int) {
         getGradeTopicResult.value = repository.getGradeTopics(gradeId)
+    }
+
+    val getGradeLevelsResult = MutableStateFlow<Levels?>(null)
+    suspend fun getGradeLevels(gradeId: Int) {
+        getGradeLevelsResult.value = repository.getGradeLevels(gradeId)
     }
 
     private val _getListeningTestsResult = MutableStateFlow<List<Listening>?>(null)

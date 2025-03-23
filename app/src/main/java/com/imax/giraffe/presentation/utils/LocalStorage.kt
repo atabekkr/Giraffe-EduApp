@@ -13,6 +13,10 @@ class LocalStorage(preference: SharedPreferences) {
 
     var feedCount by IntPreference(preference, 0)
 
+    var levelIndex by IntPreference(preference, 0)
+
     var userName by StringPreference(preference, "")
+
+    var gradeId by IntPreference(preference, 0)
 
 }

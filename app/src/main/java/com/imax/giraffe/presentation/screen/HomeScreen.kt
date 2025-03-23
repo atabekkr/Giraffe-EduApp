@@ -33,16 +33,32 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.imax.giraffe.R
 import com.imax.giraffe.presentation.navigation.Screen
+import com.imax.giraffe.presentation.screen.viewmodel.UserViewModel
 import com.imax.giraffe.presentation.ui.theme.gray
 import com.imax.giraffe.presentation.ui.theme.grayTypography
+import com.imax.giraffe.presentation.ui.theme.mainTypography
+import com.imax.giraffe.presentation.utils.GradeContent
 
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
+    userViewModel: UserViewModel = hiltViewModel(),
     onNavigateToScreen: (Screen) -> Unit
 ) {
+
+    val userName = userViewModel.getUserName()
+
+    val gradeContent = when (userViewModel.getGradeId()) {
+        1 -> GradeContent.GRADE1
+        2 -> GradeContent.GRADE2
+        3 -> GradeContent.GRADE3
+        4 -> GradeContent.GRADE4
+        else -> GradeContent.GRADE1
+    }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -60,9 +76,9 @@ fun HomeScreen(
         ) {
             Column {
                 Text(
-                    text = "Hi Atabek!",
+                    text = "Hi $userName!",
                     style = TextStyle(
-                        color = Color.Black,
+                        color = mainTypography,
                         fontSize = 26.sp,
                         fontWeight = FontWeight.Bold
                     ),
@@ -95,7 +111,7 @@ fun HomeScreen(
                 modifier = Modifier.padding(24.dp)
             ) {
                 Text(
-                    text = "Lion. 4th Grade",
+                    text = gradeContent.gradeName,
                     style = TextStyle(
                         color = Color.Black,
                         fontSize = 26.sp,

@@ -8,12 +8,24 @@ import javax.inject.Inject
 @HiltViewModel
 class UserViewModel @Inject constructor(
     private val localStorage: LocalStorage
-): ViewModel() {
+) : ViewModel() {
 
     fun getUserName() = localStorage.userName
 
     fun setUserName(userName: String) {
         localStorage.userName = userName
+    }
+
+    fun getGradeId() = localStorage.gradeId
+
+    fun setGradeId(gradeId: Int) {
+        localStorage.gradeId = gradeId
+    }
+
+    fun getLevelIndex() = localStorage.levelIndex
+
+    fun incrementLevelIndex() {
+        localStorage.levelIndex++
     }
 
 }
