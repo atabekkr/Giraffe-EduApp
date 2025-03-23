@@ -1,7 +1,10 @@
 package com.imax.giraffe.presentation.ui.components
 
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -14,25 +17,38 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.imax.giraffe.presentation.ui.theme.disabledButton
 import com.imax.giraffe.presentation.ui.theme.primaryColor
 
 @Composable
 fun StandardButton(
     text: String,
-    onClick: () -> Unit,
+    enabled: Boolean = true,
+    onClick: () -> Unit
 ) {
+
+    val saveButtonColor = if (enabled) primaryColor else disabledButton
+
     Button(
         modifier = Modifier
-            .padding(24.dp)
+            .padding(
+                start = 24.dp,
+                end = 24.dp,
+                top = 24.dp,
+                bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
+            )
             .fillMaxWidth()
             .height(56.dp),
+        enabled = enabled,
         onClick = {
             onClick.invoke()
         },
         shape = RoundedCornerShape(16.dp),
         colors = ButtonDefaults.buttonColors(
             contentColor = Color.White,
-            containerColor = primaryColor
+            containerColor = saveButtonColor,
+            disabledContainerColor = disabledButton,
+            disabledContentColor = Color.White
         )
     ) {
         Text(text, style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp))

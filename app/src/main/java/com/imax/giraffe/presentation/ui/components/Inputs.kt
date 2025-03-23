@@ -44,7 +44,7 @@ import com.imax.giraffe.presentation.ui.theme.mainTypography
 import com.imax.giraffe.presentation.ui.theme.primaryColor
 
 @Composable
-fun MyOutlinedTextField() {
+fun MyOutlinedTextField(inputText: (String) -> Unit) {
     var input by rememberSaveable { mutableStateOf("") }
 
     OutlinedTextField(
@@ -61,7 +61,10 @@ fun MyOutlinedTextField() {
             unfocusedLabelColor = gray,
         ),
         value = input,
-        onValueChange = { input = it },
+        onValueChange = {
+            input = it
+            inputText(it)
+        },
         textStyle = TextStyle(fontWeight = FontWeight.Medium, fontSize = 16.sp),
         placeholder = {
             Text(

@@ -153,8 +153,10 @@ fun TopicScreen(
                                 .width(114.dp)
                                 .height(38.dp)
                                 .clip(RoundedCornerShape(12.dp))
-                                .background(disabledButton)
-                                .clickable { onNavigateToScreen.invoke(Screen.Feed) }
+                                .background(feedButtonColor)
+                                .clickable(enabled = feedCount != 0) {
+                                    onNavigateToScreen.invoke(Screen.Feed)
+                                }
                         ) {
                             Text(
                                 text = "Feed",
@@ -171,7 +173,7 @@ fun TopicScreen(
                                 .height(38.dp)
                                 .clip(RoundedCornerShape(12.dp))
                                 .background(Color(0xFFFFF1CF))
-                                .clickable { /* TODO: Handle click */ }
+                                .clickable(enabled = false) {}
                                 .border(
                                     shape = RoundedCornerShape(12.dp),
                                     border = BorderStroke(width = 2.dp, color = Color(0xFFFFBF08))
@@ -188,7 +190,8 @@ fun TopicScreen(
                 }
             }
         }
-        val firstTopicCompletedPercent = if (viewModel.isFirstTopicCompleted()) 100 else viewModel.getTopicCompletedPercent()
+        val firstTopicCompletedPercent =
+            if (viewModel.isFirstTopicCompleted()) 100 else viewModel.getTopicCompletedPercent()
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -247,7 +250,8 @@ fun TopicScreen(
         }
         val cardColor =
             if (viewModel.isFirstTopicCompleted()) Color.White else blockedTopic.copy(alpha = 0.5f)
-        val secondTopicCompletedPercent = if (viewModel.isFirstTopicCompleted()) viewModel.getTopicCompletedPercent() else 0
+        val secondTopicCompletedPercent =
+            if (viewModel.isFirstTopicCompleted()) viewModel.getTopicCompletedPercent() else 0
         Box(
             modifier = Modifier
                 .fillMaxWidth()

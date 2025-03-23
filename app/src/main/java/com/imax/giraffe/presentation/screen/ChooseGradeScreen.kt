@@ -23,21 +23,28 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.imax.giraffe.R
 import com.imax.giraffe.presentation.navigation.Screen
 import com.imax.giraffe.presentation.screen.viewmodel.MainViewModel
+import com.imax.giraffe.presentation.screen.viewmodel.UserViewModel
 import com.imax.giraffe.presentation.ui.components.Grade
 import com.imax.giraffe.presentation.ui.theme.grayTypography
+import com.imax.giraffe.presentation.utils.GradeContent
 
 @Composable
 fun ChooseGradeScreen(
     modifier: Modifier = Modifier,
     viewModel: MainViewModel = hiltViewModel(),
+    userViewModel: UserViewModel = hiltViewModel(),
     onNavigateToScreen: (Screen) -> Unit
 ) {
+
+    val userName = userViewModel.getUserName()
+
     LaunchedEffect(viewModel) {
         viewModel.getGrades()
     }
@@ -59,7 +66,7 @@ fun ChooseGradeScreen(
         ) {
             Column {
                 Text(
-                    text = "Hi Atabek!",
+                    text = "Hi $userName!",
                     style = TextStyle(
                         color = Color.Black,
                         fontSize = 26.sp,
@@ -86,8 +93,17 @@ fun ChooseGradeScreen(
         LazyColumn {
             grades?.let {
                 items(it) { grade ->
+                    val gradeContent = when (grade.id) {
+                        1 -> GradeContent.GRADE1
+                        2 -> GradeContent.GRADE2
+                        3 -> GradeContent.GRADE3
+                        4 -> GradeContent.GRADE4
+                        else -> GradeContent.GRADE4
+                    }
                     Grade(
-                        grade
+                        grade,
+                        gradeContent.color,
+                        gradeContent.picId
                     ) {
                         onNavigateToScreen.invoke(
                             Screen.Home
@@ -98,4 +114,10 @@ fun ChooseGradeScreen(
         }
     }
 
+}
+
+@Composable
+@Preview
+fun ChooseGradePreview() {
+    ChooseGradeScreen { }
 }

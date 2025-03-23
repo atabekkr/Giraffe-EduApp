@@ -30,7 +30,7 @@ sealed class Screen {
     data object Login : Screen()
 
     @Serializable
-    data object ChooseGradeExplanation : Screen()
+    data class ChooseGradeExplanation(val name: String) : Screen()
 
     @Serializable
     data object ChooseGrade : Screen()
@@ -65,7 +65,7 @@ fun MainNav(
     NavHost(
         modifier = modifier,
         navController = navHostController,
-        startDestination = Screen.Topic
+        startDestination = Screen.ChooseGrade
     ) {
         composable<Screen.Splash> {
             SplashScreen { navigateTo ->
@@ -82,8 +82,9 @@ fun MainNav(
                 navHostController.navigate(navigateTo)
             }
         }
-        composable<Screen.ChooseGradeExplanation> {
-            ChooseGradeExplanationScreen { navigateTo ->
+        composable<Screen.ChooseGradeExplanation> { backStackEntry ->
+            val name = backStackEntry.arguments?.getString("name") ?: "No message"
+            ChooseGradeExplanationScreen(name = name) { navigateTo ->
                 navHostController.navigate(navigateTo)
             }
         }

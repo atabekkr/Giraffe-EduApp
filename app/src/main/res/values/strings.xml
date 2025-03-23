@@ -5,4 +5,7 @@
     <string name="login_title2">Please write your name so we can get to know each other better!</string>
     <string name="login_hint_text">Write your name</string>
     <string name="welcome_to_school_education">Welcome to school education.</string>
+    <string name="main_hero_name">Saribek</string>
+    <string name="giraffe">Giraffe</string>
+    <string name="skip">Skip</string>
 </resources>
