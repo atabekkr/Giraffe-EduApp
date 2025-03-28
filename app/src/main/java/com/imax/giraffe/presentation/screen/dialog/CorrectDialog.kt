@@ -1,38 +1,30 @@
 package com.imax.giraffe.presentation.screen.dialog
 
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.imax.giraffe.R
 import com.imax.giraffe.presentation.ui.components.StandardButtonWithoutPadding
-import com.imax.giraffe.presentation.ui.theme.grayTypography
-import com.imax.giraffe.presentation.ui.theme.mainTypography
 
 @Composable
-fun CongratsDialog(onDismiss: () -> Unit) {
+fun CorrectDialog(onDismiss: () -> Unit) {
     AlertDialog(
         onDismissRequest = { onDismiss() },
         title = null,
@@ -46,8 +38,7 @@ fun CongratsDialog(onDismiss: () -> Unit) {
 
                 Card(
                     modifier = Modifier
-                        .height(500.dp)
-                        .fillMaxWidth()
+                        .size(200.dp)
                         .clip(RoundedCornerShape(32.dp)),
                     colors = CardDefaults.cardColors(containerColor = Color.White)
                 ) {
@@ -55,41 +46,17 @@ fun CongratsDialog(onDismiss: () -> Unit) {
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
-                        Column(
-                            modifier = Modifier.padding(bottom = 30.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Image(
-                                painter = painterResource(id = R.drawable.pic_congrats),
-                                contentDescription = "Error Icon",
-                                modifier = Modifier.size(300.dp)
-                            )
-                            Text(
-                                text = "Congratulations",
-                                style = TextStyle(
-                                    color = mainTypography,
-                                    fontSize = 26.sp,
-                                    fontWeight = FontWeight.Bold
-                                ),
-                            )
-                            Text(
-                                text = "You did a great job in the test\n" +
-                                        "and earn meat for your pet",
-                                modifier = Modifier.padding(top = 6.dp),
-                                style = TextStyle(
-                                    color = grayTypography,
-                                    fontSize = 14.sp,
-                                    fontWeight = FontWeight.Medium,
-                                ),
-                                textAlign = TextAlign.Center
-                            )
-                        }
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_correct),
+                            contentDescription = "Error Icon",
+                            modifier = Modifier.size(112.dp)
+                        )
                     }
                 }
 
                 Spacer(modifier = Modifier.weight(1f)) // Отступ снизу перед кнопкой
 
-                StandardButtonWithoutPadding(text = "Home") {
+                StandardButtonWithoutPadding(text = "Next") {
                     onDismiss()
                 }
 
@@ -107,6 +74,6 @@ fun CongratsDialog(onDismiss: () -> Unit) {
 
 @Preview
 @Composable
-fun CongratsDialogPreview() {
-    CongratsDialog { }
+fun CorrectDialogPreview() {
+    CorrectDialog {  }
 }

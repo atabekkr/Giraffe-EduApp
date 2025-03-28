@@ -50,3 +50,13 @@ fun getDrawableResourceId(resourceName: String?): Int {
     }
 }
 
+@Composable
+fun getRawResourceId(resourceName: String?): Int {
+    val resource = resourceName ?: "test" // Укажи название аудио по умолчанию
+    val context = LocalContext.current
+    return remember(resource) {
+        context.resources.getIdentifier(resource, "raw", context.packageName)
+    }
+}
+
+

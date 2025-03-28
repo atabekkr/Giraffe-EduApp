@@ -57,9 +57,9 @@ class MainViewModel @Inject constructor(
 
     private val _getWritingTestsResult = MutableStateFlow<List<Writing>?>(null)
     val getWritingTestsResult: StateFlow<List<Writing>?> = _getWritingTestsResult
-    fun getWritingTests(gradeId: Int, levelId: Int) {
+    fun getWritingTests(gradeId: Int, topicId: Int) {
         viewModelScope.launch {
-            _getWritingTestsResult.value = repository.getWritingTests(gradeId, levelId)
+            _getWritingTestsResult.value = repository.getWritingTests(gradeId, topicId)
         }
     }
 

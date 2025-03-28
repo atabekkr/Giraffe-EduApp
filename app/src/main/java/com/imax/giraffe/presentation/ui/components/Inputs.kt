@@ -25,7 +25,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -83,10 +82,11 @@ fun MyOutlinedTextField(inputText: (String) -> Unit) {
 
 @Composable
 fun WritingTestInput(
-    inputText: (String) -> Unit
+    text: String,
+    onTextChange: (String) -> Unit
 ) {
-    var text by remember { mutableStateOf("") }
     val charLimit = 150
+
     Card(
         modifier = Modifier
             .width(342.dp)
@@ -101,7 +101,7 @@ fun WritingTestInput(
             contentAlignment = Alignment.TopEnd
         ) {
             OutlinedButton(
-                onClick = { },
+                onClick = { onTextChange("") },
                 modifier = Modifier.size(24.dp),
                 shape = CircleShape,
                 border = BorderStroke(width = 0.dp, primaryColor),
@@ -125,14 +125,12 @@ fun WritingTestInput(
                 value = text,
                 onValueChange = {
                     if (it.length <= charLimit) {
-                        text = it
-                        inputText(it)
+                        onTextChange(it)
                     }
                 },
                 placeholder = { Text("Write something...", fontSize = 20.sp) },
-                modifier = Modifier
-                    .fillMaxWidth(),
-                maxLines = 5, // Allows for multiple lines
+                modifier = Modifier.fillMaxWidth(),
+                maxLines = 5,
                 textStyle = TextStyle(color = Color.Black, fontSize = 20.sp),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = Color.Transparent,
