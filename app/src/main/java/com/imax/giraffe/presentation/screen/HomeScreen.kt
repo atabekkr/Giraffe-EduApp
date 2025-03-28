@@ -1,28 +1,22 @@
 package com.imax.giraffe.presentation.screen
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -36,19 +30,33 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.imax.giraffe.R
 import com.imax.giraffe.presentation.navigation.Screen
+import com.imax.giraffe.presentation.screen.viewmodel.MainViewModel
 import com.imax.giraffe.presentation.screen.viewmodel.UserViewModel
-import com.imax.giraffe.presentation.ui.theme.gray
+import com.imax.giraffe.presentation.ui.components.GradeCard
 import com.imax.giraffe.presentation.ui.theme.grayTypography
 import com.imax.giraffe.presentation.ui.theme.mainTypography
 import com.imax.giraffe.presentation.utils.GradeContent
+import com.imax.giraffe.presentation.utils.getDrawableResourceId
+import com.imax.giraffe.presentation.utils.parseTestSectionCardPicJson
 
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
+    mainViewModel: MainViewModel = hiltViewModel(),
     userViewModel: UserViewModel = hiltViewModel(),
     onNavigateToScreen: (Screen) -> Unit
 ) {
 
+    val gradeId = userViewModel.getGradeId()
+
+    LaunchedEffect(mainViewModel) {
+//        mainViewModel.getGradeTopics(gradeId)
+//        viewModel.getGradeLevels(gradeId)
+        mainViewModel.getGrade(gradeId)
+    }
+
+    val grade = mainViewModel.getGradeResult.collectAsState().value
+    val testSectionPic = grade?.test?.let { parseTestSectionCardPicJson(it) }
     val userName = userViewModel.getUserName()
 
     val gradeContent = when (userViewModel.getGradeId()) {
@@ -100,79 +108,17 @@ fun HomeScreen(
                 contentDescription = "Giraffe"
             )
         }
-        Card(
+        GradeCard(
+            grade = grade,
+            level = "Level ${userViewModel.getLevelIndex() + 1}",
+            gradeContent = gradeContent,
+            feedCount = mainViewModel.getFeedCount()
+        ) { }
+
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 24.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White),
-            shape = RoundedCornerShape(20.dp)
-        ) {
-            Column(
-                modifier = Modifier.padding(24.dp)
-            ) {
-                Text(
-                    text = gradeContent.gradeName,
-                    style = TextStyle(
-                        color = Color.Black,
-                        fontSize = 26.sp,
-                        fontWeight = FontWeight.Bold
-                    ),
-                )
-                Text(
-                    text = "Level 1",
-                    style = TextStyle(
-                        color = gray,
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Medium
-                    ),
-                )
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 50.dp)
-                ) {
-                    Box(
-                        contentAlignment = Alignment.Center,
-                        modifier = Modifier
-                            .width(114.dp)
-                            .height(38.dp)
-                            .clip(RoundedCornerShape(12.dp)) // Rounded corners
-                            .background(Color(0xFFF9D87D)) // Background color
-                            .clickable { onNavigateToScreen.invoke(Screen.Feed) }
-                    ) {
-                        Text(
-                            text = "Feed",
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.White
-                        )
-                    }
-                    Box(
-                        contentAlignment = Alignment.Center,
-                        modifier = Modifier
-                            .padding(start = 8.dp)
-                            .width(38.dp)
-                            .height(38.dp)
-                            .clip(RoundedCornerShape(12.dp)) // Rounded corners
-                            .background(Color(0xFFFFF1CF)) // Background color
-                            .clickable { /* TODO: Handle click */ }
-                            .border(
-                                shape = RoundedCornerShape(12.dp),
-                                border = BorderStroke(width = 2.dp, color = Color(0xFFFFBF08))
-                            )
-                    ) {
-                        Text(
-                            text = "0",
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color(0xFFFFBF08)
-                        )
-                    }
-                }
-            }
-        }
-        Row(
-            modifier = Modifier.fillMaxWidth(),
+                .padding(top = 24.dp),
             horizontalArrangement = Arrangement.spacedBy(
                 24.dp,
                 alignment = Alignment.CenterHorizontally
@@ -191,8 +137,9 @@ fun HomeScreen(
                 Column(
                     modifier = Modifier.padding(bottom = 16.dp)
                 ) {
+                    val resId = getDrawableResourceId(testSectionPic?.picListening ?: "pic_lion_1")
                     Image(
-                        painter = painterResource(R.drawable.pic_lion_1),
+                        painter = painterResource(resId),
                         modifier = Modifier
                             .size(135.dp)
                             .padding(horizontal = 12.dp),
@@ -224,8 +171,9 @@ fun HomeScreen(
                 Column(
                     modifier = Modifier.padding(bottom = 16.dp)
                 ) {
+                    val resId = getDrawableResourceId(testSectionPic?.picReading ?: "pic_lion_1")
                     Image(
-                        painter = painterResource(R.drawable.pic_lion_1),
+                        painter = painterResource(resId),
                         modifier = Modifier
                             .size(135.dp)
                             .padding(horizontal = 12.dp),
@@ -267,8 +215,9 @@ fun HomeScreen(
                 Column(
                     modifier = Modifier.padding(bottom = 16.dp)
                 ) {
+                    val resId = getDrawableResourceId(testSectionPic?.picWriting ?: "pic_lion_1")
                     Image(
-                        painter = painterResource(R.drawable.pic_lion_1),
+                        painter = painterResource(resId),
                         modifier = Modifier
                             .size(135.dp)
                             .padding(horizontal = 12.dp),
@@ -301,7 +250,7 @@ fun HomeScreen(
                     modifier = Modifier.padding(bottom = 16.dp)
                 ) {
                     Image(
-                        painter = painterResource(R.drawable.pic_lion_1),
+                        painter = painterResource(R.drawable.pic_speaking_lion_card),
                         modifier = Modifier
                             .size(135.dp)
                             .padding(horizontal = 12.dp),

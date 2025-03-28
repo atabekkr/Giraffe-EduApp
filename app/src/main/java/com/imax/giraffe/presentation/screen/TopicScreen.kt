@@ -1,9 +1,7 @@
 package com.imax.giraffe.presentation.screen
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -11,10 +9,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -46,13 +42,12 @@ import com.imax.giraffe.presentation.navigation.Screen
 import com.imax.giraffe.presentation.screen.dialog.StartMatchingDialog
 import com.imax.giraffe.presentation.screen.viewmodel.MainViewModel
 import com.imax.giraffe.presentation.screen.viewmodel.UserViewModel
+import com.imax.giraffe.presentation.ui.components.GradeCard
 import com.imax.giraffe.presentation.ui.theme.blockedTopic
-import com.imax.giraffe.presentation.ui.theme.disabledButton
 import com.imax.giraffe.presentation.ui.theme.gray
 import com.imax.giraffe.presentation.ui.theme.grayTypography
 import com.imax.giraffe.presentation.ui.theme.greenTypography
 import com.imax.giraffe.presentation.ui.theme.mainTypography
-import com.imax.giraffe.presentation.ui.theme.primaryColor
 import com.imax.giraffe.presentation.utils.GradeContent
 import com.imax.giraffe.presentation.utils.getDrawableResourceId
 
@@ -135,96 +130,13 @@ fun TopicScreen(
                 contentDescription = "Giraffe"
             )
         }
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 24.dp)
-                .clip(RoundedCornerShape(20.dp))
-                .background(Color.White)
+        GradeCard(
+            grade = grade,
+            level = level,
+            gradeContent = gradeContent,
+            feedCount = viewModel.getFeedCount()
         ) {
-            val resId = getDrawableResourceId(grade?.gradeAnimalPic)
-            Image(
-                painter = painterResource(resId),
-                contentDescription = null,
-                contentScale = ContentScale.FillBounds,
-                modifier = Modifier
-                    .matchParentSize() // Растянет картинку на всю область Box
-            )
-
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth(), // Уменьшает размер, чтобы фон был виден
-                colors = CardDefaults.cardColors(containerColor = Color.Transparent), // Делаем фон карты прозрачным
-                shape = RoundedCornerShape(20.dp)
-            ) {
-                Column(
-                    modifier = Modifier.padding(24.dp)
-                ) {
-                    Text(
-                        text = gradeContent.gradeName,
-                        style = TextStyle(
-                            color = Color.Black,
-                            fontSize = 26.sp,
-                            fontWeight = FontWeight.Bold
-                        ),
-                    )
-                    Text(
-                        text = level,
-                        style = TextStyle(
-                            color = gray,
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.Medium
-                        ),
-                    )
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 60.dp)
-                    ) {
-                        val feedCount = viewModel.getFeedCount()
-                        val feedButtonColor = if (feedCount == 0) disabledButton else primaryColor
-                        Box(
-                            contentAlignment = Alignment.Center,
-                            modifier = Modifier
-                                .width(114.dp)
-                                .height(38.dp)
-                                .clip(RoundedCornerShape(12.dp))
-                                .background(feedButtonColor)
-                                .clickable(enabled = feedCount != 0) {
-                                    onNavigateToScreen.invoke(Screen.Feed)
-                                }
-                        ) {
-                            Text(
-                                text = "Feed",
-                                fontSize = 18.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = Color.White
-                            )
-                        }
-                        Box(
-                            contentAlignment = Alignment.Center,
-                            modifier = Modifier
-                                .padding(start = 8.dp)
-                                .width(38.dp)
-                                .height(38.dp)
-                                .clip(RoundedCornerShape(12.dp))
-                                .background(Color(0xFFFFF1CF))
-                                .clickable(enabled = false) {}
-                                .border(
-                                    shape = RoundedCornerShape(12.dp),
-                                    border = BorderStroke(width = 2.dp, color = Color(0xFFFFBF08))
-                                )
-                        ) {
-                            Text(
-                                text = "$feedCount",
-                                fontSize = 20.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = Color(0xFFFFBF08)
-                            )
-                        }
-                    }
-                }
-            }
+            onNavigateToScreen(Screen.Feed)
         }
         val firstTopicCompletedPercent =
             if (viewModel.isFirstTopicCompleted()) 100 else viewModel.getTopicCompletedPercent()

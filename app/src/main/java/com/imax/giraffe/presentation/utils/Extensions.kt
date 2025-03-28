@@ -6,6 +6,7 @@ import androidx.compose.ui.platform.LocalContext
 import com.google.gson.Gson
 import com.imax.giraffe.presentation.data.db.entities.GradeTopic
 import com.imax.giraffe.presentation.data.db.entities.Levels
+import com.imax.giraffe.presentation.data.db.entities.TestSectionPic
 import com.imax.giraffe.presentation.data.db.entities.Words
 
 fun parseTopicsJson(jsonString: String): GradeTopic? {
@@ -29,6 +30,14 @@ fun parseVocabularyJson(jsonString: String): List<String> {
         Gson().fromJson(jsonString, Words::class.java).data
     } catch (e: Exception) {
         emptyList()
+    }
+}
+
+fun parseTestSectionCardPicJson(jsonString: String): TestSectionPic? {
+    return try {
+        Gson().fromJson(jsonString, TestSectionPic::class.java)
+    } catch (e: Exception) {
+        null
     }
 }
 

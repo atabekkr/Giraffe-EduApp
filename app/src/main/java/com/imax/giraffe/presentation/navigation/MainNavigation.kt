@@ -73,7 +73,7 @@ fun MainNav(
     NavHost(
         modifier = modifier,
         navController = navHostController,
-        startDestination = Screen.Matching
+        startDestination = Screen.Home
     ) {
         composable<Screen.Splash> {
             SplashScreen { navigateTo ->
