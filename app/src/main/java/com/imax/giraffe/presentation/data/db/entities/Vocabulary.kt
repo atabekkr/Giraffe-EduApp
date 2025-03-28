@@ -17,3 +17,7 @@ data class Vocabulary(
     @ColumnInfo(name = "karakalpak_words")
     val karakalpakWords: String
 )
+
+data class Words(
+    val data: List<String>
+)

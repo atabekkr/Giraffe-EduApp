@@ -112,7 +112,9 @@ fun MainNav(
             }
         }
         composable<Screen.Matching> {
-            MatchingScreen()
+            MatchingScreen { navigateTo ->
+                navHostController.navigate(navigateTo)
+            }
         }
         composable<Screen.Home> {
             HomeScreen { navigateTo ->
