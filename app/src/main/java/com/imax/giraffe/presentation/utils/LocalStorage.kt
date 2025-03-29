@@ -14,9 +14,15 @@ class LocalStorage(preference: SharedPreferences) {
     var feedCount by IntPreference(preference, 0)
 
     var levelIndex by IntPreference(preference, 0)
+    var feedLevel by IntPreference(preference, 1)
 
     var userName by StringPreference(preference, "")
 
     var gradeId by IntPreference(preference, 0)
+
+    var isWritingTestCompleted by BooleanPreference(preference, false)
+    var isSpeakingTestCompleted by BooleanPreference(preference, false)
+    var isReadingTestCompleted by BooleanPreference(preference, false)
+    var isListeningTestCompleted by BooleanPreference(preference, false)
 
 }

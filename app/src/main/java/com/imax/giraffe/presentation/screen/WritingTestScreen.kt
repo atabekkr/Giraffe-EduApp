@@ -112,6 +112,7 @@ fun WritingTestScreen(
                     }
                 else
                     CongratsDialog {
+                        userViewModel.setWritingTestCompleted()
                         userViewModel.incrementLevelIndex()
                         onNavigateToScreen(Screen.Home)
                     }

@@ -28,6 +28,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -58,6 +59,8 @@ fun TopicScreen(
     userViewModel: UserViewModel = hiltViewModel(),
     onNavigateToScreen: (Screen) -> Unit
 ) {
+
+    val context = LocalContext.current
 
     val gradeId = userViewModel.getGradeId()
 
@@ -146,13 +149,14 @@ fun TopicScreen(
                 .clip(RoundedCornerShape(20.dp))
                 .background(Color.White)
                 .clickable {
+                    if (userViewModel.isFirstTopicCompleted()) return@clickable
                     if (levelIndex != 0)
                         onNavigateToScreen.invoke(Screen.Home)
                     else
                         showStartMatchingDialog = true
                 }
         ) {
-            val resId = getDrawableResourceId(topics?.topic1?.pic ?: "pic_grade1_topic1")
+            val resId = getDrawableResourceId(context, topics?.topic1?.pic)
             Image(
                 painter = painterResource(resId),
                 contentDescription = null,
@@ -211,9 +215,12 @@ fun TopicScreen(
                 .padding(top = 24.dp)
                 .clip(RoundedCornerShape(20.dp))
                 .background(cardColor)
+                .clickable {
+                    onNavigateToScreen.invoke(Screen.Home)
+                }
         ) {
 
-            val resId = getDrawableResourceId(topics?.topic2?.pic ?: "pic_grade1_topic1")
+            val resId = getDrawableResourceId(context, topics?.topic2?.pic ?: "pic_grade1_topic1")
             Image(
                 painter = painterResource(resId),
                 contentDescription = null,

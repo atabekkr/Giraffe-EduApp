@@ -81,6 +81,44 @@ fun MyOutlinedTextField(inputText: (String) -> Unit) {
 }
 
 @Composable
+fun PetNameTextField(inputText: (String) -> Unit) {
+    var input by rememberSaveable { mutableStateOf("") }
+
+    OutlinedTextField(
+        modifier = Modifier
+            .padding(horizontal = 24.dp, vertical = 20.dp)
+            .fillMaxWidth(),
+        shape = RoundedCornerShape(16.dp),
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedBorderColor = gray,
+            unfocusedBorderColor = gray,
+            unfocusedContainerColor = Color.White,
+            focusedContainerColor = Color.White,
+            focusedTextColor = mainTypography,
+            unfocusedLabelColor = gray,
+        ),
+        value = input,
+        onValueChange = {
+            input = it
+            inputText(it)
+        },
+        textStyle = TextStyle(fontWeight = FontWeight.Medium, fontSize = 16.sp),
+        placeholder = {
+            Text(
+                "Write your pet’s name",
+                style = TextStyle(
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = grayTypography
+                )
+            )
+        },
+        singleLine = true,
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
+    )
+}
+
+@Composable
 fun WritingTestInput(
     text: String,
     onTextChange: (String) -> Unit

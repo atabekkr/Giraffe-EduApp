@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -88,6 +89,7 @@ fun GradePreview() {
 
 @Composable
 fun GradeCard(grade: Grade?, gradeContent: GradeContent, level: String, feedCount: Int, onNavigateToScreen: (Screen) -> Unit) {
+    val context = LocalContext.current
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -95,7 +97,7 @@ fun GradeCard(grade: Grade?, gradeContent: GradeContent, level: String, feedCoun
             .clip(RoundedCornerShape(20.dp))
             .background(Color.White)
     ) {
-        val resId = getDrawableResourceId(grade?.gradeAnimalPic)
+        val resId = getDrawableResourceId(context, grade?.gradeAnimalPic)
         Image(
             painter = painterResource(resId),
             contentDescription = null,

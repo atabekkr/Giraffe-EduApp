@@ -43,6 +43,7 @@ import com.imax.giraffe.presentation.screen.dialog.CongratsDialog
 import com.imax.giraffe.presentation.screen.dialog.CorrectDialog
 import com.imax.giraffe.presentation.screen.dialog.ErrorDialog
 import com.imax.giraffe.presentation.screen.viewmodel.MainViewModel
+import com.imax.giraffe.presentation.screen.viewmodel.UserViewModel
 import com.imax.giraffe.presentation.ui.components.SoundCard
 import com.imax.giraffe.presentation.ui.components.StandardButtonWithoutPadding
 import com.imax.giraffe.presentation.ui.theme.grayTypography
@@ -52,13 +53,16 @@ import java.io.File
 @Composable
 fun SpeakingTestScreen(
     viewModel: MainViewModel = hiltViewModel(),
+    userViewModel: UserViewModel = hiltViewModel(),
     onNavigateToScreen: (Screen) -> Unit
 ) {
 
     val context = LocalContext.current
 
+    val gradeId = userViewModel.getGradeId()
+    val topicId = userViewModel.getTopicId()
     LaunchedEffect(viewModel) {
-        viewModel.getSpeakingTests(1, 1)
+        viewModel.getSpeakingTests(gradeId, topicId)
     }
     val tests = viewModel.getSpeakingTestsResult.collectAsState().value
 
@@ -114,6 +118,8 @@ fun SpeakingTestScreen(
                     }
                 else
                     CongratsDialog {
+                        userViewModel.setSpeakingTestCompleted()
+                        userViewModel.incrementLevelIndex()
                         onNavigateToScreen(Screen.Home)
                     }
             }

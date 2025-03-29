@@ -40,6 +40,7 @@ import com.imax.giraffe.presentation.screen.dialog.CongratsDialog
 import com.imax.giraffe.presentation.screen.dialog.CorrectDialog
 import com.imax.giraffe.presentation.screen.dialog.ErrorDialog
 import com.imax.giraffe.presentation.screen.viewmodel.MainViewModel
+import com.imax.giraffe.presentation.screen.viewmodel.UserViewModel
 import com.imax.giraffe.presentation.ui.components.ReadingSentenceCard
 import com.imax.giraffe.presentation.ui.components.StandardButtonWithoutPadding
 import com.imax.giraffe.presentation.ui.theme.grayTypography
@@ -50,11 +51,14 @@ import com.imax.giraffe.presentation.utils.parseReadingAnswersJson
 fun ReadingTestScreen(
     modifier: Modifier = Modifier,
     viewModel: MainViewModel = hiltViewModel(),
+    userViewModel: UserViewModel = hiltViewModel(),
     onNavigateToScreen: (Screen) -> Unit
 ) {
 
+    val gradeId = userViewModel.getGradeId()
+    val topicId = userViewModel.getTopicId()
     LaunchedEffect(viewModel) {
-        viewModel.getReadingTests(4, 1)
+        viewModel.getReadingTests(gradeId, topicId)
     }
     val tests = viewModel.getReadingTestsResult.collectAsState().value
 
@@ -90,6 +94,8 @@ fun ReadingTestScreen(
                 }
             else
                 CongratsDialog {
+                    userViewModel.setReadingTestCompleted()
+                    userViewModel.incrementLevelIndex()
                     onNavigateToScreen(Screen.Home)
                 }
         }

@@ -27,12 +27,16 @@ class UserViewModel @Inject constructor(
     fun incrementLevelIndex() {
         localStorage.levelIndex++
         localStorage.feedCount++
-        localStorage.topicCompletedPercent += 10
-        if (localStorage.topicCompletedPercent == 100) setFirstTopicCompleted()
+        localStorage.topicCompletedPercent += 20
+        if (localStorage.topicCompletedPercent == 100) {
+            resetCompletedStatus()
+            setFirstTopicCompleted()
+        }
     }
 
     fun setFirstTopicCompleted() {
         localStorage.isFirstTopicCompleted = true
+        localStorage.topicCompletedPercent = 0
     }
 
     fun getTopicId(): Int {
@@ -47,6 +51,38 @@ class UserViewModel @Inject constructor(
 
     fun resetFeedCount() {
         localStorage.feedCount = 0
+    }
+
+    fun isWritingTestCompleted() = localStorage.isWritingTestCompleted
+    fun setWritingTestCompleted() {
+        localStorage.isWritingTestCompleted = true
+    }
+
+    fun isSpeakingTestCompleted() = localStorage.isSpeakingTestCompleted
+    fun setSpeakingTestCompleted() {
+        localStorage.isSpeakingTestCompleted = true
+    }
+
+    fun isReadingTestCompleted() = localStorage.isReadingTestCompleted
+    fun setReadingTestCompleted() {
+        localStorage.isReadingTestCompleted = true
+    }
+
+    fun isListeningTestCompleted() = localStorage.isListeningTestCompleted
+    fun setListeningTestCompleted() {
+        localStorage.isListeningTestCompleted = true
+    }
+
+    fun getFeedLevel() = localStorage.feedLevel
+    fun setFeedLevel(level: Int) {
+        localStorage.feedLevel = level
+    }
+
+    fun resetCompletedStatus() {
+        localStorage.isWritingTestCompleted = false
+        localStorage.isSpeakingTestCompleted = false
+        localStorage.isReadingTestCompleted = false
+        localStorage.isListeningTestCompleted = false
     }
 
 }

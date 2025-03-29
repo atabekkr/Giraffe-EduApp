@@ -1,6 +1,7 @@
 package com.imax.giraffe.presentation.screen
 
 import android.media.MediaPlayer
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -47,6 +48,7 @@ import com.imax.giraffe.presentation.screen.dialog.CongratsDialog
 import com.imax.giraffe.presentation.screen.dialog.CorrectDialog
 import com.imax.giraffe.presentation.screen.dialog.ErrorDialog
 import com.imax.giraffe.presentation.screen.viewmodel.MainViewModel
+import com.imax.giraffe.presentation.screen.viewmodel.UserViewModel
 import com.imax.giraffe.presentation.ui.components.SentenceCard
 import com.imax.giraffe.presentation.ui.components.SoundCard
 import com.imax.giraffe.presentation.ui.components.StandardButtonWithoutPadding
@@ -60,13 +62,17 @@ import com.imax.giraffe.presentation.utils.getRawResourceId
 fun ListeningTestScreen(
     modifier: Modifier = Modifier,
     viewModel: MainViewModel = hiltViewModel(),
+    userViewModel: UserViewModel = hiltViewModel(),
     onNavigateToScreen: (Screen) -> Unit
 ) {
 
     val context = LocalContext.current
 
+    val gradeId = userViewModel.getGradeId()
+    val topicId = userViewModel.getTopicId()
+    Log.d("Listning", "$gradeId --- $topicId")
     LaunchedEffect(viewModel) {
-        viewModel.getListeningTests(1, 1)
+        viewModel.getListeningTests(gradeId, topicId)
     }
     val tests = viewModel.getListeningTestsResult.collectAsState().value
 
@@ -118,6 +124,8 @@ fun ListeningTestScreen(
                     }
                 else
                     CongratsDialog {
+                        userViewModel.setListeningTestCompleted()
+                        userViewModel.incrementLevelIndex()
                         onNavigateToScreen(Screen.Home)
                     }
             }

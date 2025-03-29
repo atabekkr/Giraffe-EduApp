@@ -14,6 +14,7 @@ import com.imax.giraffe.presentation.screen.ListeningTestScreen
 import com.imax.giraffe.presentation.screen.LoginScreen
 import com.imax.giraffe.presentation.screen.MatchingScreen
 import com.imax.giraffe.presentation.screen.ReadingTestScreen
+import com.imax.giraffe.presentation.screen.SetNameToPetScreen
 import com.imax.giraffe.presentation.screen.SpeakingTestScreen
 import com.imax.giraffe.presentation.screen.SplashScreen
 import com.imax.giraffe.presentation.screen.TopicScreen
@@ -63,6 +64,9 @@ sealed class Screen {
 
     @Serializable
     data object ReadingTest : Screen()
+
+    @Serializable
+    data object SetNameToPet : Screen()
 }
 
 @Composable
@@ -77,7 +81,9 @@ fun MainNav(
     ) {
         composable<Screen.Splash> {
             SplashScreen { navigateTo ->
-                navHostController.navigate(navigateTo)
+                navHostController.navigate(navigateTo) {
+                    popUpTo(Screen.Splash) { inclusive = true }
+                }
             }
         }
         composable<Screen.Welcome> {
@@ -103,7 +109,9 @@ fun MainNav(
         }
         composable<Screen.AfterChooseGrade> {
             AfterGradeChooseScreen { navigateTo ->
-                navHostController.navigate(navigateTo)
+                navHostController.navigate(navigateTo) {
+                    popUpTo<Screen.AfterChooseGrade> { inclusive = true }
+                }
             }
         }
         composable<Screen.Topic> {
@@ -124,9 +132,15 @@ fun MainNav(
             }
         }
         composable<Screen.Feed> {
-            FeedScreen { navigateTo ->
-                navHostController.navigate(navigateTo)
-            }
+            FeedScreen(
+                onNavigateToScreen = { navigateTo ->
+                    navHostController.navigate(navigateTo)
+
+                },
+                onNavigateUp = {
+                    navHostController.popBackStack()
+                }
+            )
         }
         composable<Screen.ListeningTest> {
             ListeningTestScreen { navigateTo ->
@@ -151,6 +165,13 @@ fun MainNav(
         }
         composable<Screen.ReadingTest> {
             ReadingTestScreen { navigateTo ->
+                navHostController.navigate(navigateTo) {
+                    popUpTo(Screen.Topic) { inclusive = false }
+                }
+            }
+        }
+        composable<Screen.SetNameToPet> {
+            SetNameToPetScreen { navigateTo ->
                 navHostController.navigate(navigateTo) {
                     popUpTo(Screen.Topic) { inclusive = false }
                 }

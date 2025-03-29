@@ -21,6 +21,10 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,17 +35,41 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.imax.giraffe.R
 import com.imax.giraffe.presentation.navigation.Screen
+import com.imax.giraffe.presentation.screen.viewmodel.MainViewModel
+import com.imax.giraffe.presentation.screen.viewmodel.UserViewModel
 import com.imax.giraffe.presentation.ui.components.StandardButtonWithoutPadding
 import com.imax.giraffe.presentation.ui.theme.grayTypography
 import com.imax.giraffe.presentation.ui.theme.primaryColor
+import com.imax.giraffe.presentation.utils.LevelPic
 
 @Composable
 fun FeedScreen(
     modifier: Modifier = Modifier,
-    onNavigateToScreen: (Screen) -> Unit
+    mainViewModel: MainViewModel = hiltViewModel(),
+    userViewModel: UserViewModel = hiltViewModel(),
+    onNavigateToScreen: (Screen) -> Unit,
+    onNavigateUp: () -> Unit,
 ) {
+
+    var feedCount by remember { mutableIntStateOf(userViewModel.getFeedCount()) }
+    var feedLevel by remember { mutableIntStateOf(userViewModel.getFeedLevel()) }
+
+    val picAnimal = when (feedLevel) {
+        1 -> LevelPic.LEVEL1.resId
+        2 -> LevelPic.LEVEL2.resId
+        3 -> LevelPic.LEVEL3.resId
+        4 -> LevelPic.LEVEL4.resId
+        5 -> LevelPic.LEVEL5.resId
+        6 -> LevelPic.LEVEL6.resId
+        7 -> LevelPic.LEVEL7.resId
+        8 -> LevelPic.LEVEL8.resId
+        9 -> LevelPic.LEVEL9.resId
+        else -> LevelPic.LEVEL10.resId
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -68,7 +96,7 @@ fun FeedScreen(
                         .size(64.dp)
                         .clip(RoundedCornerShape(12.dp)) // Rounded corners
                         .background(primaryColor) // Background color
-                        .clickable { /* TODO: Handle click */ }
+                        .clickable { onNavigateUp()}
                 ) {
                     Icon(
                         Icons.Default.Close,
@@ -97,16 +125,15 @@ fun FeedScreen(
                     )
                 }
                 Text(
-                    text = "level 1",
+                    text = "level $feedLevel",
                     fontSize = 16.sp,
                     color = grayTypography
                 )
 
                 Spacer(modifier = Modifier.height(20.dp))
 
-                // Изображение льва
                 Image(
-                    painter = painterResource(R.drawable.pic_lion_1), // Заменить на актуальный ресурс
+                    painter = painterResource(picAnimal),
                     contentDescription = "Lion",
                     modifier = Modifier.size(300.dp)
                 )
@@ -129,7 +156,7 @@ fun FeedScreen(
                         )
                 ) {
                     Text(
-                        text = "0",
+                        text = "$feedCount",
                         fontSize = 48.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color(0xFFFFBF08)
@@ -141,7 +168,15 @@ fun FeedScreen(
                 StandardButtonWithoutPadding(
                     modifier = Modifier.padding(bottom = 32.dp),
                     "Feed"
-                ) { }
+                ) {
+                    feedLevel += feedCount
+                    feedCount = 0
+                    userViewModel.setFeedLevel(feedLevel)
+                    userViewModel.resetFeedCount()
+                    if (feedLevel >= 10) {
+                        onNavigateToScreen(Screen.SetNameToPet)
+                    }
+                }
             }
         }
     }

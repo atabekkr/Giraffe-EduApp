@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -33,6 +34,7 @@ import com.imax.giraffe.presentation.navigation.Screen
 import com.imax.giraffe.presentation.screen.viewmodel.MainViewModel
 import com.imax.giraffe.presentation.screen.viewmodel.UserViewModel
 import com.imax.giraffe.presentation.ui.components.GradeCard
+import com.imax.giraffe.presentation.ui.theme.completedColor
 import com.imax.giraffe.presentation.ui.theme.grayTypography
 import com.imax.giraffe.presentation.ui.theme.mainTypography
 import com.imax.giraffe.presentation.utils.GradeContent
@@ -46,6 +48,8 @@ fun HomeScreen(
     userViewModel: UserViewModel = hiltViewModel(),
     onNavigateToScreen: (Screen) -> Unit
 ) {
+
+    val context = LocalContext.current
 
     val gradeId = userViewModel.getGradeId()
 
@@ -113,7 +117,11 @@ fun HomeScreen(
             level = "Level ${userViewModel.getLevelIndex() + 1}",
             gradeContent = gradeContent,
             feedCount = userViewModel.getFeedCount()
-        ) { }
+        ) {
+            onNavigateToScreen.invoke(
+                Screen.Feed
+            )
+        }
 
         Row(
             modifier = Modifier
@@ -124,10 +132,17 @@ fun HomeScreen(
                 alignment = Alignment.CenterHorizontally
             )
         ) {
+            val containerColor =
+                if (userViewModel.isListeningTestCompleted()) completedColor else Color.White
+            val listeningCardEnabled = !userViewModel.isListeningTestCompleted()
             Card(
                 modifier = Modifier.weight(1f),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
+                colors = CardDefaults.cardColors(
+                    containerColor = containerColor,
+                    disabledContainerColor = completedColor
+                ),
                 shape = RoundedCornerShape(20.dp),
+                enabled = listeningCardEnabled,
                 onClick = {
                     onNavigateToScreen.invoke(
                         Screen.ListeningTest
@@ -135,9 +150,15 @@ fun HomeScreen(
                 }
             ) {
                 Column(
-                    modifier = Modifier.padding(bottom = 16.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    val resId = getDrawableResourceId(testSectionPic?.picListening ?: "pic_lion_1")
+                    val resId = getDrawableResourceId(
+                        context,
+                        testSectionPic?.picListening ?: "pic_listening_lion_card"
+                    )
                     Image(
                         painter = painterResource(resId),
                         modifier = Modifier
@@ -147,7 +168,6 @@ fun HomeScreen(
                     )
                     Text(
                         modifier = Modifier
-                            .padding(top = 2.dp)
                             .align(Alignment.CenterHorizontally),
                         text = "Listening",
                         style = TextStyle(
@@ -158,10 +178,17 @@ fun HomeScreen(
                     )
                 }
             }
+            val readingCardContainerColor =
+                if (userViewModel.isReadingTestCompleted()) completedColor else Color.White
+            val readingCardEnabled = !userViewModel.isReadingTestCompleted()
             Card(
                 modifier = Modifier.weight(1f),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
+                colors = CardDefaults.cardColors(
+                    containerColor = readingCardContainerColor,
+                    disabledContainerColor = completedColor
+                ),
                 shape = RoundedCornerShape(20.dp),
+                enabled = readingCardEnabled,
                 onClick = {
                     onNavigateToScreen.invoke(
                         Screen.ReadingTest
@@ -169,9 +196,12 @@ fun HomeScreen(
                 }
             ) {
                 Column(
-                    modifier = Modifier.padding(bottom = 16.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    val resId = getDrawableResourceId(testSectionPic?.picReading ?: "pic_lion_1")
+                    val resId = getDrawableResourceId(context, testSectionPic?.picReading)
                     Image(
                         painter = painterResource(resId),
                         modifier = Modifier
@@ -181,7 +211,6 @@ fun HomeScreen(
                     )
                     Text(
                         modifier = Modifier
-                            .padding(top = 2.dp)
                             .align(Alignment.CenterHorizontally),
                         text = "Reading",
                         style = TextStyle(
@@ -202,10 +231,17 @@ fun HomeScreen(
                 alignment = Alignment.CenterHorizontally
             )
         ) {
+            val writingCardContainerColor =
+                if (userViewModel.isWritingTestCompleted()) completedColor else Color.White
+            val writingCardEnabled = !userViewModel.isWritingTestCompleted()
             Card(
                 modifier = Modifier.weight(1f),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
+                colors = CardDefaults.cardColors(
+                    containerColor = writingCardContainerColor,
+                    disabledContainerColor = completedColor
+                ),
                 shape = RoundedCornerShape(20.dp),
+                enabled = writingCardEnabled,
                 onClick = {
                     onNavigateToScreen.invoke(
                         Screen.WritingTest
@@ -213,9 +249,12 @@ fun HomeScreen(
                 }
             ) {
                 Column(
-                    modifier = Modifier.padding(bottom = 16.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    val resId = getDrawableResourceId(testSectionPic?.picWriting ?: "pic_lion_1")
+                    val resId = getDrawableResourceId(context, testSectionPic?.picWriting)
                     Image(
                         painter = painterResource(resId),
                         modifier = Modifier
@@ -225,7 +264,6 @@ fun HomeScreen(
                     )
                     Text(
                         modifier = Modifier
-                            .padding(top = 2.dp)
                             .align(Alignment.CenterHorizontally),
                         text = "Writing",
                         style = TextStyle(
@@ -236,10 +274,17 @@ fun HomeScreen(
                     )
                 }
             }
+            val speakingCardContainerColor =
+                if (userViewModel.isSpeakingTestCompleted()) completedColor else Color.White
+            val speakingCardEnabled = !userViewModel.isSpeakingTestCompleted()
             Card(
                 modifier = Modifier.weight(1f),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
+                colors = CardDefaults.cardColors(
+                    containerColor = speakingCardContainerColor,
+                    disabledContainerColor = completedColor
+                ),
                 shape = RoundedCornerShape(20.dp),
+                enabled = speakingCardEnabled,
                 onClick = {
                     onNavigateToScreen.invoke(
                         Screen.SpeakingTest
@@ -247,10 +292,14 @@ fun HomeScreen(
                 }
             ) {
                 Column(
-                    modifier = Modifier.padding(bottom = 16.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    val resId = getDrawableResourceId(context, testSectionPic?.picSpeaking)
                     Image(
-                        painter = painterResource(R.drawable.pic_speaking_lion_card),
+                        painter = painterResource(resId),
                         modifier = Modifier
                             .size(135.dp)
                             .padding(horizontal = 12.dp),
@@ -258,7 +307,6 @@ fun HomeScreen(
                     )
                     Text(
                         modifier = Modifier
-                            .padding(top = 2.dp)
                             .align(Alignment.CenterHorizontally),
                         text = "Speaking",
                         style = TextStyle(

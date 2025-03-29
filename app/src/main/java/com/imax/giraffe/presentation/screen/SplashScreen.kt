@@ -44,7 +44,6 @@ fun SplashScreen(
         )
         LaunchedEffect(lifeCycleOwner) {
             delay(1000)
-//            onNavigateToScreen.invoke(Screen.Welcome)
             if (viewModel.isLogin())
                 onNavigateToScreen.invoke(Screen.Topic)
             else
