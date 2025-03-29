@@ -16,8 +16,8 @@ interface GiraffeDao {
     @Query("SELECT * FROM Grades WHERE id = :gradeId")
     suspend fun getGrade(gradeId: Int): Grade
 
-    @Query("SELECT * FROM Listening WHERE grade_id = :gradeId AND topic_id = :levelId")
-    suspend fun getListeningTests(gradeId: Int, levelId: Int): List<Listening>
+    @Query("SELECT * FROM Listening WHERE grade_id = :gradeId AND topic_id = :topicId")
+    suspend fun getListeningTests(gradeId: Int, topicId: Int): List<Listening>
 
     @Query("SELECT * FROM Writing WHERE grade_id = :gradeId AND topic_id = :topicId")
     suspend fun getWritingTests(gradeId: Int, topicId: Int): List<Writing>

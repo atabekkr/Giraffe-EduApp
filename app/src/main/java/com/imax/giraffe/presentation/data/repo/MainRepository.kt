@@ -25,8 +25,8 @@ class MainRepository @Inject constructor(
         return parseLevelsJson(jsonString)
     }
 
-    suspend fun getListeningTests(gradeId: Int, levelId: Int) =
-        dao.getListeningTests(gradeId, levelId)
+    suspend fun getListeningTests(gradeId: Int, topicId: Int) =
+        dao.getListeningTests(gradeId, topicId)
 
     suspend fun getWritingTests(gradeId: Int, topicId: Int) = dao.getWritingTests(gradeId, topicId)
 
