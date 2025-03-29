@@ -1,5 +1,7 @@
 package com.imax.giraffe.presentation.utils
 
+import android.content.Context
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
@@ -50,13 +52,11 @@ fun getDrawableResourceId(resourceName: String?): Int {
     }
 }
 
-@Composable
-fun getRawResourceId(resourceName: String?): Int {
-    val resource = resourceName ?: "test" // Укажи название аудио по умолчанию
-    val context = LocalContext.current
-    return remember(resource) {
-        context.resources.getIdentifier(resource, "raw", context.packageName)
-    }
+fun getRawResourceId(context: Context, resourceName: String?): Int {
+    Log.d("getRawResourceId", "getRawResourceId: $resourceName")
+    val resource = resourceName ?: "test" // Аудио по умолчанию
+    return context.resources.getIdentifier(resource, "raw", context.packageName)
 }
+
 
 
