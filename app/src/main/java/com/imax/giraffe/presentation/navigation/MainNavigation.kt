@@ -73,7 +73,7 @@ fun MainNav(
     NavHost(
         modifier = modifier,
         navController = navHostController,
-        startDestination = Screen.ReadingTest
+        startDestination = Screen.Splash
     ) {
         composable<Screen.Splash> {
             SplashScreen { navigateTo ->
@@ -113,7 +113,9 @@ fun MainNav(
         }
         composable<Screen.Matching> {
             MatchingScreen { navigateTo ->
-                navHostController.navigate(navigateTo)
+                navHostController.navigate(navigateTo) {
+                    popUpTo(Screen.Topic) { inclusive = false }
+                }
             }
         }
         composable<Screen.Home> {
@@ -128,20 +130,30 @@ fun MainNav(
         }
         composable<Screen.ListeningTest> {
             ListeningTestScreen { navigateTo ->
-                navHostController.navigate(navigateTo)
+                navHostController.navigate(navigateTo) {
+                    popUpTo(Screen.Topic) { inclusive = false }
+                }
             }
         }
         composable<Screen.WritingTest> {
             WritingTestScreen { navigateTo ->
-                navHostController.navigate(navigateTo)
+                navHostController.navigate(navigateTo) {
+                    popUpTo(Screen.Topic) { inclusive = false }
+                }
             }
         }
         composable<Screen.SpeakingTest> {
-            SpeakingTestScreen()
+            SpeakingTestScreen { navigateTo ->
+                navHostController.navigate(navigateTo) {
+                    popUpTo(Screen.Topic) { inclusive = false }
+                }
+            }
         }
         composable<Screen.ReadingTest> {
             ReadingTestScreen { navigateTo ->
-                navHostController.navigate(navigateTo)
+                navHostController.navigate(navigateTo) {
+                    popUpTo(Screen.Topic) { inclusive = false }
+                }
             }
         }
     }

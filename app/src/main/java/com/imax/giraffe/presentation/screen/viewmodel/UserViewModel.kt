@@ -26,6 +26,27 @@ class UserViewModel @Inject constructor(
 
     fun incrementLevelIndex() {
         localStorage.levelIndex++
+        localStorage.feedCount++
+        localStorage.topicCompletedPercent += 10
+        if (localStorage.topicCompletedPercent == 100) setFirstTopicCompleted()
+    }
+
+    fun setFirstTopicCompleted() {
+        localStorage.isFirstTopicCompleted = true
+    }
+
+    fun getTopicId(): Int {
+        return if (!localStorage.isFirstTopicCompleted) 1 else 2
+    }
+
+    fun isFirstTopicCompleted() = localStorage.isFirstTopicCompleted
+
+    fun getTopicCompletedPercent() = localStorage.topicCompletedPercent
+
+    fun getFeedCount() = localStorage.feedCount
+
+    fun resetFeedCount() {
+        localStorage.feedCount = 0
     }
 
 }

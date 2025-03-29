@@ -109,6 +109,7 @@ fun ListeningTestScreen(
                 ErrorDialog { showWrongDialog = false }
             }
             if (showCorrectDialog) {
+                mediaPlayer?.release()
                 if (tests?.getOrNull(index + 1) != null)
                     CorrectDialog {
                         showCorrectDialog = false

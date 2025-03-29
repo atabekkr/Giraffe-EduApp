@@ -1,5 +1,6 @@
 package com.imax.giraffe.presentation.screen
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -58,10 +59,12 @@ fun MatchingScreen(
 ) {
 
     val gradeId = userViewModel.getGradeId()
+    val topicId = userViewModel.getTopicId()
+    Log.d("Matching", gradeId.toString() + topicId.toString())
     LaunchedEffect(viewModel) {
         viewModel.getVocabulary(
-            1,
-            1
+            gradeId,
+            topicId
         )
     }
 
@@ -79,7 +82,7 @@ fun MatchingScreen(
         )
     }
 
-    var showStartMatchingDialog by remember { mutableStateOf(false) }
+    var showCongratsDialog by remember { mutableStateOf(false) }
 
     fun checkMatch(word: String? = null, translation: String? = null) {
         if (word != null) selectedWord = word
@@ -92,7 +95,7 @@ fun MatchingScreen(
                 matchedPairs += selectedWord!!
                 matchedPairs += selectedTranslation!!
                 if (matchedPairs.size == words.size + translations.size) {
-                    showStartMatchingDialog = true
+                    showCongratsDialog = true
                 }
             }
 
@@ -125,10 +128,11 @@ fun MatchingScreen(
             .padding(horizontal = 24.dp)
     ) {
 
-        if (showStartMatchingDialog) {
+        if (showCongratsDialog) {
             CongratsDialog {
+                userViewModel.incrementLevelIndex()
                 onNavigateToScreen.invoke(Screen.Home)
-                showStartMatchingDialog = false
+                showCongratsDialog = false
             }
         }
 

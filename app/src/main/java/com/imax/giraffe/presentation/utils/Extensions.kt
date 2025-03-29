@@ -67,5 +67,3 @@ fun getRawResourceId(context: Context, resourceName: String?): Int {
     return context.resources.getIdentifier(resource, "raw", context.packageName)
 }
 
-
-

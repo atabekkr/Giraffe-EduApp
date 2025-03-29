@@ -41,6 +41,7 @@ import com.imax.giraffe.presentation.screen.dialog.CongratsDialog
 import com.imax.giraffe.presentation.screen.dialog.CorrectDialog
 import com.imax.giraffe.presentation.screen.dialog.ErrorDialog
 import com.imax.giraffe.presentation.screen.viewmodel.MainViewModel
+import com.imax.giraffe.presentation.screen.viewmodel.UserViewModel
 import com.imax.giraffe.presentation.ui.components.SoundCard
 import com.imax.giraffe.presentation.ui.components.StandardButtonWithoutPadding
 import com.imax.giraffe.presentation.ui.components.WritingTestInput
@@ -51,13 +52,16 @@ import com.imax.giraffe.presentation.utils.getRawResourceId
 fun WritingTestScreen(
     modifier: Modifier = Modifier,
     viewModel: MainViewModel = hiltViewModel(),
+    userViewModel: UserViewModel = hiltViewModel(),
     onNavigateToScreen: (Screen) -> Unit
 ) {
 
     val context = LocalContext.current
 
+    val gradeId = userViewModel.getGradeId()
+    val topicId = userViewModel.getTopicId()
     LaunchedEffect(viewModel) {
-        viewModel.getWritingTests(1, 1)
+        viewModel.getWritingTests(gradeId, topicId)
     }
     val tests = viewModel.getWritingTestsResult.collectAsState().value
 
@@ -99,6 +103,7 @@ fun WritingTestScreen(
                 ErrorDialog { showWrongDialog = false }
             }
             if (showCorrectDialog) {
+                mediaPlayer?.release()
                 if (tests?.getOrNull(index + 1) != null)
                     CorrectDialog {
                         showCorrectDialog = false
@@ -107,6 +112,7 @@ fun WritingTestScreen(
                     }
                 else
                     CongratsDialog {
+                        userViewModel.incrementLevelIndex()
                         onNavigateToScreen(Screen.Home)
                     }
             }

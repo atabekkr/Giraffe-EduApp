@@ -112,7 +112,7 @@ fun HomeScreen(
             grade = grade,
             level = "Level ${userViewModel.getLevelIndex() + 1}",
             gradeContent = gradeContent,
-            feedCount = mainViewModel.getFeedCount()
+            feedCount = userViewModel.getFeedCount()
         ) { }
 
         Row(

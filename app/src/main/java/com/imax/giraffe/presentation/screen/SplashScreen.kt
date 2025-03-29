@@ -1,10 +1,12 @@
 package com.imax.giraffe.presentation.screen
 
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.layout.ContentScale
@@ -26,22 +28,27 @@ fun SplashScreen(
 ) {
     val lifeCycleOwner = LocalLifecycleOwner.current
 
-    Column(
+    Box(
         modifier = modifier
             .fillMaxSize()
             .paint(
-                painterResource(R.drawable.pic_splash_bg),
+                painterResource(R.drawable.background1),
                 contentScale = ContentScale.Crop
             )
             .padding(horizontal = 24.dp)
     ) {
+        Image(
+            modifier = Modifier.align(alignment = Alignment.Center),
+            painter = painterResource(R.drawable.grade_lion),
+            contentDescription = "Logo"
+        )
         LaunchedEffect(lifeCycleOwner) {
             delay(1000)
-            onNavigateToScreen.invoke(Screen.Welcome)
-//            if (viewModel.isLogin())
-//                onNavigateToScreen.invoke(Screen.Welcome)
-//            else
-//                onNavigateToScreen.invoke(Screen.Topic)
+//            onNavigateToScreen.invoke(Screen.Welcome)
+            if (viewModel.isLogin())
+                onNavigateToScreen.invoke(Screen.Topic)
+            else
+                onNavigateToScreen.invoke(Screen.Welcome)
         }
     }
 

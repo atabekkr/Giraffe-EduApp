@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.imax.giraffe.R
 import com.imax.giraffe.presentation.navigation.Screen
+import com.imax.giraffe.presentation.screen.viewmodel.SplashViewModel
 import com.imax.giraffe.presentation.screen.viewmodel.UserViewModel
 import com.imax.giraffe.presentation.ui.components.MyOutlinedTextField
 import com.imax.giraffe.presentation.ui.components.StandardButton
@@ -35,6 +36,7 @@ import com.imax.giraffe.presentation.ui.theme.mainTypography
 fun LoginScreen(
     modifier: Modifier = Modifier,
     viewModel: UserViewModel = hiltViewModel(),
+    splashViewModel: SplashViewModel = hiltViewModel(),
     onNavigateToHome: (Screen) -> Unit,
 ) {
 
@@ -72,7 +74,6 @@ fun LoginScreen(
         )
         MyOutlinedTextField {
             name = it
-            viewModel.setUserName(name)
             saveButtonEnabled = name.length >= 3
         }
         Spacer(modifier = modifier.weight(1f))
@@ -80,6 +81,8 @@ fun LoginScreen(
             text = stringResource(R.string.save),
             enabled = saveButtonEnabled
         ) {
+            splashViewModel.setLogin(true)
+            viewModel.setUserName(name)
             onNavigateToHome.invoke(Screen.ChooseGradeExplanation(name))
         }
     }

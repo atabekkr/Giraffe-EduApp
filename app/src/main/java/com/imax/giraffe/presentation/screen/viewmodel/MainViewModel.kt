@@ -7,6 +7,7 @@ import com.imax.giraffe.presentation.data.db.entities.GradeTopic
 import com.imax.giraffe.presentation.data.db.entities.Levels
 import com.imax.giraffe.presentation.data.db.entities.Listening
 import com.imax.giraffe.presentation.data.db.entities.Reading
+import com.imax.giraffe.presentation.data.db.entities.Speaking
 import com.imax.giraffe.presentation.data.db.entities.Vocabulary
 import com.imax.giraffe.presentation.data.db.entities.Writing
 import com.imax.giraffe.presentation.data.repo.MainRepository
@@ -55,6 +56,14 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    private val _getSpeakingTestsResult = MutableStateFlow<List<Speaking>?>(null)
+    val getSpeakingTestsResult: StateFlow<List<Speaking>?> = _getSpeakingTestsResult
+    fun getSpeakingTests(gradeId: Int, topicId: Int) {
+        viewModelScope.launch {
+            _getSpeakingTestsResult.value = repository.getSpeakingTests(gradeId, topicId)
+        }
+    }
+
     private val _getWritingTestsResult = MutableStateFlow<List<Writing>?>(null)
     val getWritingTestsResult: StateFlow<List<Writing>?> = _getWritingTestsResult
     fun getWritingTests(gradeId: Int, topicId: Int) {
@@ -65,28 +74,18 @@ class MainViewModel @Inject constructor(
 
     private val _getReadingTestsResult = MutableStateFlow<List<Reading>?>(null)
     val getReadingTestsResult: StateFlow<List<Reading>?> = _getReadingTestsResult
-    fun getReadingTests(gradeId: Int, levelId: Int) {
+    fun getReadingTests(gradeId: Int, topicId: Int) {
         viewModelScope.launch {
-            _getReadingTestsResult.value = repository.getReadingTests(gradeId, levelId)
+            _getReadingTestsResult.value = repository.getReadingTests(gradeId, topicId)
         }
     }
 
     private val _getVocabularyResult = MutableStateFlow<Vocabulary?>(null)
     val getVocabularyResult: StateFlow<Vocabulary?> = _getVocabularyResult
-    fun getVocabulary(gradeId: Int, levelId: Int) {
+    fun getVocabulary(gradeId: Int, topicId: Int) {
         viewModelScope.launch {
-            _getVocabularyResult.value = repository.getVocabulary(gradeId, levelId)
+            _getVocabularyResult.value = repository.getVocabulary(gradeId, topicId)
         }
     }
-
-    fun setFirstTopicCompleted() {
-        localStorage.isFirstTopicCompleted = true
-    }
-
-    fun isFirstTopicCompleted() = localStorage.isFirstTopicCompleted
-
-    fun getTopicCompletedPercent() = localStorage.topicCompletedPercent
-
-    fun getFeedCount() = localStorage.feedCount
 
 }

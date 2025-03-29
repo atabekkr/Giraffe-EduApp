@@ -134,12 +134,11 @@ fun TopicScreen(
             grade = grade,
             level = level,
             gradeContent = gradeContent,
-            feedCount = viewModel.getFeedCount()
+            feedCount = userViewModel.getFeedCount()
         ) {
             onNavigateToScreen(Screen.Feed)
         }
-        val firstTopicCompletedPercent =
-            if (viewModel.isFirstTopicCompleted()) 100 else viewModel.getTopicCompletedPercent()
+        val firstTopicCompletedPercent = userViewModel.getTopicCompletedPercent()
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -203,9 +202,9 @@ fun TopicScreen(
             }
         }
         val cardColor =
-            if (viewModel.isFirstTopicCompleted()) Color.White else blockedTopic.copy(alpha = 0.5f)
+            if (userViewModel.isFirstTopicCompleted()) Color.White else blockedTopic.copy(alpha = 0.5f)
         val secondTopicCompletedPercent =
-            if (viewModel.isFirstTopicCompleted()) viewModel.getTopicCompletedPercent() else 0
+            if (userViewModel.isFirstTopicCompleted()) userViewModel.getTopicCompletedPercent() else 0
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -224,7 +223,7 @@ fun TopicScreen(
                     .size(200.dp) // Устанавливаем фиксированный размер, если нужно
             )
 
-            if (!viewModel.isFirstTopicCompleted())
+            if (!userViewModel.isFirstTopicCompleted())
                 Image(
                     painter = painterResource(R.drawable.ic_lock),
                     contentDescription = "lock",

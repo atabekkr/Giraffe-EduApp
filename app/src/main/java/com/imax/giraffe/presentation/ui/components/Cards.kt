@@ -2,6 +2,7 @@ package com.imax.giraffe.presentation.ui.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -45,11 +46,19 @@ fun SoundCard(
     modifier: Modifier = Modifier,
     iconRes: Int,
     size: Dp,
+    isSelected: Boolean = false,
     onClick: () -> Unit
 ) {
+    val iconSize = if (size == 72.dp) 36.dp else 64.dp
+
     Card(
         modifier = modifier
-            .size(size),
+            .size(size)
+            .border(
+                width = if (isSelected) 4.dp else 0.dp, // Добавляем бордер при выборе
+                color = if (isSelected) primaryColor else Color.Transparent,
+                shape = RoundedCornerShape(20.dp)
+            ),
         onClick = { onClick() },
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White)
@@ -62,7 +71,7 @@ fun SoundCard(
                 painter = painterResource(iconRes),
                 contentDescription = "Sound Icon",
                 tint = primaryColor,
-                modifier = Modifier.size(64.dp)
+                modifier = Modifier.size(iconSize)
             )
         }
     }
