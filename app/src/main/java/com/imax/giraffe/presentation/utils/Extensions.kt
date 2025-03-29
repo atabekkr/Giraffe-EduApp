@@ -8,6 +8,7 @@ import androidx.compose.ui.platform.LocalContext
 import com.google.gson.Gson
 import com.imax.giraffe.presentation.data.db.entities.GradeTopic
 import com.imax.giraffe.presentation.data.db.entities.Levels
+import com.imax.giraffe.presentation.data.db.entities.ReadingAnswers
 import com.imax.giraffe.presentation.data.db.entities.TestSectionPic
 import com.imax.giraffe.presentation.data.db.entities.Words
 
@@ -30,6 +31,14 @@ fun parseLevelsJson(jsonString: String): Levels {
 fun parseVocabularyJson(jsonString: String): List<String> {
     return try {
         Gson().fromJson(jsonString, Words::class.java).data
+    } catch (e: Exception) {
+        emptyList()
+    }
+}
+
+fun parseReadingAnswersJson(jsonString: String): List<String> {
+    return try {
+        Gson().fromJson(jsonString, ReadingAnswers::class.java).answers
     } catch (e: Exception) {
         emptyList()
     }

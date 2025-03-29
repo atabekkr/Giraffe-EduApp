@@ -19,3 +19,7 @@ data class Reading(
     val answers: String,
     val key: String
 )
+
+data class ReadingAnswers(
+    val answers: List<String>
+)
