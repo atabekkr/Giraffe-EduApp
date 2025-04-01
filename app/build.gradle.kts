@@ -45,6 +45,8 @@ android {
 
 dependencies {
 
+    implementation(project(":models"))
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -78,5 +80,7 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
 
     implementation(libs.gson)
+
+    implementation(libs.vosk.android)
 
 }

@@ -59,6 +59,7 @@ fun StandardButton(
 fun StandardButtonWithoutPadding(
     modifier: Modifier = Modifier,
     text: String,
+    enabled: Boolean = true,
     onClick: () -> Unit,
 ) {
     Button(
@@ -68,6 +69,7 @@ fun StandardButtonWithoutPadding(
         onClick = {
             onClick.invoke()
         },
+        enabled = enabled,
         shape = RoundedCornerShape(16.dp),
         colors = ButtonDefaults.buttonColors(
             contentColor = Color.White,
