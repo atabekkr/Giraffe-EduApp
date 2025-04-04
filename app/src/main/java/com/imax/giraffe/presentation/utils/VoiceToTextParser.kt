@@ -127,6 +127,14 @@ class VoiceToTextParser @Inject constructor(
             }
     }
 
+    fun setDefaultText() {
+        _state.update {
+            it.copy(
+                spokenText = ""
+            )
+        }
+    }
+
     override fun onPartialResults(partialResults: Bundle?) = Unit
 
     override fun onEvent(eventType: Int, params: Bundle?) = Unit

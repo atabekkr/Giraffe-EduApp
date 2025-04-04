@@ -62,6 +62,7 @@ fun StandardButtonWithoutPadding(
     enabled: Boolean = true,
     onClick: () -> Unit,
 ) {
+    val saveButtonColor = if (enabled) primaryColor else disabledButton
     Button(
         modifier = modifier
             .fillMaxWidth()
@@ -73,7 +74,9 @@ fun StandardButtonWithoutPadding(
         shape = RoundedCornerShape(16.dp),
         colors = ButtonDefaults.buttonColors(
             contentColor = Color.White,
-            containerColor = primaryColor
+            containerColor = saveButtonColor,
+            disabledContainerColor = disabledButton,
+            disabledContentColor = Color.White
         )
     ) {
         Text(text, style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp))

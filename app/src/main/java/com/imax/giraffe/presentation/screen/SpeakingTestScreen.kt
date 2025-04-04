@@ -49,6 +49,7 @@ import com.imax.giraffe.presentation.ui.components.SoundCard
 import com.imax.giraffe.presentation.ui.components.StandardButtonWithoutPadding
 import com.imax.giraffe.presentation.ui.theme.grayTypography
 import com.imax.giraffe.presentation.utils.getRawResourceId
+import com.imax.giraffe.presentation.utils.isTextCorrect
 import java.io.File
 
 
@@ -76,6 +77,8 @@ fun SpeakingTestScreen(
     var showCorrectDialog by remember { mutableStateOf(false) }
     var showRecognizedTextDialog by remember { mutableStateOf(false) } // New dialog state
 
+    var state = voiceViewModel.state.collectAsState()
+
     var mediaPlayer: MediaPlayer? = null
 
     val snackbarHostState = remember { SnackbarHostState() }
@@ -89,8 +92,6 @@ fun SpeakingTestScreen(
         }
     }
 
-    val state by voiceViewModel.state.collectAsState()
-
     var canRecord by remember {
         mutableStateOf(false)
     }
@@ -100,9 +101,6 @@ fun SpeakingTestScreen(
     val audioFile = remember { File(context.cacheDir, "recorded_audio.3gp") }
     var isRecording by remember { mutableStateOf(false) }
     var isPlaying by remember { mutableStateOf(false) }
-    var hasPermission by remember { mutableStateOf(false) }
-
-    var speechText = remember { mutableStateOf("Your speech will appear here.") }
 
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) }
@@ -230,15 +228,19 @@ fun SpeakingTestScreen(
                         player.value = null
                         isPlaying = false
                     } else {
-                        player.value = MediaPlayer().apply {
-                            setDataSource(audioFile.absolutePath)
-                            prepare()
-                            start()
-                            setOnCompletionListener {
-                                isPlaying = false
+                        try {
+                            player.value = MediaPlayer().apply {
+                                setDataSource(audioFile.absolutePath)
+                                prepare()
+                                start()
+                                setOnCompletionListener {
+                                    isPlaying = false
+                                }
                             }
+                            isPlaying = true
+                        } catch (e: Exception) {
+                            errorMessage = "Audio file not found"
                         }
-                        isPlaying = true
                     }
                 }
                 SoundCard(
@@ -270,7 +272,6 @@ fun SpeakingTestScreen(
                     }
                 }
             }
-            Text(state.spokenText)
             StandardButtonWithoutPadding(
                 modifier = Modifier.padding(bottom = 24.dp),
                 text = "Check",
@@ -284,6 +285,19 @@ fun SpeakingTestScreen(
                     }
                     recorder.value = null
                     isRecording = false
+                }
+
+                if (state.value.spokenText.isNotBlank()) {
+                    if (isTextCorrect(
+                            recognizedText = state.value.spokenText,
+                            correctAnswer = speakingTest?.text.toString()
+                        )
+                    ) {
+                        showCorrectDialog = true
+                    } else {
+                        showWrongDialog = true
+                    }
+                    voiceViewModel.setDefaultText()
                 }
             }
         }

@@ -60,3 +60,36 @@ fun getRawResourceId(context: Context, resourceName: String?): Int {
     return context.resources.getIdentifier(resource, "raw", context.packageName)
 }
 
+fun isTextCorrect(recognizedText: String, correctAnswer: String): Boolean {
+    val normalizedRecognized = recognizedText.trim().lowercase()
+    val normalizedCorrect = correctAnswer.trim().lowercase()
+
+    val distance = levenshtein(normalizedRecognized, normalizedCorrect)
+    val maxLen = maxOf(normalizedRecognized.length, normalizedCorrect.length)
+
+    val similarity = 1.0 - (distance.toDouble() / maxLen)
+
+    return similarity >= 0.8
+}
+
+
+fun levenshtein(a: String, b: String): Int {
+    val dp = Array(a.length + 1) { IntArray(b.length + 1) }
+
+    for (i in 0..a.length) dp[i][0] = i
+    for (j in 0..b.length) dp[0][j] = j
+
+    for (i in 1..a.length) {
+        for (j in 1..b.length) {
+            val cost = if (a[i - 1] == b[j - 1]) 0 else 1
+            dp[i][j] = minOf(
+                dp[i - 1][j] + 1,
+                dp[i][j - 1] + 1,
+                dp[i - 1][j - 1] + cost
+            )
+        }
+    }
+
+    return dp[a.length][b.length]
+}
+

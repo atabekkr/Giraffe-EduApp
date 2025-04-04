@@ -20,4 +20,8 @@ class VoiceViewModel @Inject constructor(private val voiceToTextParser: VoiceToT
     fun stopListening() {
         voiceToTextParser.stopListening()
     }
+
+    fun setDefaultText() {
+        voiceToTextParser.setDefaultText()
+    }
 }
