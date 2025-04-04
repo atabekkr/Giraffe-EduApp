@@ -18,7 +18,6 @@ import com.imax.giraffe.presentation.screen.SetNameToPetScreen
 import com.imax.giraffe.presentation.screen.SpeakingTestScreen
 import com.imax.giraffe.presentation.screen.SplashScreen
 import com.imax.giraffe.presentation.screen.TopicScreen
-import com.imax.giraffe.presentation.screen.VoskScreen
 import com.imax.giraffe.presentation.screen.WelcomeScreen
 import com.imax.giraffe.presentation.screen.WritingTestScreen
 import kotlinx.serialization.Serializable
@@ -68,9 +67,6 @@ sealed class Screen {
 
     @Serializable
     data object SetNameToPet : Screen()
-
-    @Serializable
-    data object Vosk : Screen()
 }
 
 @Composable
@@ -81,11 +77,8 @@ fun MainNav(
     NavHost(
         modifier = modifier,
         navController = navHostController,
-        startDestination = Screen.Splash
+        startDestination = Screen.SpeakingTest
     ) {
-        composable<Screen.Vosk> {
-            VoskScreen()
-        }
         composable<Screen.Splash> {
             SplashScreen { navigateTo ->
                 navHostController.navigate(navigateTo) {

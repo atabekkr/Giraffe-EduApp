@@ -21,4 +21,3 @@ dependencyResolutionManagement {
 
 rootProject.name = "Giraffe"
 include(":app")
-include(":models")
