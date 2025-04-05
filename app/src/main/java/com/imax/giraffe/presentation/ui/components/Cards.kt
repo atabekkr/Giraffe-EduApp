@@ -1,7 +1,14 @@
 package com.imax.giraffe.presentation.ui.components
 
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,10 +34,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
@@ -78,10 +87,99 @@ fun SoundCard(
 }
 
 @Composable
+fun AnimatedSoundCard(
+    modifier: Modifier = Modifier,
+    iconRes: Int,
+    size: Dp,
+    isSelected: Boolean = false,
+    onClick: () -> Unit
+) {
+    val iconSize = if (size == 72.dp) 36.dp else 64.dp
+
+    val infiniteTransition = rememberInfiniteTransition()
+    val scale by infiniteTransition.animateFloat(
+        initialValue = 1f,
+        targetValue = if (isSelected) 1.15f else 1f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(800, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        )
+    )
+
+    val ringAlpha by infiniteTransition.animateFloat(
+        initialValue = 0.3f,
+        targetValue = 0f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(1200),
+            repeatMode = RepeatMode.Restart
+        )
+    )
+
+    val ringScale by infiniteTransition.animateFloat(
+        initialValue = 1f,
+        targetValue = 2f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(1200),
+            repeatMode = RepeatMode.Restart
+        )
+    )
+
+    Box(
+        modifier = modifier.size(size),
+        contentAlignment = Alignment.Center
+    ) {
+        if (isSelected) {
+            Box(
+                modifier = Modifier
+                    .matchParentSize()
+                    .graphicsLayer {
+                        scaleX = ringScale
+                        scaleY = ringScale
+                        alpha = ringAlpha
+                    }
+                    .background(
+                        color = primaryColor,
+                        shape = CircleShape
+                    )
+            )
+        }
+
+        Card(
+            modifier = Modifier
+                .size(size)
+                .graphicsLayer {
+                    scaleX = scale
+                    scaleY = scale
+                }
+                .border(
+                    width = if (isSelected) 3.dp else 0.dp,
+                    color = if (isSelected) primaryColor else Color.Transparent,
+                    shape = RoundedCornerShape(20.dp)
+                ),
+            shape = RoundedCornerShape(20.dp),
+            onClick = onClick,
+            colors = CardDefaults.cardColors(containerColor = Color.White)
+        ) {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Icon(
+                    painter = painterResource(iconRes),
+                    contentDescription = "Mic Icon",
+                    tint = primaryColor,
+                    modifier = Modifier.size(iconSize)
+                )
+            }
+        }
+    }
+}
+
+@Composable
 fun SentenceCard(
     modifier: Modifier = Modifier,
     selectedWords: List<String>,
-    onClear: () -> Unit
+    onClear: (word: String) -> Unit
 ) {
     Card(
         modifier = modifier
@@ -97,7 +195,7 @@ fun SentenceCard(
             contentAlignment = Alignment.TopEnd // Размещаем кнопку в верхнем правом углу
         ) {
             OutlinedButton(
-                onClick = { onClear() },
+                onClick = { selectedWords.lastOrNull()?.let { onClear(it) } },
                 modifier = Modifier.size(24.dp),
                 shape = CircleShape,
                 border = BorderStroke(width = 0.dp, primaryColor),

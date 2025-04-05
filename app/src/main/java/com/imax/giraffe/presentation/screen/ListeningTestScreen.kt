@@ -1,7 +1,6 @@
 package com.imax.giraffe.presentation.screen
 
 import android.media.MediaPlayer
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -60,7 +59,6 @@ import com.imax.giraffe.presentation.utils.getRawResourceId
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ListeningTestScreen(
-    modifier: Modifier = Modifier,
     viewModel: MainViewModel = hiltViewModel(),
     userViewModel: UserViewModel = hiltViewModel(),
     onNavigateToScreen: (Screen) -> Unit
@@ -70,7 +68,6 @@ fun ListeningTestScreen(
 
     val gradeId = userViewModel.getGradeId()
     val topicId = userViewModel.getTopicId()
-    Log.d("Listning", "$gradeId --- $topicId")
     LaunchedEffect(viewModel) {
         viewModel.getListeningTests(gradeId, topicId)
     }
@@ -79,6 +76,8 @@ fun ListeningTestScreen(
     var index by remember { mutableIntStateOf(0) }
     val listeningTest = tests?.getOrNull(index)
     val listeningText = listeningTest?.text?.split(" ") ?: emptyList()
+    val availableWords =
+        remember(listeningText) { mutableStateListOf<String>().apply { addAll(listeningText) } }
     val answer = remember { mutableStateListOf<String>() }
 
     var showWrongDialog by remember { mutableStateOf(false) }
@@ -107,7 +106,6 @@ fun ListeningTestScreen(
                     painterResource(R.drawable.background2),
                     contentScale = ContentScale.Crop
                 )
-                .padding(paddingValues)
                 .padding(horizontal = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -201,8 +199,9 @@ fun ListeningTestScreen(
 
             SentenceCard(
                 selectedWords = answer
-            ) {
-                answer.clear()
+            ) { word ->
+                availableWords.add(word)
+                answer.remove(word)
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -214,10 +213,11 @@ fun ListeningTestScreen(
                     .padding(horizontal = 12.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                listeningText.forEach { word ->
+                availableWords.forEach { word ->
                     Button(
                         onClick = {
                             answer.add(word)
+                            availableWords.remove(word)
                         },
                         shape = RoundedCornerShape(8.dp),
                         colors = ButtonDefaults.buttonColors(containerColor = Color.White)
@@ -234,7 +234,7 @@ fun ListeningTestScreen(
             Spacer(modifier = Modifier.weight(1f))
 
             StandardButtonWithoutPadding(
-                modifier = Modifier.padding(bottom = 24.dp),
+                modifier = Modifier.padding(bottom = 48.dp),
                 text = "Check"
             ) {
                 val correctText = answer.joinToString(" ")

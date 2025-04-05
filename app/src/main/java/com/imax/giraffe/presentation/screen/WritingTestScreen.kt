@@ -95,7 +95,6 @@ fun WritingTestScreen(
                     painterResource(R.drawable.background2),
                     contentScale = ContentScale.Crop
                 )
-                .padding(paddingValues)
                 .padding(horizontal = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -127,7 +126,7 @@ fun WritingTestScreen(
             ) {
                 Column {
                     Text(
-                        "Listening! 🎧",
+                        "Writing! \uD83D\uDD8B",
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color.Black

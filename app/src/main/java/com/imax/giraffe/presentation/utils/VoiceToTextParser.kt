@@ -107,6 +107,7 @@ class VoiceToTextParser @Inject constructor(
         }
         _state.update {
             it.copy(
+                isSpeaking = false,
                 error = "Error: $error"
             )
         }
@@ -121,6 +122,7 @@ class VoiceToTextParser @Inject constructor(
                 Log.d("VoiceToTextParser", "Recognition result: $text")
                 _state.update {
                     it.copy(
+                        isSpeaking = false,
                         spokenText = text
                     )
                 }

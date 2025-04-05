@@ -13,6 +13,7 @@ import com.imax.giraffe.presentation.data.db.entities.Writing
 import com.imax.giraffe.presentation.data.repo.MainRepository
 import com.imax.giraffe.presentation.utils.LocalStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -75,7 +76,7 @@ class MainViewModel @Inject constructor(
     private val _getReadingTestsResult = MutableStateFlow<List<Reading>?>(null)
     val getReadingTestsResult: StateFlow<List<Reading>?> = _getReadingTestsResult
     fun getReadingTests(gradeId: Int, topicId: Int) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _getReadingTestsResult.value = repository.getReadingTests(gradeId, topicId)
         }
     }

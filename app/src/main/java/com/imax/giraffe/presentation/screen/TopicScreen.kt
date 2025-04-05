@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -86,198 +87,203 @@ fun TopicScreen(
 
     var showStartMatchingDialog by remember { mutableStateOf(false) }
 
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .paint(
-                painterResource(R.drawable.background2),
-                contentScale = ContentScale.Crop
-            )
-            .padding(horizontal = 24.dp)
-    ) {
-        if (showStartMatchingDialog) {
-            StartMatchingDialog {
-                showStartMatchingDialog = false
-                onNavigateToScreen.invoke(Screen.Matching)
-            }
-        }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 60.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Column {
-                Text(
-                    text = "Hi $username!",
-                    style = TextStyle(
-                        color = Color.Black,
-                        fontSize = 26.sp,
-                        fontWeight = FontWeight.Bold
-                    ),
+    if (topics == null) {
+        CircularProgressIndicator(modifier = Modifier.padding(top = 100.dp))
+    } else {
+        // основной UI
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .paint(
+                    painterResource(R.drawable.background2),
+                    contentScale = ContentScale.Crop
                 )
-                Text(
-                    text = stringResource(R.string.welcome_to_school_education),
-                    modifier = Modifier.padding(top = 6.dp),
-                    style = TextStyle(
-                        color = grayTypography,
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Medium,
-                    ),
-                    textAlign = TextAlign.Center
-                )
-            }
-            Image(
-                painter = painterResource(R.drawable.pic_giraffe),
-                modifier = Modifier.size(54.dp),
-                contentDescription = "Giraffe"
-            )
-        }
-        GradeCard(
-            grade = grade,
-            level = level,
-            gradeContent = gradeContent,
-            feedCount = userViewModel.getFeedCount()
+                .padding(horizontal = 24.dp)
         ) {
-            onNavigateToScreen(Screen.Feed)
-        }
-        val firstTopicCompletedPercent = userViewModel.getTopicCompletedPercent()
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 24.dp)
-                .clip(RoundedCornerShape(20.dp))
-                .background(Color.White)
-                .clickable {
-                    if (userViewModel.isFirstTopicCompleted()) return@clickable
-                    if (levelIndex != 0)
-                        onNavigateToScreen.invoke(Screen.Home)
-                    else
-                        showStartMatchingDialog = true
+            if (showStartMatchingDialog) {
+                StartMatchingDialog {
+                    showStartMatchingDialog = false
+                    onNavigateToScreen.invoke(Screen.Matching)
                 }
-        ) {
-            val resId = getDrawableResourceId(context, topics?.topic1?.pic)
-            Image(
-                painter = painterResource(resId),
-                contentDescription = null,
-                contentScale = ContentScale.FillBounds, // Оставляем пропорции
-                modifier = Modifier
-                    .align(Alignment.CenterEnd) // Выравниваем картинку вправо
-                    .size(200.dp) // Устанавливаем фиксированный размер, если нужно
-            )
-
-            Card(
+            }
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(end = 100.dp), // Уменьшаем ширину, чтобы оставить место под картинку
-                colors = CardDefaults.cardColors(containerColor = Color.Transparent),
-                shape = RoundedCornerShape(20.dp)
+                    .padding(top = 60.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Column(
-                    modifier = Modifier.padding(24.dp)
-                ) {
+                Column {
                     Text(
-                        text = topics?.topic1?.name.toString(),
+                        text = "Hi $username!",
                         style = TextStyle(
-                            color = mainTypography,
+                            color = Color.Black,
                             fontSize = 26.sp,
                             fontWeight = FontWeight.Bold
                         ),
                     )
                     Text(
-                        text = "Theme 1",
+                        text = stringResource(R.string.welcome_to_school_education),
+                        modifier = Modifier.padding(top = 6.dp),
                         style = TextStyle(
-                            color = gray,
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.Medium
+                            color = grayTypography,
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Medium,
                         ),
-                    )
-
-                    Text(
-                        modifier = Modifier.padding(top = 60.dp),
-                        text = "$firstTopicCompletedPercent%",
-                        style = TextStyle(
-                            color = greenTypography,
-                            fontSize = 32.sp,
-                            fontWeight = FontWeight.SemiBold
-                        )
+                        textAlign = TextAlign.Center
                     )
                 }
-            }
-        }
-        val cardColor =
-            if (userViewModel.isFirstTopicCompleted()) Color.White else blockedTopic.copy(alpha = 0.5f)
-        val secondTopicCompletedPercent =
-            if (userViewModel.isFirstTopicCompleted()) userViewModel.getTopicCompletedPercent() else 0
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 24.dp)
-                .clip(RoundedCornerShape(20.dp))
-                .background(cardColor)
-                .clickable(enabled = userViewModel.isFirstTopicCompleted()) {
-                    onNavigateToScreen.invoke(Screen.Home)
-                }
-        ) {
-
-            val resId = getDrawableResourceId(context, topics?.topic2?.pic ?: "pic_grade1_topic1")
-            Image(
-                painter = painterResource(resId),
-                contentDescription = null,
-                contentScale = ContentScale.FillBounds, // Оставляем пропорции
-                modifier = Modifier
-                    .align(Alignment.CenterEnd) // Выравниваем картинку вправо
-                    .size(200.dp) // Устанавливаем фиксированный размер, если нужно
-            )
-
-            if (!userViewModel.isFirstTopicCompleted())
                 Image(
-                    painter = painterResource(R.drawable.ic_lock),
-                    contentDescription = "lock",
-                    modifier = Modifier.align(Alignment.Center)
+                    painter = painterResource(R.drawable.pic_giraffe),
+                    modifier = Modifier.size(54.dp),
+                    contentDescription = "Giraffe"
                 )
-
-            Card(
+            }
+            GradeCard(
+                grade = grade,
+                level = level,
+                gradeContent = gradeContent,
+                feedCount = userViewModel.getFeedCount()
+            ) {
+                onNavigateToScreen(Screen.Feed)
+            }
+            val firstTopicCompletedPercent = userViewModel.getTopicCompletedPercent()
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(end = 100.dp), // Уменьшаем ширину, чтобы оставить место под картинку
-                colors = CardDefaults.cardColors(containerColor = Color.Transparent),
-                shape = RoundedCornerShape(20.dp)
+                    .padding(top = 24.dp)
+                    .clip(RoundedCornerShape(20.dp))
+                    .background(Color.White)
+                    .clickable {
+                        if (userViewModel.isFirstTopicCompleted()) return@clickable
+                        if (levelIndex != 0)
+                            onNavigateToScreen.invoke(Screen.Home)
+                        else
+                            showStartMatchingDialog = true
+                    }
             ) {
-                Column(
-                    modifier = Modifier.padding(24.dp)
-                ) {
-                    Text(
-                        text = topics?.topic2?.name.toString(),
-                        style = TextStyle(
-                            color = mainTypography,
-                            fontSize = 26.sp,
-                            fontWeight = FontWeight.Bold
-                        ),
-                    )
-                    Text(
-                        text = "Theme 2",
-                        style = TextStyle(
-                            color = gray,
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.Medium
-                        ),
-                    )
+                val resId = getDrawableResourceId(context, topics?.topic1?.pic)
+                Image(
+                    painter = painterResource(resId),
+                    contentDescription = null,
+                    contentScale = ContentScale.FillBounds, // Оставляем пропорции
+                    modifier = Modifier
+                        .align(Alignment.CenterEnd) // Выравниваем картинку вправо
+                        .size(200.dp) // Устанавливаем фиксированный размер, если нужно
+                )
 
-                    Text(
-                        modifier = Modifier.padding(top = 60.dp),
-                        text = "$secondTopicCompletedPercent%",
-                        style = TextStyle(
-                            color = greenTypography,
-                            fontSize = 32.sp,
-                            fontWeight = FontWeight.SemiBold
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(end = 100.dp), // Уменьшаем ширину, чтобы оставить место под картинку
+                    colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+                    shape = RoundedCornerShape(20.dp)
+                ) {
+                    Column(
+                        modifier = Modifier.padding(24.dp)
+                    ) {
+                        Text(
+                            text = topics?.topic1?.name.toString(),
+                            style = TextStyle(
+                                color = mainTypography,
+                                fontSize = 26.sp,
+                                fontWeight = FontWeight.Bold
+                            ),
                         )
-                    )
+                        Text(
+                            text = "Theme 1",
+                            style = TextStyle(
+                                color = gray,
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Medium
+                            ),
+                        )
+
+                        Text(
+                            modifier = Modifier.padding(top = 60.dp),
+                            text = "$firstTopicCompletedPercent%",
+                            style = TextStyle(
+                                color = greenTypography,
+                                fontSize = 32.sp,
+                                fontWeight = FontWeight.SemiBold
+                            )
+                        )
+                    }
                 }
             }
+            val cardColor =
+                if (userViewModel.isFirstTopicCompleted()) Color.White else blockedTopic.copy(alpha = 0.5f)
+            val secondTopicCompletedPercent =
+                if (userViewModel.isFirstTopicCompleted()) userViewModel.getTopicCompletedPercent() else 0
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 24.dp)
+                    .clip(RoundedCornerShape(20.dp))
+                    .background(cardColor)
+                    .clickable(enabled = userViewModel.isFirstTopicCompleted()) {
+                        onNavigateToScreen.invoke(Screen.Home)
+                    }
+            ) {
+
+                val resId = getDrawableResourceId(context, topics?.topic2?.pic ?: "pic_grade1_topic1")
+                Image(
+                    painter = painterResource(resId),
+                    contentDescription = null,
+                    contentScale = ContentScale.FillBounds, // Оставляем пропорции
+                    modifier = Modifier
+                        .align(Alignment.CenterEnd) // Выравниваем картинку вправо
+                        .size(200.dp) // Устанавливаем фиксированный размер, если нужно
+                )
+
+                if (!userViewModel.isFirstTopicCompleted())
+                    Image(
+                        painter = painterResource(R.drawable.ic_lock),
+                        contentDescription = "lock",
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(end = 100.dp), // Уменьшаем ширину, чтобы оставить место под картинку
+                    colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+                    shape = RoundedCornerShape(20.dp)
+                ) {
+                    Column(
+                        modifier = Modifier.padding(24.dp)
+                    ) {
+                        Text(
+                            text = topics?.topic2?.name.toString(),
+                            style = TextStyle(
+                                color = mainTypography,
+                                fontSize = 26.sp,
+                                fontWeight = FontWeight.Bold
+                            ),
+                        )
+                        Text(
+                            text = "Theme 2",
+                            style = TextStyle(
+                                color = gray,
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Medium
+                            ),
+                        )
+
+                        Text(
+                            modifier = Modifier.padding(top = 60.dp),
+                            text = "$secondTopicCompletedPercent%",
+                            style = TextStyle(
+                                color = greenTypography,
+                                fontSize = 32.sp,
+                                fontWeight = FontWeight.SemiBold
+                            )
+                        )
+                    }
+                }
+            }
+
+
         }
-
-
     }
 
 }

@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -49,7 +50,6 @@ import com.imax.giraffe.presentation.utils.parseReadingAnswersJson
 
 @Composable
 fun ReadingTestScreen(
-    modifier: Modifier = Modifier,
     viewModel: MainViewModel = hiltViewModel(),
     userViewModel: UserViewModel = hiltViewModel(),
     onNavigateToScreen: (Screen) -> Unit
@@ -72,80 +72,86 @@ fun ReadingTestScreen(
     var showWrongDialog by remember { mutableStateOf(false) }
     var showCorrectDialog by remember { mutableStateOf(false) }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .paint(
-                painterResource(R.drawable.background2),
-                contentScale = ContentScale.Crop
-            )
-            .padding(horizontal = 24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-
-        if (showWrongDialog) {
-            ErrorDialog { showWrongDialog = false }
-        }
-        if (showCorrectDialog) {
-            if (tests?.getOrNull(index + 1) != null)
-                CorrectDialog {
-                    showCorrectDialog = false
-                    index++
-                }
-            else
-                CongratsDialog {
-                    userViewModel.setReadingTestCompleted()
-                    userViewModel.incrementLevelIndex()
-                    onNavigateToScreen(Screen.Home)
-                }
-        }
-
-        Row(
+    if (tests == null) {
+        CircularProgressIndicator(modifier = Modifier.padding(top = 100.dp))
+    } else {
+        // основной UI
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 60.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Column {
-                Text(
-                    text = "Reading! 🎧",
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Black
+                .fillMaxSize()
+                .paint(
+                    painterResource(R.drawable.background2),
+                    contentScale = ContentScale.Crop
                 )
-                Text(
-                    text = "Boost your listening with Saribek.",
-                    fontSize = 14.sp,
-                    color = grayTypography
+                .padding(horizontal = 24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+
+            if (showWrongDialog) {
+                ErrorDialog { showWrongDialog = false }
+            }
+            if (showCorrectDialog) {
+                selectedOption = ""
+                if (tests?.getOrNull(index + 1) != null)
+                    CorrectDialog {
+                        showCorrectDialog = false
+                        index++
+                    }
+                else
+                    CongratsDialog {
+                        userViewModel.setReadingTestCompleted()
+                        userViewModel.incrementLevelIndex()
+                        onNavigateToScreen(Screen.Home)
+                    }
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 60.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column {
+                    Text(
+                        text = "Reading! \uD83D\uDCD9 ",
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
+                    )
+                    Text(
+                        text = "Boost your listening with Saribek.",
+                        fontSize = 14.sp,
+                        color = grayTypography
+                    )
+                }
+                Image(
+                    painter = painterResource(id = R.drawable.pic_giraffe),
+                    contentDescription = "Avatar",
+                    modifier = Modifier.size(50.dp)
                 )
             }
-            Image(
-                painter = painterResource(id = R.drawable.pic_giraffe),
-                contentDescription = "Avatar",
-                modifier = Modifier.size(50.dp)
+
+            ReadingSentenceCard(
+                modifier = Modifier.padding(top = 56.dp),
+                firstPart = readingTest?.firstPart,
+                secondPart = readingTest?.secondPart
             )
-        }
 
-        ReadingSentenceCard(
-            modifier = Modifier.padding(top = 56.dp),
-            firstPart = readingTest?.firstPart,
-            secondPart = readingTest?.secondPart
-        )
+            SelectableButtons(
+                options = answers,
+                selectedOption = selectedOption,
+                onOptionSelected = { selectedOption = it })
 
-        SelectableButtons(
-            options = answers,
-            selectedOption = selectedOption,
-            onOptionSelected = { selectedOption = it })
+            Spacer(modifier = Modifier.weight(1f))
 
-        Spacer(modifier = Modifier.weight(1f))
-
-        StandardButtonWithoutPadding(
-            modifier = Modifier.padding(bottom = 48.dp),
-            text = "Check"
-        ) {
-            if (selectedOption == readingTest?.key) showCorrectDialog = true
-            else showWrongDialog = true
+            StandardButtonWithoutPadding(
+                modifier = Modifier.padding(bottom = 48.dp),
+                text = "Check"
+            ) {
+                if (selectedOption == readingTest?.key) showCorrectDialog = true
+                else showWrongDialog = true
+            }
         }
     }
 }

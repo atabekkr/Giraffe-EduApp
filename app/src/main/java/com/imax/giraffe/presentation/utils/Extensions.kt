@@ -3,6 +3,7 @@ package com.imax.giraffe.presentation.utils
 import android.content.Context
 import android.util.Log
 import com.google.gson.Gson
+import com.imax.giraffe.R
 import com.imax.giraffe.presentation.data.db.entities.GradeTopic
 import com.imax.giraffe.presentation.data.db.entities.Levels
 import com.imax.giraffe.presentation.data.db.entities.ReadingAnswers
@@ -51,7 +52,8 @@ fun parseTestSectionCardPicJson(jsonString: String): TestSectionPic? {
 
 fun getDrawableResourceId(context: Context, resourceName: String?): Int {
     val resource = resourceName ?: "pic_listening_lion_card"
-    return context.resources.getIdentifier(resource, "drawable", context.packageName)
+    val resourceId = context.resources.getIdentifier(resource, "drawable", context.packageName)
+    return if (resourceId !=0) resourceId else R.drawable.pic_listening_lion_card
 }
 
 fun getRawResourceId(context: Context, resourceName: String?): Int {

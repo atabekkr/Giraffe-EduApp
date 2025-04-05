@@ -45,13 +45,13 @@ import com.imax.giraffe.presentation.screen.dialog.ErrorDialog
 import com.imax.giraffe.presentation.screen.viewmodel.MainViewModel
 import com.imax.giraffe.presentation.screen.viewmodel.UserViewModel
 import com.imax.giraffe.presentation.screen.viewmodel.VoiceViewModel
+import com.imax.giraffe.presentation.ui.components.AnimatedSoundCard
 import com.imax.giraffe.presentation.ui.components.SoundCard
 import com.imax.giraffe.presentation.ui.components.StandardButtonWithoutPadding
 import com.imax.giraffe.presentation.ui.theme.grayTypography
 import com.imax.giraffe.presentation.utils.getRawResourceId
 import com.imax.giraffe.presentation.utils.isTextCorrect
 import java.io.File
-
 
 @Composable
 fun SpeakingTestScreen(
@@ -75,7 +75,6 @@ fun SpeakingTestScreen(
 
     var showWrongDialog by remember { mutableStateOf(false) }
     var showCorrectDialog by remember { mutableStateOf(false) }
-    var showRecognizedTextDialog by remember { mutableStateOf(false) } // New dialog state
 
     var state = voiceViewModel.state.collectAsState()
 
@@ -99,7 +98,7 @@ fun SpeakingTestScreen(
     val recorder = remember { mutableStateOf<MediaRecorder?>(null) }
     val player = remember { mutableStateOf<MediaPlayer?>(null) }
     val audioFile = remember { File(context.cacheDir, "recorded_audio.3gp") }
-    var isRecording by remember { mutableStateOf(false) }
+    var checkButtonIsEnabled by remember { mutableStateOf(false) }
     var isPlaying by remember { mutableStateOf(false) }
 
     Scaffold(
@@ -124,7 +123,6 @@ fun SpeakingTestScreen(
                     painterResource(R.drawable.background2),
                     contentScale = ContentScale.Crop
                 )
-                .padding(paddingValues)
                 .padding(horizontal = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -149,19 +147,19 @@ fun SpeakingTestScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 36.dp),
+                    .padding(top = 60.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column {
                     Text(
-                        text = "Listening! 🎧",
+                        text = "Speaking! \uD83C\uDF99",
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color.Black
                     )
                     Text(
-                        text = "Boost your listening with Saribek.",
+                        text = "Boost your speaking with Saribek.",
                         fontSize = 14.sp,
                         color = grayTypography
                     )
@@ -243,21 +241,22 @@ fun SpeakingTestScreen(
                         }
                     }
                 }
-                SoundCard(
+                AnimatedSoundCard(
                     iconRes = R.drawable.ic_mic,
                     size = 132.dp,
-                    isSelected = isRecording
+                    isSelected = state.value.isSpeaking
                 ) {
                     if (canRecord) {
-                        if (isRecording) {
+                        if (state.value.isSpeaking) {
 //                            recorder.value?.apply {
 //                                stop()
 //                                release()
 //                            }
 //                            recorder.value = null
                             voiceViewModel.stopListening()
-                            isRecording = false
+                            checkButtonIsEnabled = true
                         } else {
+                            checkButtonIsEnabled = false
                             voiceViewModel.startListening("en")
 //                            recorder.value = MediaRecorder().apply {
 //                                setAudioSource(MediaRecorder.AudioSource.MIC)
@@ -267,24 +266,22 @@ fun SpeakingTestScreen(
 //                                prepare()
 //                                start()
 //                            }
-                            isRecording = true
                         }
                     }
                 }
             }
             StandardButtonWithoutPadding(
-                modifier = Modifier.padding(bottom = 24.dp),
-                text = "Check",
-                enabled = !isRecording
+                modifier = Modifier.padding(bottom = 48.dp),
+                text = if (checkButtonIsEnabled) "Check" else "Start record audio",
+                enabled = checkButtonIsEnabled
             ) {
                 // Stop recording if it's still active
-                if (isRecording) {
+                if (state.value.isSpeaking) {
                     recorder.value?.apply {
                         stop()
                         release()
                     }
                     recorder.value = null
-                    isRecording = false
                 }
 
                 if (state.value.spokenText.isNotBlank()) {
@@ -298,6 +295,8 @@ fun SpeakingTestScreen(
                         showWrongDialog = true
                     }
                     voiceViewModel.setDefaultText()
+                } else {
+                    errorMessage = "Please start recording audio"
                 }
             }
         }
