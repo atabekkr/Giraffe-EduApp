@@ -30,6 +30,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -45,6 +46,8 @@ import com.imax.giraffe.presentation.screen.viewmodel.UserViewModel
 import com.imax.giraffe.presentation.ui.theme.grayTypography
 import com.imax.giraffe.presentation.ui.theme.primaryColor
 import com.imax.giraffe.presentation.utils.parseVocabularyJson
+import com.imax.giraffe.presentation.utils.playCorrectAnswerSound
+import com.imax.giraffe.presentation.utils.vibrate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -57,6 +60,8 @@ fun MatchingScreen(
     userViewModel: UserViewModel = hiltViewModel(),
     onNavigateToScreen: (Screen) -> Unit
 ) {
+
+    val context = LocalContext.current
 
     val gradeId = userViewModel.getGradeId()
     val topicId = userViewModel.getTopicId()
@@ -97,6 +102,8 @@ fun MatchingScreen(
                 if (matchedPairs.size == words.size + translations.size) {
                     showCongratsDialog = true
                 }
+
+                context.playCorrectAnswerSound()
             }
 
             // Store both the word and translation in lastMatchResult
@@ -109,6 +116,7 @@ fun MatchingScreen(
                     selectedWord = null
                     selectedTranslation = null
                     lastMatchResult = null
+                    vibrate(context)
                 }
             } else {
                 selectedWord = null

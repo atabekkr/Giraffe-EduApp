@@ -1,7 +1,6 @@
 package com.imax.giraffe.presentation.screen
 
 import android.media.MediaPlayer
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -47,6 +46,7 @@ import com.imax.giraffe.presentation.ui.components.StandardButtonWithoutPadding
 import com.imax.giraffe.presentation.ui.components.WritingTestInput
 import com.imax.giraffe.presentation.ui.theme.grayTypography
 import com.imax.giraffe.presentation.utils.getRawResourceId
+import com.imax.giraffe.presentation.utils.isWritingTextCorrect
 
 @Composable
 fun WritingTestScreen(
@@ -196,9 +196,16 @@ fun WritingTestScreen(
                 modifier = Modifier.padding(bottom = 48.dp),
                 text = "Check"
             ) {
-                Log.d("WritingTest", "WritingTestScreen: $inputText\n${writingTest?.text}")
-                if (inputText == writingTest?.text) showCorrectDialog = true
-                else showWrongDialog = true
+                if (inputText.isNotBlank()) {
+                    if (isWritingTextCorrect(
+                            inputText,
+                            writingTest?.text.toString()
+                        )
+                    )
+                        showCorrectDialog = true
+                    else
+                        showWrongDialog = true
+                }
             }
         }
     }

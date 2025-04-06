@@ -98,7 +98,6 @@ fun SpeakingTestScreen(
     val recorder = remember { mutableStateOf<MediaRecorder?>(null) }
     val player = remember { mutableStateOf<MediaPlayer?>(null) }
     val audioFile = remember { File(context.cacheDir, "recorded_audio.3gp") }
-    var checkButtonIsEnabled by remember { mutableStateOf(false) }
     var isPlaying by remember { mutableStateOf(false) }
 
     Scaffold(
@@ -254,9 +253,7 @@ fun SpeakingTestScreen(
 //                            }
 //                            recorder.value = null
                             voiceViewModel.stopListening()
-                            checkButtonIsEnabled = true
                         } else {
-                            checkButtonIsEnabled = false
                             voiceViewModel.startListening("en")
 //                            recorder.value = MediaRecorder().apply {
 //                                setAudioSource(MediaRecorder.AudioSource.MIC)
@@ -272,8 +269,8 @@ fun SpeakingTestScreen(
             }
             StandardButtonWithoutPadding(
                 modifier = Modifier.padding(bottom = 48.dp),
-                text = if (checkButtonIsEnabled) "Check" else "Start record audio",
-                enabled = checkButtonIsEnabled
+                text = if (state.value.spokenText.isNotBlank()) "Check" else "Start record audio",
+                enabled = state.value.spokenText.isNotBlank()
             ) {
                 // Stop recording if it's still active
                 if (state.value.isSpeaking) {

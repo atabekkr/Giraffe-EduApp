@@ -1,6 +1,11 @@
 package com.imax.giraffe.presentation.utils
 
 import android.content.Context
+import android.media.MediaPlayer
+import android.os.Build
+import android.os.VibrationEffect
+import android.os.Vibrator
+import android.os.VibratorManager
 import android.util.Log
 import com.google.gson.Gson
 import com.imax.giraffe.R
@@ -74,6 +79,18 @@ fun isTextCorrect(recognizedText: String, correctAnswer: String): Boolean {
     return similarity >= 0.8
 }
 
+fun isWritingTextCorrect(inputText: String, correctAnswer: String): Boolean {
+    val normalizedRecognized = inputText.trim().lowercase()
+    val normalizedCorrect = correctAnswer.trim().lowercase()
+
+    val distance = levenshtein(normalizedRecognized, normalizedCorrect)
+    val maxLen = maxOf(normalizedRecognized.length, normalizedCorrect.length)
+
+    val similarity = 1.0 - (distance.toDouble() / maxLen)
+
+    return similarity >= 0.9
+}
+
 
 fun levenshtein(a: String, b: String): Int {
     val dp = Array(a.length + 1) { IntArray(b.length + 1) }
@@ -95,3 +112,31 @@ fun levenshtein(a: String, b: String): Int {
     return dp[a.length][b.length]
 }
 
+fun vibrate(context: Context, durationMillis: Long = 200) {
+    val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        val vibratorManager = context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
+        vibratorManager.defaultVibrator
+    } else {
+        @Suppress("DEPRECATION")
+        context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+    }
+
+    val effect = VibrationEffect.createOneShot(durationMillis, VibrationEffect.DEFAULT_AMPLITUDE)
+    vibrator.vibrate(effect)
+}
+
+fun Context.playCorrectAnswerSound() {
+    val mediaPlayer = MediaPlayer.create(this, R.raw.correct_audio)
+    mediaPlayer.setOnCompletionListener {
+        it.release()
+    }
+    mediaPlayer.start()
+}
+
+fun Context.playCongratsSound() {
+    val mediaPlayer = MediaPlayer.create(this, R.raw.finish_audio)
+    mediaPlayer.setOnCompletionListener {
+        it.release()
+    }
+    mediaPlayer.start()
+}

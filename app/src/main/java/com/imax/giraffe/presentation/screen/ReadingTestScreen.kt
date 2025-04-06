@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -29,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -72,10 +72,6 @@ fun ReadingTestScreen(
     var showWrongDialog by remember { mutableStateOf(false) }
     var showCorrectDialog by remember { mutableStateOf(false) }
 
-    if (tests == null) {
-        CircularProgressIndicator(modifier = Modifier.padding(top = 100.dp))
-    } else {
-        // основной UI
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -154,7 +150,6 @@ fun ReadingTestScreen(
             }
         }
     }
-}
 
 @Composable
 fun SelectableButtons(

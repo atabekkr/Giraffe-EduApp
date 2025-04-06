@@ -13,18 +13,27 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.imax.giraffe.R
 import com.imax.giraffe.presentation.ui.components.StandardButtonWithoutPadding
+import com.imax.giraffe.presentation.utils.playCorrectAnswerSound
 
 @Composable
 fun CorrectDialog(onDismiss: () -> Unit) {
+
+    val context = LocalContext.current
+    LaunchedEffect(Unit) {
+        context.playCorrectAnswerSound()
+    }
+
     AlertDialog(
         onDismissRequest = { onDismiss() },
         title = null,
