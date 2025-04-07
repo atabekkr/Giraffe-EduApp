@@ -6,6 +6,7 @@ import com.imax.giraffe.presentation.data.db.entities.Grade
 import com.imax.giraffe.presentation.data.db.entities.Listening
 import com.imax.giraffe.presentation.data.db.entities.Reading
 import com.imax.giraffe.presentation.data.db.entities.Speaking
+import com.imax.giraffe.presentation.data.db.entities.TopicOverview
 import com.imax.giraffe.presentation.data.db.entities.Vocabulary
 import com.imax.giraffe.presentation.data.db.entities.Writing
 
@@ -31,5 +32,8 @@ interface GiraffeDao {
 
     @Query("SELECT * FROM Vocabulary WHERE grade_id = :gradeId AND topic_id = :topicId")
     suspend fun getVocabulary(gradeId: Int, topicId: Int): Vocabulary
+
+    @Query("SELECT * FROM TopicOverview WHERE grade_id = :gradeId AND topic_id = :topicId")
+    suspend fun getTopicContent(gradeId: Int, topicId: Int): TopicOverview
 
 }

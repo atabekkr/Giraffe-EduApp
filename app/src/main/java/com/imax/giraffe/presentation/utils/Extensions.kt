@@ -14,6 +14,7 @@ import com.imax.giraffe.presentation.data.db.entities.Levels
 import com.imax.giraffe.presentation.data.db.entities.ReadingAnswers
 import com.imax.giraffe.presentation.data.db.entities.TestSectionPic
 import com.imax.giraffe.presentation.data.db.entities.Words
+import com.imax.giraffe.presentation.models.ContentResponse
 
 fun parseTopicsJson(jsonString: String): GradeTopic? {
     return try {
@@ -139,4 +140,16 @@ fun Context.playCongratsSound() {
         it.release()
     }
     mediaPlayer.start()
+}
+
+fun String?.toContentResponseOrNull(): ContentResponse? {
+    return if (this.isNullOrBlank()) {
+        null
+    } else {
+        try {
+            Gson().fromJson(this, ContentResponse::class.java)
+        } catch (e: Exception) {
+            null
+        }
+    }
 }

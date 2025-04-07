@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -145,6 +146,14 @@ fun TopicScreen(
                 feedCount = userViewModel.getFeedCount()
             ) {
                 onNavigateToScreen(Screen.Feed)
+            }
+
+            Button(
+                onClick = {
+                    onNavigateToScreen.invoke(Screen.TopicOverview)
+                }
+            ) {
+                Text("Go to topic overview")
             }
             val firstTopicCompletedPercent = userViewModel.getTopicCompletedPercent()
             Box(

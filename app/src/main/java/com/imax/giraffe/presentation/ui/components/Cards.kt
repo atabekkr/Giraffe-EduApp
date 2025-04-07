@@ -1,5 +1,6 @@
 package com.imax.giraffe.presentation.ui.components
 
+import android.view.ViewGroup
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -10,6 +11,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -35,11 +37,18 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
@@ -48,7 +57,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.lifecycle.LifecycleOwner
+import com.imax.giraffe.R
 import com.imax.giraffe.presentation.ui.theme.primaryColor
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 
 @Composable
 fun SoundCard(
@@ -271,7 +286,11 @@ fun ReadingText(firstPart: String?, secondPart: String?) {
 
     val inlineContent = mapOf(
         "gap" to InlineTextContent(
-            Placeholder(underlineWidth, 2.sp, PlaceholderVerticalAlign.TextBottom) // Ставим линию между текстом
+            Placeholder(
+                underlineWidth,
+                2.sp,
+                PlaceholderVerticalAlign.TextBottom
+            ) // Ставим линию между текстом
         ) {
             Canvas(
                 modifier = Modifier
@@ -300,3 +319,80 @@ fun ReadingText(firstPart: String?, secondPart: String?) {
     )
 }
 
+@Composable
+fun YouTubePlayer(videoId: String, modifier: Modifier = Modifier) {
+    val context = LocalContext.current
+
+    // Получаем высоту в px, чтобы передать в layoutParams
+    val density = LocalDensity.current
+    var heightPx by remember { mutableStateOf(0) }
+
+    AndroidView(
+        modifier = modifier
+            .onGloballyPositioned { coordinates ->
+                heightPx = coordinates.size.height
+            },
+        factory = { ctx ->
+            val youTubePlayerView = YouTubePlayerView(ctx)
+
+            // Задаём высоту вручную
+            youTubePlayerView.layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                heightPx.takeIf { it > 0 } ?: ViewGroup.LayoutParams.WRAP_CONTENT
+            )
+
+            // Жизненный цикл
+            (context as? LifecycleOwner)?.lifecycle?.addObserver(youTubePlayerView)
+
+            youTubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
+                override fun onReady(youTubePlayer: YouTubePlayer) {
+                    youTubePlayer.loadVideo(videoId, 0f)
+                }
+            })
+
+            youTubePlayerView
+        },
+        update = {
+            // Обновим высоту если изменилась
+            it.layoutParams.height = heightPx
+            it.requestLayout()
+        }
+    )
+}
+
+@Composable
+fun YouTubeCard(videoId: String) {
+    var playVideo by remember { mutableStateOf(false) }
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(200.dp)
+            .padding(top = 16.dp)
+            .clip(RoundedCornerShape(20.dp))
+            .border(
+                width = 3.dp,
+                color = Color(0xFFFFBF08), // жёлтая рамка
+                shape = RoundedCornerShape(20.dp)
+            )
+            .background(Color.White)
+            .clickable { playVideo = true }
+    ) {
+        if (playVideo) {
+            YouTubePlayer(
+                videoId = videoId,
+                modifier = Modifier
+                    .fillMaxSize()
+            )
+        } else {
+            Icon(
+                painter = painterResource(R.drawable.ic_play_youtube),
+                contentDescription = "Play",
+                modifier = Modifier
+                    .size(64.dp)
+                    .align(Alignment.Center),
+                tint = Color(0xFFFFBF08)
+            )
+        }
+    }
+}

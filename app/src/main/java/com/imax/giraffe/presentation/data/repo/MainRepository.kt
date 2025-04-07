@@ -37,4 +37,6 @@ class MainRepository @Inject constructor(
 
     suspend fun getVocabulary(gradeId: Int, topicId: Int) = dao.getVocabulary(gradeId, topicId)
 
+    suspend fun getTopicContent(gradeId: Int, topicId: Int) = dao.getTopicContent(gradeId, topicId)
+
 }

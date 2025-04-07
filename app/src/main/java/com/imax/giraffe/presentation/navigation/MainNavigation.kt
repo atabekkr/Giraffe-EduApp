@@ -17,6 +17,7 @@ import com.imax.giraffe.presentation.screen.ReadingTestScreen
 import com.imax.giraffe.presentation.screen.SetNameToPetScreen
 import com.imax.giraffe.presentation.screen.SpeakingTestScreen
 import com.imax.giraffe.presentation.screen.SplashScreen
+import com.imax.giraffe.presentation.screen.TopicOverviewScreen
 import com.imax.giraffe.presentation.screen.TopicScreen
 import com.imax.giraffe.presentation.screen.WelcomeScreen
 import com.imax.giraffe.presentation.screen.WritingTestScreen
@@ -43,6 +44,9 @@ sealed class Screen {
 
     @Serializable
     data object Topic : Screen()
+
+    @Serializable
+    data object TopicOverview : Screen()
 
     @Serializable
     data object Matching : Screen()
@@ -116,6 +120,11 @@ fun MainNav(
         }
         composable<Screen.Topic> {
             TopicScreen { navigateTo ->
+                navHostController.navigate(navigateTo)
+            }
+        }
+        composable<Screen.TopicOverview> {
+            TopicOverviewScreen { navigateTo ->
                 navHostController.navigate(navigateTo)
             }
         }

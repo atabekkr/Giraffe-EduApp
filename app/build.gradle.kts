@@ -79,4 +79,6 @@ dependencies {
 
     implementation(libs.gson)
 
+    implementation(libs.core)
+
 }

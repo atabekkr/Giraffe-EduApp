@@ -8,6 +8,7 @@ import com.imax.giraffe.presentation.data.db.entities.Levels
 import com.imax.giraffe.presentation.data.db.entities.Listening
 import com.imax.giraffe.presentation.data.db.entities.Reading
 import com.imax.giraffe.presentation.data.db.entities.Speaking
+import com.imax.giraffe.presentation.data.db.entities.TopicOverview
 import com.imax.giraffe.presentation.data.db.entities.Vocabulary
 import com.imax.giraffe.presentation.data.db.entities.Writing
 import com.imax.giraffe.presentation.data.repo.MainRepository
@@ -86,6 +87,14 @@ class MainViewModel @Inject constructor(
     fun getVocabulary(gradeId: Int, topicId: Int) {
         viewModelScope.launch {
             _getVocabularyResult.value = repository.getVocabulary(gradeId, topicId)
+        }
+    }
+
+    private val _getTopicContentResult = MutableStateFlow<TopicOverview?>(null)
+    val getTopicContentResult: StateFlow<TopicOverview?> = _getTopicContentResult
+    fun getTopicContent(gradeId: Int, topicId: Int) {
+        viewModelScope.launch {
+            _getTopicContentResult.value = repository.getTopicContent(gradeId, topicId)
         }
     }
 

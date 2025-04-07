@@ -6,11 +6,12 @@ import com.imax.giraffe.presentation.data.db.entities.Grade
 import com.imax.giraffe.presentation.data.db.entities.Listening
 import com.imax.giraffe.presentation.data.db.entities.Reading
 import com.imax.giraffe.presentation.data.db.entities.Speaking
+import com.imax.giraffe.presentation.data.db.entities.TopicOverview
 import com.imax.giraffe.presentation.data.db.entities.Vocabulary
 import com.imax.giraffe.presentation.data.db.entities.Writing
 
 @Database(
-    entities = [Grade::class, Listening::class, Writing::class, Reading::class, Speaking::class, Vocabulary::class],
+    entities = [Grade::class, Listening::class, Writing::class, Reading::class, Speaking::class, Vocabulary::class, TopicOverview::class],
     exportSchema = false,
     version = 2
 )
