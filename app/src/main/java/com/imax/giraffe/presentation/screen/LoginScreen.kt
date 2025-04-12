@@ -28,7 +28,7 @@ import com.imax.giraffe.presentation.navigation.Screen
 import com.imax.giraffe.presentation.screen.viewmodel.SplashViewModel
 import com.imax.giraffe.presentation.screen.viewmodel.UserViewModel
 import com.imax.giraffe.presentation.ui.components.MyOutlinedTextField
-import com.imax.giraffe.presentation.ui.components.StandardButton
+import com.imax.giraffe.presentation.ui.components.StandardButtonWithoutPadding
 import com.imax.giraffe.presentation.ui.theme.grayTypography
 import com.imax.giraffe.presentation.ui.theme.mainTypography
 
@@ -77,7 +77,8 @@ fun LoginScreen(
             saveButtonEnabled = name.length >= 3
         }
         Spacer(modifier = modifier.weight(1f))
-        StandardButton(
+        StandardButtonWithoutPadding(
+            modifier = Modifier.padding(start = 24.dp, end = 24.dp, bottom = 48.dp),
             text = stringResource(R.string.save),
             enabled = saveButtonEnabled
         ) {

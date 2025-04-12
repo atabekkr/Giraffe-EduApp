@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -65,76 +64,70 @@ fun TopicOverviewScreen(
 
     val contentResponse = content.toContentResponseOrNull()
 
-    Column(
+    LazyColumn(
         modifier = modifier
             .fillMaxSize()
             .paint(
                 painterResource(R.drawable.background2),
                 contentScale = ContentScale.Crop
             )
-            .padding(16.dp)
+            .padding(16.dp),
+        contentPadding = PaddingValues(bottom = 32.dp)
     ) {
-        Text(
-            modifier = Modifier
-                .padding(top = 36.dp)
-                .align(Alignment.CenterHorizontally),
-            text = topicOverview?.title.toString(),
-            style = TextStyle(
-                color = mainTypography,
-                fontSize = 22.sp,
-                fontWeight = FontWeight.Bold
-            ),
-        )
-        YouTubeCard(
-            videoId = topicOverview?.video_id.toString(), // Замени на нужное тебе видео
-        )
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 24.dp)
-                .clip(RoundedCornerShape(20.dp)),
-            colors = CardDefaults.cardColors(containerColor = Color.White)
-        ) {
+        item {
             Text(
                 modifier = Modifier
-                    .padding(top = 26.dp)
-                    .align(Alignment.CenterHorizontally),
-                text = topicOverview?.topic_label.toString(),
+                    .padding(top = 36.dp),
+                text = topicOverview?.title.toString(),
                 style = TextStyle(
                     color = mainTypography,
                     fontSize = 22.sp,
                     fontWeight = FontWeight.Bold
                 ),
-                textAlign = TextAlign.Center
             )
-            Text(
-                modifier = Modifier.padding(top = 16.dp, start = 20.dp),
-                text = topicOverview?.topic_label2.toString(),
-                style = TextStyle(
-                    color = mainTypography,
-                    fontSize = 22.sp,
-                    fontWeight = FontWeight.Bold
-                ),
-                textAlign = TextAlign.Center
+        }
+        item {
+            YouTubeCard(
+                videoId = topicOverview?.video_id.toString(), // Замени на нужное тебе видео
             )
-            contentResponse?.content?.let { ContentList(it) }
+        }
+        item {
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 24.dp)
+                    .clip(RoundedCornerShape(20.dp)),
+                colors = CardDefaults.cardColors(containerColor = Color.White)
+            ) {
+                Text(
+                    modifier = Modifier
+                        .padding(top = 26.dp)
+                        .align(Alignment.CenterHorizontally),
+                    text = topicOverview?.topic_label.toString(),
+                    style = TextStyle(
+                        color = mainTypography,
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Bold
+                    ),
+                    textAlign = TextAlign.Center
+                )
+                Text(
+                    modifier = Modifier.padding(top = 16.dp, start = 20.dp),
+                    text = topicOverview?.topic_label2.toString(),
+                    style = TextStyle(
+                        color = mainTypography,
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Bold
+                    ),
+                    textAlign = TextAlign.Center
+                )
+                contentResponse?.content?.forEach { item ->
+                    ContentItemView(item)
+                }
+            }
         }
     }
 }
-
-
-@Composable
-fun ContentList(contentItems: List<ContentItem>) {
-    LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(vertical = 8.dp)
-    ) {
-        items(contentItems) { item ->
-            ContentItemView(item)
-        }
-    }
-}
-
 
 @Composable
 fun ContentItemView(item: ContentItem) {

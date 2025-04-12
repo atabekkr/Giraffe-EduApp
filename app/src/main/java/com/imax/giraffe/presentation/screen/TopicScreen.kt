@@ -11,7 +11,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -99,6 +101,7 @@ fun TopicScreen(
                     painterResource(R.drawable.background2),
                     contentScale = ContentScale.Crop
                 )
+                .verticalScroll(rememberScrollState())
                 .padding(horizontal = 24.dp)
         ) {
             if (showStartMatchingDialog) {
@@ -226,7 +229,7 @@ fun TopicScreen(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 24.dp)
+                    .padding(top = 24.dp, bottom = 48.dp)
                     .clip(RoundedCornerShape(20.dp))
                     .background(cardColor)
                     .clickable(enabled = userViewModel.isFirstTopicCompleted()) {

@@ -49,6 +49,7 @@ import com.imax.giraffe.presentation.ui.components.AnimatedSoundCard
 import com.imax.giraffe.presentation.ui.components.SoundCard
 import com.imax.giraffe.presentation.ui.components.StandardButtonWithoutPadding
 import com.imax.giraffe.presentation.ui.theme.grayTypography
+import com.imax.giraffe.presentation.utils.AudioRecognitionManager
 import com.imax.giraffe.presentation.utils.getRawResourceId
 import com.imax.giraffe.presentation.utils.isTextCorrect
 import java.io.File
@@ -247,22 +248,22 @@ fun SpeakingTestScreen(
                 ) {
                     if (canRecord) {
                         if (state.value.isSpeaking) {
-//                            recorder.value?.apply {
-//                                stop()
-//                                release()
-//                            }
-//                            recorder.value = null
+                            recorder.value?.apply {
+                                stop()
+                                release()
+                            }
+                            recorder.value = null
                             voiceViewModel.stopListening()
                         } else {
                             voiceViewModel.startListening("en")
-//                            recorder.value = MediaRecorder().apply {
-//                                setAudioSource(MediaRecorder.AudioSource.MIC)
-//                                setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
-//                                setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
-//                                setOutputFile(audioFile.absolutePath)
-//                                prepare()
-//                                start()
-//                            }
+                            recorder.value = MediaRecorder().apply {
+                                setAudioSource(MediaRecorder.AudioSource.MIC)
+                                setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
+                                setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
+                                setOutputFile(audioFile.absolutePath)
+                                prepare()
+                                start()
+                            }
                         }
                     }
                 }
