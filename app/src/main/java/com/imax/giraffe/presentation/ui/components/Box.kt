@@ -27,9 +27,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.imax.giraffe.R
 import com.imax.giraffe.presentation.data.db.entities.Grade
 import com.imax.giraffe.presentation.navigation.Screen
 import com.imax.giraffe.presentation.ui.theme.disabledButton
@@ -43,52 +43,67 @@ fun Grade(
     grade: Grade,
     color: Color,
     picId: Int,
+    isLocked: Boolean,
     onClick: () -> Unit
 ) {
-    Card(
+    Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 24.dp),
-        shape = RoundedCornerShape(
-            28.dp
-        ),
-        onClick = {
-            onClick()
-        },
-        colors = CardDefaults.cardColors(containerColor = color)
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 24.dp),
+            shape = RoundedCornerShape(
+                28.dp
+            ),
+            enabled = !isLocked,
+            onClick = {
+                onClick()
+            },
+            colors = CardDefaults.cardColors(containerColor = color)
         ) {
-            Image(
-                modifier = Modifier.padding(start = 12.dp, top = 12.dp, bottom = 10.dp).size(80.dp),
-                painter = painterResource(picId), // Замените на своё изображение
-                contentDescription = "Lion Icon",
-                contentScale = ContentScale.Fit // Подгоняет изображение
-            )
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 14.dp),
-                text = grade.gradeName,
-                style = TextStyle(
-                    color = Color.White,
-                    fontSize = 36.sp,
-                    fontWeight = FontWeight.Bold
-                ),
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    modifier = Modifier
+                        .padding(start = 12.dp, top = 12.dp, bottom = 10.dp)
+                        .size(80.dp),
+                    painter = painterResource(picId), // Замените на своё изображение
+                    contentDescription = "Lion Icon",
+                    contentScale = ContentScale.Fit // Подгоняет изображение
+                )
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 14.dp),
+                    text = grade.gradeName,
+                    style = TextStyle(
+                        color = Color.White,
+                        fontSize = 36.sp,
+                        fontWeight = FontWeight.Bold
+                    ),
+                )
+            }
         }
+        if (isLocked)
+            Image(
+                painter = painterResource(R.drawable.ic_lock),
+                contentDescription = "lock",
+                modifier = Modifier.align(Alignment.Center)
+            )
     }
 }
 
 @Composable
-@Preview
-fun GradePreview() {
-    GradeCard(grade = Grade(1, "Grade 1", "", "", "", ""), gradeContent = GradeContent.GRADE1, level = "Level 1", feedCount = 0) {}
-}
-
-@Composable
-fun GradeCard(grade: Grade?, gradeContent: GradeContent, level: String, feedCount: Int, onNavigateToScreen: (Screen) -> Unit) {
+fun GradeCard(
+    grade: Grade?,
+    gradeContent: GradeContent,
+    level: String,
+    feedCount: Int,
+    onNavigateToScreen: (Screen) -> Unit
+) {
     val context = LocalContext.current
     Box(
         modifier = Modifier

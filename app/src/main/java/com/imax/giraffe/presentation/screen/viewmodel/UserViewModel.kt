@@ -34,7 +34,7 @@ class UserViewModel @Inject constructor(
         }
     }
 
-    fun setFirstTopicCompleted() {
+    private fun setFirstTopicCompleted() {
         localStorage.isFirstTopicCompleted = true
         localStorage.topicCompletedPercent = 0
     }
@@ -78,7 +78,7 @@ class UserViewModel @Inject constructor(
         localStorage.feedLevel = level
     }
 
-    fun resetCompletedStatus() {
+    private fun resetCompletedStatus() {
         localStorage.isWritingTestCompleted = false
         localStorage.isSpeakingTestCompleted = false
         localStorage.isReadingTestCompleted = false

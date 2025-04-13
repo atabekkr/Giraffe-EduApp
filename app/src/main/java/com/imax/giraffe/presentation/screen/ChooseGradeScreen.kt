@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.imax.giraffe.R
 import com.imax.giraffe.presentation.navigation.Screen
+import com.imax.giraffe.presentation.screen.viewmodel.ChooseGradeViewModel
 import com.imax.giraffe.presentation.screen.viewmodel.MainViewModel
 import com.imax.giraffe.presentation.screen.viewmodel.UserViewModel
 import com.imax.giraffe.presentation.ui.components.Grade
@@ -40,6 +41,7 @@ fun ChooseGradeScreen(
     modifier: Modifier = Modifier,
     viewModel: MainViewModel = hiltViewModel(),
     userViewModel: UserViewModel = hiltViewModel(),
+    chooseGradeViewModel: ChooseGradeViewModel = hiltViewModel(),
     onNavigateToScreen: (Screen) -> Unit
 ) {
 
@@ -93,17 +95,34 @@ fun ChooseGradeScreen(
         LazyColumn(modifier = Modifier.padding(top = 20.dp)) {
             grades?.let {
                 items(it) { grade ->
+                    val isLocked: Boolean
                     val gradeContent = when (grade.id) {
-                        1 -> GradeContent.GRADE1
-                        2 -> GradeContent.GRADE2
-                        3 -> GradeContent.GRADE3
-                        4 -> GradeContent.GRADE4
-                        else -> GradeContent.GRADE4
+                        1 -> {
+                            isLocked = chooseGradeViewModel.getIsFirstGradeLocked()
+                            GradeContent.GRADE1
+                        }
+                        2 -> {
+                            isLocked = chooseGradeViewModel.getIsSecondGradeLocked()
+                            GradeContent.GRADE2
+                        }
+                        3 -> {
+                            isLocked = chooseGradeViewModel.getIsThirdGradeLocked()
+                            GradeContent.GRADE3
+                        }
+                        4 -> {
+                            isLocked = chooseGradeViewModel.getIsFourthGradeLocked()
+                            GradeContent.GRADE4
+                        }
+                        else -> {
+                            isLocked = chooseGradeViewModel.getIsFourthGradeLocked()
+                            GradeContent.GRADE4
+                        }
                     }
                     Grade(
                         grade,
                         gradeContent.color,
-                        gradeContent.picId
+                        gradeContent.picId,
+                        isLocked
                     ) {
                         userViewModel.setGradeId(grade.id)
                         onNavigateToScreen.invoke(

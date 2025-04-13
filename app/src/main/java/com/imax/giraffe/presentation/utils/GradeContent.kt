@@ -15,10 +15,3 @@ enum class GradeContent(val color: Color, val picId: Int, val gradeName: String)
         "Lion.4th Grade"
     ),
 }
-
-enum class Grade(val id: Int) {
-    GRADE1(1),
-    GRADE2(2),
-    GRADE3(3),
-    GRADE4(4)
-}
