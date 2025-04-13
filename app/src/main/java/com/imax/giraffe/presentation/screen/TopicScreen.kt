@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -130,7 +129,7 @@ fun TopicScreen(
                         modifier = Modifier.padding(top = 6.dp),
                         style = TextStyle(
                             color = grayTypography,
-                            fontSize = 14.sp,
+                            fontSize = 16.sp,
                             fontWeight = FontWeight.Medium,
                         ),
                         textAlign = TextAlign.Center
@@ -151,13 +150,6 @@ fun TopicScreen(
                 onNavigateToScreen(Screen.Feed)
             }
 
-            Button(
-                onClick = {
-                    onNavigateToScreen.invoke(Screen.TopicOverview)
-                }
-            ) {
-                Text("Go to topic overview")
-            }
             val firstTopicCompletedPercent = userViewModel.getTopicCompletedPercent()
             Box(
                 modifier = Modifier
@@ -237,7 +229,8 @@ fun TopicScreen(
                     }
             ) {
 
-                val resId = getDrawableResourceId(context, topics?.topic2?.pic ?: "pic_grade1_topic1")
+                val resId =
+                    getDrawableResourceId(context, topics.topic2.pic)
                 Image(
                     painter = painterResource(resId),
                     contentDescription = null,

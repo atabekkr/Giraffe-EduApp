@@ -37,6 +37,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -323,9 +324,8 @@ fun ReadingText(firstPart: String?, secondPart: String?) {
 fun YouTubePlayer(videoId: String, modifier: Modifier = Modifier) {
     val context = LocalContext.current
 
-    // Получаем высоту в px, чтобы передать в layoutParams
-    val density = LocalDensity.current
-    var heightPx by remember { mutableStateOf(0) }
+    LocalDensity.current
+    var heightPx by remember { mutableIntStateOf(0) }
 
     AndroidView(
         modifier = modifier

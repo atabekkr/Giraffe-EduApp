@@ -1,6 +1,7 @@
 package com.imax.giraffe.presentation.screen
 
 import android.media.MediaPlayer
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,6 +22,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -41,6 +43,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.imax.giraffe.R
 import com.imax.giraffe.presentation.navigation.Screen
 import com.imax.giraffe.presentation.screen.dialog.CongratsDialog
@@ -61,6 +67,7 @@ import com.imax.giraffe.presentation.utils.getRawResourceId
 fun ListeningTestScreen(
     viewModel: MainViewModel = hiltViewModel(),
     userViewModel: UserViewModel = hiltViewModel(),
+    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
     onNavigateToScreen: (Screen) -> Unit
 ) {
 
@@ -83,7 +90,7 @@ fun ListeningTestScreen(
     var showWrongDialog by remember { mutableStateOf(false) }
     var showCorrectDialog by remember { mutableStateOf(false) }
 
-    var mediaPlayer: MediaPlayer? = null
+    var mediaPlayer = remember { MediaPlayer() }
 
     val snackbarHostState = remember { SnackbarHostState() }
     var errorMessage by remember { mutableStateOf<String?>(null) }
@@ -93,6 +100,26 @@ fun ListeningTestScreen(
         errorMessage?.let { message ->
             snackbarHostState.showSnackbar(message)
             errorMessage = null // Сбрасываем ошибку после показа
+        }
+    }
+
+    var lifecycleEvent by remember { mutableStateOf(Lifecycle.Event.ON_ANY) }
+    DisposableEffect(lifecycleOwner) {
+        val lifecycleObserver = LifecycleEventObserver { _, event ->
+            lifecycleEvent = event
+        }
+
+        lifecycleOwner.lifecycle.addObserver(lifecycleObserver)
+
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(lifecycleObserver)
+        }
+    }
+
+    LaunchedEffect(lifecycleEvent) {
+        if (lifecycleEvent == Lifecycle.Event.ON_STOP) {
+            mediaPlayer.stop()
+            mediaPlayer.release()
         }
     }
 
@@ -164,33 +191,41 @@ fun ListeningTestScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 SoundCard(iconRes = R.drawable.ic_sound, size = 132.dp) {
-                    mediaPlayer?.release()
                     try {
-                        mediaPlayer =
-                            MediaPlayer.create(
-                                context,
-                                getRawResourceId(context, listeningTest?.audio)
-                            )
-                        mediaPlayer?.playbackParams = mediaPlayer?.playbackParams!!.setSpeed(1f)
-                        mediaPlayer?.seekTo(0)
-                        mediaPlayer?.start()
+                        mediaPlayer.reset()
+                        listeningTest?.audio?.let { audioFileName ->
+                            val filename =
+                                "android.resource://" + context.packageName + "/raw/$audioFileName";
+                            mediaPlayer.setDataSource(context, Uri.parse(filename))
+                            mediaPlayer.prepare()
+                            mediaPlayer.playbackParams = mediaPlayer.playbackParams.setSpeed(1f)
+                                ?: mediaPlayer.playbackParams
+                            mediaPlayer.seekTo(0)
+                            mediaPlayer.start()
+                        } ?: run {
+                            errorMessage = "Audio file name is null"
+                        }
                     } catch (e: Exception) {
-                        errorMessage = "Audio file not found"
+                        errorMessage = "Error playing audio"
                     }
                 }
                 SoundCard(iconRes = R.drawable.ic_slow_sound, size = 96.dp) {
-                    mediaPlayer?.release()
                     try {
-                        mediaPlayer =
-                            MediaPlayer.create(
-                                context,
-                                getRawResourceId(context, listeningTest?.audio)
-                            )
-                        mediaPlayer!!.playbackParams = mediaPlayer!!.playbackParams.setSpeed(0.5f)
-                        mediaPlayer!!.seekTo(0)
-                        mediaPlayer!!.start()
+                        mediaPlayer.reset()
+                        listeningTest?.audio?.let { audioFileName ->
+                            val filename =
+                                "android.resource://" + context.packageName + "/raw/$audioFileName";
+                            mediaPlayer.setDataSource(context, Uri.parse(filename))
+                            mediaPlayer.prepare()
+                            mediaPlayer.playbackParams = mediaPlayer.playbackParams.setSpeed(0.5f)
+                                ?: mediaPlayer.playbackParams
+                            mediaPlayer.seekTo(0)
+                            mediaPlayer.start()
+                        } ?: run {
+                            errorMessage = "Audio file name is null"
+                        }
                     } catch (e: Exception) {
-                        errorMessage = "Audio file not found"
+                        errorMessage = "Error playing audio"
                     }
                 }
             }

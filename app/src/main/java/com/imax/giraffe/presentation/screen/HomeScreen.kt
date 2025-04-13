@@ -1,6 +1,7 @@
 package com.imax.giraffe.presentation.screen
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -107,8 +108,8 @@ fun HomeScreen(
                 )
             }
             Image(
-                painter = painterResource(R.drawable.pic_giraffe),
-                modifier = Modifier.size(54.dp),
+                painter = painterResource(R.drawable.ic_topic_overview),
+                modifier = Modifier.clickable { onNavigateToScreen.invoke(Screen.TopicOverview) },
                 contentDescription = "Giraffe"
             )
         }
