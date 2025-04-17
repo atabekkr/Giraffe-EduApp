@@ -101,18 +101,22 @@ fun ChooseGradeScreen(
                             isLocked = chooseGradeViewModel.getIsFirstGradeLocked()
                             GradeContent.GRADE1
                         }
+
                         2 -> {
                             isLocked = chooseGradeViewModel.getIsSecondGradeLocked()
                             GradeContent.GRADE2
                         }
+
                         3 -> {
                             isLocked = chooseGradeViewModel.getIsThirdGradeLocked()
                             GradeContent.GRADE3
                         }
+
                         4 -> {
                             isLocked = chooseGradeViewModel.getIsFourthGradeLocked()
                             GradeContent.GRADE4
                         }
+
                         else -> {
                             isLocked = chooseGradeViewModel.getIsFourthGradeLocked()
                             GradeContent.GRADE4
@@ -125,9 +129,16 @@ fun ChooseGradeScreen(
                         isLocked
                     ) {
                         userViewModel.setGradeId(grade.id)
-                        onNavigateToScreen.invoke(
-                            Screen.AfterChooseGrade
-                        )
+                        if (userViewModel.getIsAfterChooseGradeShowed())
+                            onNavigateToScreen.invoke(
+                                Screen.Topic
+                            )
+                        else
+                            onNavigateToScreen.invoke(
+                                Screen.AfterChooseGrade
+                            )
+
+                        userViewModel.setTrueToIsAfterChooseGradeShowed()
                     }
                 }
             }

@@ -49,6 +49,7 @@ import com.imax.giraffe.presentation.screen.viewmodel.MainViewModel
 import com.imax.giraffe.presentation.screen.viewmodel.UserViewModel
 import com.imax.giraffe.presentation.ui.components.SoundCard
 import com.imax.giraffe.presentation.ui.components.StandardButtonWithoutPadding
+import com.imax.giraffe.presentation.ui.components.TestProgress
 import com.imax.giraffe.presentation.ui.components.WritingTestInput
 import com.imax.giraffe.presentation.ui.theme.grayTypography
 import com.imax.giraffe.presentation.utils.isWritingTextCorrect
@@ -170,10 +171,16 @@ fun WritingTestScreen(
                 )
             }
 
+            TestProgress(
+                modifier = Modifier.padding(top = 42.dp, start = 12.dp, end = 12.dp),
+                currentQuestion = index + 1,
+                totalQuestions = tests?.size ?: 0
+            )
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 32.dp, top = 48.dp),
+                    .padding(start = 32.dp, top = 26.dp),
                 horizontalArrangement = Arrangement.spacedBy(24.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {

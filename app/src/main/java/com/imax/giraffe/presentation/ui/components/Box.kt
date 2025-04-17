@@ -34,6 +34,7 @@ import com.imax.giraffe.presentation.data.db.entities.Grade
 import com.imax.giraffe.presentation.navigation.Screen
 import com.imax.giraffe.presentation.ui.theme.disabledButton
 import com.imax.giraffe.presentation.ui.theme.gray
+import com.imax.giraffe.presentation.ui.theme.lockedGradeButton
 import com.imax.giraffe.presentation.ui.theme.primaryColor
 import com.imax.giraffe.presentation.utils.GradeContent
 import com.imax.giraffe.presentation.utils.getDrawableResourceId
@@ -61,7 +62,7 @@ fun Grade(
             onClick = {
                 onClick()
             },
-            colors = CardDefaults.cardColors(containerColor = color)
+            colors = CardDefaults.cardColors(containerColor = color, disabledContainerColor = lockedGradeButton)
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically
@@ -91,7 +92,7 @@ fun Grade(
             Image(
                 painter = painterResource(R.drawable.ic_lock),
                 contentDescription = "lock",
-                modifier = Modifier.align(Alignment.Center)
+                modifier = Modifier.align(Alignment.CenterEnd).padding(end = 24.dp, top = 12.dp)
             )
     }
 }

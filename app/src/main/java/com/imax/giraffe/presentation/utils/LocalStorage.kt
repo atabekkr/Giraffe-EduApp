@@ -21,14 +21,11 @@ class LocalStorage(preference: SharedPreferences) {
     var isReadingTestCompleted by BooleanPreference(preference, false)
     var isListeningTestCompleted by BooleanPreference(preference, false)
 
-    var isFirstGradeCompleted by BooleanPreference(preference, false)
-    var isSecondGradeCompleted by BooleanPreference(preference, false)
-    var isThirdGradeCompleted by BooleanPreference(preference, false)
-    var isFourthGradeCompleted by BooleanPreference(preference, true)
-
     var isFirstGradeLocked by BooleanPreference(preference, true)
     var isSecondGradeLocked by BooleanPreference(preference, true)
     var isThirdGradeLocked by BooleanPreference(preference, true)
     var isFourthGradeLocked by BooleanPreference(preference, false)
+
+    var isAfterChooseGradeShowed by BooleanPreference(preference, false)
 
 }

@@ -14,7 +14,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Scaffold
@@ -57,10 +59,10 @@ import com.imax.giraffe.presentation.screen.viewmodel.UserViewModel
 import com.imax.giraffe.presentation.ui.components.SentenceCard
 import com.imax.giraffe.presentation.ui.components.SoundCard
 import com.imax.giraffe.presentation.ui.components.StandardButtonWithoutPadding
+import com.imax.giraffe.presentation.ui.components.TestProgress
 import com.imax.giraffe.presentation.ui.theme.grayTypography
 import com.imax.giraffe.presentation.ui.theme.mainTypography
 import com.imax.giraffe.presentation.ui.theme.primaryColor
-import com.imax.giraffe.presentation.utils.getRawResourceId
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -118,8 +120,14 @@ fun ListeningTestScreen(
 
     LaunchedEffect(lifecycleEvent) {
         if (lifecycleEvent == Lifecycle.Event.ON_STOP) {
-            mediaPlayer.stop()
-            mediaPlayer.release()
+            try {
+                if (mediaPlayer.isPlaying) {
+                    mediaPlayer.stop()
+                }
+                mediaPlayer.release()
+            } catch (e: IllegalStateException) {
+                e.printStackTrace()
+            }
         }
     }
 
@@ -133,7 +141,8 @@ fun ListeningTestScreen(
                     painterResource(R.drawable.background2),
                     contentScale = ContentScale.Crop
                 )
-                .padding(horizontal = 24.dp),
+                .padding(horizontal = 24.dp)
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             if (showWrongDialog) {
@@ -182,11 +191,17 @@ fun ListeningTestScreen(
                 )
             }
 
+            TestProgress(
+                modifier = Modifier.padding(top = 42.dp, start = 12.dp, end = 12.dp),
+                currentQuestion = index + 1,
+                totalQuestions = tests?.size ?: 0
+            )
+
             // Кнопки с иконками
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 32.dp, top = 48.dp),
+                    .padding(start = 32.dp, top = 26.dp),
                 horizontalArrangement = Arrangement.spacedBy(24.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -269,7 +284,7 @@ fun ListeningTestScreen(
             Spacer(modifier = Modifier.weight(1f))
 
             StandardButtonWithoutPadding(
-                modifier = Modifier.padding(bottom = 48.dp),
+                modifier = Modifier.padding(bottom = 48.dp, top = 12.dp),
                 text = "Check"
             ) {
                 val correctText = answer.joinToString(" ")

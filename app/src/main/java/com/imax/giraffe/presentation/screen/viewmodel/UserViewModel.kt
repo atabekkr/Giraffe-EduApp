@@ -78,6 +78,11 @@ class UserViewModel @Inject constructor(
         localStorage.feedLevel = level
     }
 
+    fun getIsAfterChooseGradeShowed() = localStorage.isAfterChooseGradeShowed
+    fun setTrueToIsAfterChooseGradeShowed() {
+        localStorage.isAfterChooseGradeShowed = true
+    }
+
     private fun resetCompletedStatus() {
         localStorage.isWritingTestCompleted = false
         localStorage.isSpeakingTestCompleted = false
