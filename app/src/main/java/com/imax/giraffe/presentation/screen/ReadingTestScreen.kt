@@ -28,7 +28,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -44,6 +43,7 @@ import com.imax.giraffe.presentation.screen.viewmodel.MainViewModel
 import com.imax.giraffe.presentation.screen.viewmodel.UserViewModel
 import com.imax.giraffe.presentation.ui.components.ReadingSentenceCard
 import com.imax.giraffe.presentation.ui.components.StandardButtonWithoutPadding
+import com.imax.giraffe.presentation.ui.components.TestProgress
 import com.imax.giraffe.presentation.ui.theme.grayTypography
 import com.imax.giraffe.presentation.ui.theme.primaryColor
 import com.imax.giraffe.presentation.utils.parseReadingAnswersJson
@@ -128,8 +128,14 @@ fun ReadingTestScreen(
                 )
             }
 
+            TestProgress(
+                modifier = Modifier.padding(top = 50.dp, start = 12.dp, end = 12.dp),
+                currentQuestion = index + 1,
+                totalQuestions = tests?.size ?: 0
+            )
+
             ReadingSentenceCard(
-                modifier = Modifier.padding(top = 56.dp),
+                modifier = Modifier.padding(top = 26.dp),
                 firstPart = readingTest?.firstPart,
                 secondPart = readingTest?.secondPart
             )
