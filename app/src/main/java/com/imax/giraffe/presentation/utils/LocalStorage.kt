@@ -23,9 +23,16 @@ class LocalStorage(preference: SharedPreferences) {
 
     var isFirstGradeLocked by BooleanPreference(preference, true)
     var isSecondGradeLocked by BooleanPreference(preference, true)
-    var isThirdGradeLocked by BooleanPreference(preference, true)
+    var isThirdGradeLocked by BooleanPreference(preference, false)
     var isFourthGradeLocked by BooleanPreference(preference, false)
 
+    var isFirstGradeCompleted by BooleanPreference(preference, false)
+    var isSecondGradeCompleted by BooleanPreference(preference, false)
+    var isThirdGradeCompleted by BooleanPreference(preference, false)
+    var isFourthGradeCompleted by BooleanPreference(preference, false)
+
     var isAfterChooseGradeShowed by BooleanPreference(preference, false)
+
+    var isGradeChosen by BooleanPreference(preference, false)
 
 }

@@ -44,10 +44,14 @@ fun SplashScreen(
         )
         LaunchedEffect(lifeCycleOwner) {
             delay(1000)
-            if (viewModel.isLogin())
-                onNavigateToScreen.invoke(Screen.ChooseGrade)
-            else
+            if (viewModel.isLogin()) {
+                if (viewModel.isGradeChosen())
+                    onNavigateToScreen.invoke(Screen.Topic)
+                else
+                    onNavigateToScreen.invoke(Screen.ChooseGrade)
+            } else {
                 onNavigateToScreen.invoke(Screen.Welcome)
+            }
         }
     }
 

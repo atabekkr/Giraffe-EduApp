@@ -150,7 +150,8 @@ fun TopicScreen(
                 onNavigateToScreen(Screen.Feed)
             }
 
-            val firstTopicCompletedPercent = userViewModel.getTopicCompletedPercent()
+            val firstTopicCompletedPercent =
+                if (!userViewModel.isFirstTopicCompleted()) userViewModel.getTopicCompletedPercent() else 100
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -225,7 +226,10 @@ fun TopicScreen(
                     .clip(RoundedCornerShape(20.dp))
                     .background(cardColor)
                     .clickable(enabled = userViewModel.isFirstTopicCompleted()) {
-                        onNavigateToScreen.invoke(Screen.Home)
+                        if (levelIndex != 5)
+                            onNavigateToScreen.invoke(Screen.Home)
+                        else
+                            showStartMatchingDialog = true
                     }
             ) {
 

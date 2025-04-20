@@ -144,7 +144,7 @@ fun MainNav(
             FeedScreen(
                 onNavigateToScreen = { navigateTo ->
                     navHostController.navigate(navigateTo) {
-                        popUpTo(Screen.Home) { inclusive = false }
+                        popUpTo(Screen.Topic) { inclusive = false }
                     }
 
                 },
@@ -184,7 +184,7 @@ fun MainNav(
         composable<Screen.SetNameToPet> {
             SetNameToPetScreen { navigateTo ->
                 navHostController.navigate(navigateTo) {
-                    popUpTo(Screen.Topic) { inclusive = false }
+                    popUpTo(Screen.ChooseGrade) { inclusive = false }
                 }
             }
         }

@@ -43,7 +43,8 @@ import com.imax.giraffe.presentation.screen.viewmodel.UserViewModel
 import com.imax.giraffe.presentation.ui.components.StandardButtonWithoutPadding
 import com.imax.giraffe.presentation.ui.theme.grayTypography
 import com.imax.giraffe.presentation.ui.theme.primaryColor
-import com.imax.giraffe.presentation.utils.LevelPic
+import com.imax.giraffe.presentation.utils.LionLevelPic
+import com.imax.giraffe.presentation.utils.TigerLevelPic
 
 @Composable
 fun FeedScreen(
@@ -57,18 +58,35 @@ fun FeedScreen(
     var feedCount by remember { mutableIntStateOf(userViewModel.getFeedCount()) }
     var feedLevel by remember { mutableIntStateOf(userViewModel.getFeedLevel()) }
 
-    val picAnimal = when (feedLevel) {
-        1 -> LevelPic.LEVEL1.resId
-        2 -> LevelPic.LEVEL2.resId
-        3 -> LevelPic.LEVEL3.resId
-        4 -> LevelPic.LEVEL4.resId
-        5 -> LevelPic.LEVEL5.resId
-        6 -> LevelPic.LEVEL6.resId
-        7 -> LevelPic.LEVEL7.resId
-        8 -> LevelPic.LEVEL8.resId
-        9 -> LevelPic.LEVEL9.resId
-        else -> LevelPic.LEVEL10.resId
+    val picAnimal = if (userViewModel.getGradeId() == 4) {
+        when (feedLevel) {
+            1 -> LionLevelPic.LEVEL1.resId
+            2 -> LionLevelPic.LEVEL2.resId
+            3 -> LionLevelPic.LEVEL3.resId
+            4 -> LionLevelPic.LEVEL4.resId
+            5 -> LionLevelPic.LEVEL5.resId
+            6 -> LionLevelPic.LEVEL6.resId
+            7 -> LionLevelPic.LEVEL7.resId
+            8 -> LionLevelPic.LEVEL8.resId
+            9 -> LionLevelPic.LEVEL9.resId
+            else -> LionLevelPic.LEVEL10.resId
+        }
+    } else {
+        when (feedLevel) {
+            1 -> TigerLevelPic.LEVEL1.resId
+            2 -> TigerLevelPic.LEVEL2.resId
+            3 -> TigerLevelPic.LEVEL3.resId
+            4 -> TigerLevelPic.LEVEL4.resId
+            5 -> TigerLevelPic.LEVEL5.resId
+            6 -> TigerLevelPic.LEVEL6.resId
+            7 -> TigerLevelPic.LEVEL7.resId
+            8 -> TigerLevelPic.LEVEL8.resId
+            9 -> TigerLevelPic.LEVEL9.resId
+            else -> TigerLevelPic.LEVEL10.resId
+        }
     }
+
+    val buttonLabel = if (feedLevel == 10) "Finish" else "Feed"
 
     Box(
         modifier = Modifier
@@ -96,7 +114,7 @@ fun FeedScreen(
                         .size(64.dp)
                         .clip(RoundedCornerShape(12.dp)) // Rounded corners
                         .background(primaryColor) // Background color
-                        .clickable { onNavigateToScreen.invoke(Screen.Home)}
+                        .clickable { onNavigateToScreen.invoke(Screen.Topic) }
                 ) {
                     Icon(
                         Icons.Default.Close,
@@ -121,7 +139,9 @@ fun FeedScreen(
                     Icon(
                         painterResource(R.drawable.ic_edit),
                         contentDescription = "Edit",
-                        modifier = Modifier.size(24.dp).padding(start = 4.dp)
+                        modifier = Modifier
+                            .size(24.dp)
+                            .padding(start = 4.dp)
                     )
                 }
                 Text(
@@ -167,14 +187,15 @@ fun FeedScreen(
 
                 StandardButtonWithoutPadding(
                     modifier = Modifier.padding(bottom = 32.dp),
-                    "Feed"
+                    buttonLabel
                 ) {
                     feedLevel += feedCount
                     feedCount = 0
-                    userViewModel.setFeedLevel(feedLevel)
                     userViewModel.resetFeedCount()
-                    if (feedLevel >= 10) {
+                    if (feedLevel > 10) {
                         onNavigateToScreen(Screen.SetNameToPet)
+                    } else {
+                        userViewModel.setFeedLevel(feedLevel)
                     }
                 }
             }

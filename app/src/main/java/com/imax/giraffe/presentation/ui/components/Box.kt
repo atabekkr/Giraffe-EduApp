@@ -45,6 +45,7 @@ fun Grade(
     color: Color,
     picId: Int,
     isLocked: Boolean,
+    isCompleted: Boolean,
     onClick: () -> Unit
 ) {
     Box(
@@ -58,7 +59,7 @@ fun Grade(
             shape = RoundedCornerShape(
                 28.dp
             ),
-            enabled = !isLocked,
+            enabled = !isLocked && !isCompleted,
             onClick = {
                 onClick()
             },
@@ -93,6 +94,12 @@ fun Grade(
                 painter = painterResource(R.drawable.ic_lock),
                 contentDescription = "lock",
                 modifier = Modifier.align(Alignment.CenterEnd).padding(end = 24.dp, top = 12.dp)
+            )
+        if (isCompleted)
+            Image(
+                painter = painterResource(R.drawable.ic_completed),
+                contentDescription = "lock",
+                modifier = Modifier.size(80.dp).align(Alignment.CenterEnd).padding(end = 24.dp, top = 12.dp)
             )
     }
 }

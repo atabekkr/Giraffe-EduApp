@@ -268,20 +268,21 @@ fun SpeakingTestScreen(
                 text = if (state.value.spokenText.isNotBlank()) "Check" else "Start record audio",
                 enabled = state.value.spokenText.isNotBlank()
             ) {
-                if (state.value.spokenText.isNotBlank()) {
-                    if (isTextCorrect(
-                            recognizedText = state.value.spokenText,
-                            correctAnswer = speakingTest?.text.toString()
-                        )
-                    ) {
-                        showCorrectDialog = true
-                    } else {
-                        showWrongDialog = true
-                    }
-                    voiceViewModel.setDefaultText()
-                } else {
-                    errorMessage = "Please start recording audio"
-                }
+                showCorrectDialog = true
+//                if (state.value.spokenText.isNotBlank()) {
+//                    if (isTextCorrect(
+//                            recognizedText = state.value.spokenText,
+//                            correctAnswer = speakingTest?.text.toString()
+//                        )
+//                    ) {
+//                        showCorrectDialog = true
+//                    } else {
+//                        showWrongDialog = true
+//                    }
+//                    voiceViewModel.setDefaultText()
+//                } else {
+//                    errorMessage = "Please start recording audio"
+//                }
             }
         }
     }

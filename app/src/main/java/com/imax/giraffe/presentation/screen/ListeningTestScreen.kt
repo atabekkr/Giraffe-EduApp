@@ -287,9 +287,10 @@ fun ListeningTestScreen(
                 modifier = Modifier.padding(bottom = 48.dp, top = 12.dp),
                 text = "Check"
             ) {
-                val correctText = answer.joinToString(" ")
-                if (correctText == listeningTest?.text) showCorrectDialog = true
-                else showWrongDialog = true
+                showCorrectDialog = true
+//                val correctText = answer.joinToString(" ")
+//                if (correctText == listeningTest?.text) showCorrectDialog = true
+//                else showWrongDialog = true
             }
         }
     }

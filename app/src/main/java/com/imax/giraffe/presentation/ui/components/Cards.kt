@@ -1,6 +1,6 @@
 package com.imax.giraffe.presentation.ui.components
 
-import android.view.ViewGroup
+import android.util.Log
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -36,8 +36,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -47,9 +47,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
@@ -59,7 +57,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.imax.giraffe.R
 import com.imax.giraffe.presentation.ui.theme.primaryColor
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
@@ -319,45 +317,37 @@ fun ReadingText(firstPart: String?, secondPart: String?) {
         color = Color.Black
     )
 }
-
 @Composable
-fun YouTubePlayer(videoId: String, modifier: Modifier = Modifier) {
+fun YouTubePlayer(
+    videoId: String,
+    modifier: Modifier = Modifier
+) {
     val context = LocalContext.current
-
-    LocalDensity.current
-    var heightPx by remember { mutableIntStateOf(0) }
+    val lifecycleOwner = LocalLifecycleOwner.current
 
     AndroidView(
-        modifier = modifier
-            .onGloballyPositioned { coordinates ->
-                heightPx = coordinates.size.height
-            },
+        modifier = modifier,
         factory = { ctx ->
             val youTubePlayerView = YouTubePlayerView(ctx)
-
-            // Задаём высоту вручную
-            youTubePlayerView.layoutParams = ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                heightPx.takeIf { it > 0 } ?: ViewGroup.LayoutParams.WRAP_CONTENT
-            )
-
-            // Жизненный цикл
-            (context as? LifecycleOwner)?.lifecycle?.addObserver(youTubePlayerView)
-
             youTubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
-                override fun onReady(youTubePlayer: YouTubePlayer) {
-                    youTubePlayer.loadVideo(videoId, 0f)
+                override fun onReady(player: YouTubePlayer) {
+                    player.loadVideo(videoId, 0f)
                 }
             })
-
+            lifecycleOwner.lifecycle.addObserver(youTubePlayerView)
             youTubePlayerView
         },
-        update = {
-            // Обновим высоту если изменилась
-            it.layoutParams.height = heightPx
-            it.requestLayout()
-        }
+        update = {}
     )
+
+    // Освобождаем ресурсы, когда уходим с экрана
+    DisposableEffect(Unit) {
+        onDispose {
+            Log.d("YouTube", "Disposing player")
+            // Это может быть освобождение в зависимости от твоей библиотеки
+            // Например, youTubePlayerView.release() или аналог
+        }
+    }
 }
 
 @Composable

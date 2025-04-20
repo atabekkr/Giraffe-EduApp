@@ -29,7 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.imax.giraffe.R
-import com.imax.giraffe.presentation.ui.components.StandardButtonWithoutPadding
+import com.imax.giraffe.presentation.ui.components.StandardButtonForCongratsDialog
 import com.imax.giraffe.presentation.ui.theme.grayTypography
 import com.imax.giraffe.presentation.ui.theme.mainTypography
 import com.imax.giraffe.presentation.utils.playCongratsSound
@@ -98,7 +98,7 @@ fun CongratsDialog(onDismiss: () -> Unit) {
 
                 Spacer(modifier = Modifier.weight(1f)) // Отступ снизу перед кнопкой
 
-                StandardButtonWithoutPadding(text = "Continue") {
+                StandardButtonForCongratsDialog(text = "Continue") {
                     onDismiss()
                 }
 

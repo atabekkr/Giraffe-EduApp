@@ -30,4 +30,24 @@ class ChooseGradeViewModel @Inject constructor(
         localStorage.isFourthGradeLocked = value
     }
 
+    fun getIsFirstGradeCompleted() = localStorage.isFirstGradeCompleted
+    fun setIsFirstGradeCompleted(value: Boolean) {
+        localStorage.isFirstGradeCompleted = value
+    }
+
+    fun getIsSecondGradeCompleted() = localStorage.isSecondGradeCompleted
+    fun setIsSecondGradeCompleted(value: Boolean) {
+        localStorage.isSecondGradeCompleted = value
+    }
+
+    fun getIsThirdGradeCompleted() = localStorage.isThirdGradeCompleted
+    fun setIsThirdGradeCompleted(value: Boolean) {
+        localStorage.isThirdGradeCompleted = value
+    }
+
+    fun getIsFourthGradeCompleted() = localStorage.isFourthGradeCompleted
+    fun setIsFourthGradeCompleted(value: Boolean) {
+        localStorage.isFourthGradeCompleted = value
+    }
+
 }

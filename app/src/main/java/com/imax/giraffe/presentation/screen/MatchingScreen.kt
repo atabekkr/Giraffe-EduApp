@@ -65,7 +65,6 @@ fun MatchingScreen(
 
     val gradeId = userViewModel.getGradeId()
     val topicId = userViewModel.getTopicId()
-    Log.d("Matching", gradeId.toString() + topicId.toString())
     LaunchedEffect(viewModel) {
         viewModel.getVocabulary(
             gradeId,
@@ -99,7 +98,9 @@ fun MatchingScreen(
             if (isCorrect) {
                 matchedPairs += selectedWord!!
                 matchedPairs += selectedTranslation!!
-                if (matchedPairs.size == words.size + translations.size) {
+                Log.d("MatchedPairs", matchedPairs.size.toString())
+                Log.d("MatchedPairs", (words.size + translations.size).toString())
+                if (matchedPairs.size == words.size + translations.size || matchedPairs.size == words.size + translations.size - 1) {
                     showCongratsDialog = true
                 }
 
@@ -269,7 +270,7 @@ fun MatchingItem(
             text = text,
             fontSize = 20.sp,
             modifier = Modifier.padding(16.dp),
-            style = TextStyle(color = primaryColor)
+            style = TextStyle(color = primaryColor, textAlign = TextAlign.Center)
         )
     }
 

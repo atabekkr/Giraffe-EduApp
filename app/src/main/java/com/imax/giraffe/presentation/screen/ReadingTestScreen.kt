@@ -151,8 +151,9 @@ fun ReadingTestScreen(
                 modifier = Modifier.padding(bottom = 48.dp),
                 text = "Check"
             ) {
-                if (selectedOption == readingTest?.key) showCorrectDialog = true
-                else showWrongDialog = true
+                showCorrectDialog = true
+//                if (selectedOption == readingTest?.key) showCorrectDialog = true
+//                else showWrongDialog = true
             }
         }
     }

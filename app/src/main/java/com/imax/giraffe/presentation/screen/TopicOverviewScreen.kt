@@ -163,6 +163,7 @@ fun ContentItemView(item: ContentItem) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(200.dp)
+                        .padding(top = 16.dp)
                 )
             }
         }

@@ -90,4 +90,23 @@ class UserViewModel @Inject constructor(
         localStorage.isListeningTestCompleted = false
     }
 
+    fun resetGradeCompletionData() {
+        localStorage.isFirstTopicCompleted = false
+        resetCompletedStatus()
+        localStorage.levelIndex = 0
+    }
+
+    fun setGradeChosen(isGradeChosen: Boolean) {
+        localStorage.isGradeChosen = isGradeChosen
+    }
+
+    fun setCompletedStatus() {
+        when (localStorage.gradeId) {
+            1 -> localStorage.isFirstGradeCompleted = true
+            2 -> localStorage.isSecondGradeCompleted = true
+            3 -> localStorage.isThirdGradeCompleted = true
+            4 -> localStorage.isFourthGradeCompleted = true
+        }
+    }
+
 }
