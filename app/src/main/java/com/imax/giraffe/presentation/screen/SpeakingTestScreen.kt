@@ -160,7 +160,7 @@ fun SpeakingTestScreen(
                     CongratsDialog {
                         userViewModel.setSpeakingTestCompleted()
                         userViewModel.incrementLevelIndex()
-                        onNavigateToScreen(Screen.Home)
+                        onNavigateToScreen(Screen.Feed)
                     }
             }
 

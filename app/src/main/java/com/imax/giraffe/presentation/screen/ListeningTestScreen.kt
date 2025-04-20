@@ -160,7 +160,7 @@ fun ListeningTestScreen(
                     CongratsDialog {
                         userViewModel.setListeningTestCompleted()
                         userViewModel.incrementLevelIndex()
-                        onNavigateToScreen(Screen.Home)
+                        onNavigateToScreen(Screen.Feed)
                     }
             }
 

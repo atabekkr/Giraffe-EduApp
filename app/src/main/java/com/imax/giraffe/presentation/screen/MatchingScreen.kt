@@ -139,7 +139,7 @@ fun MatchingScreen(
         if (showCongratsDialog) {
             CongratsDialog {
                 userViewModel.incrementLevelIndex()
-                onNavigateToScreen.invoke(Screen.Home)
+                onNavigateToScreen.invoke(Screen.Feed)
                 showCongratsDialog = false
             }
         }

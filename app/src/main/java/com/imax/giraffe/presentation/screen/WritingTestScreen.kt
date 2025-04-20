@@ -140,7 +140,7 @@ fun WritingTestScreen(
                     CongratsDialog {
                         userViewModel.setWritingTestCompleted()
                         userViewModel.incrementLevelIndex()
-                        onNavigateToScreen(Screen.Home)
+                        onNavigateToScreen(Screen.Feed)
                     }
             }
 

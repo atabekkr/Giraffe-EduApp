@@ -97,7 +97,7 @@ fun ReadingTestScreen(
                     CongratsDialog {
                         userViewModel.setReadingTestCompleted()
                         userViewModel.incrementLevelIndex()
-                        onNavigateToScreen(Screen.Home)
+                        onNavigateToScreen(Screen.Feed)
                     }
             }
 

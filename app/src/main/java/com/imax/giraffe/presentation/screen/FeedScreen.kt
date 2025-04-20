@@ -96,7 +96,7 @@ fun FeedScreen(
                         .size(64.dp)
                         .clip(RoundedCornerShape(12.dp)) // Rounded corners
                         .background(primaryColor) // Background color
-                        .clickable { onNavigateUp()}
+                        .clickable { onNavigateToScreen.invoke(Screen.Home)}
                 ) {
                     Icon(
                         Icons.Default.Close,

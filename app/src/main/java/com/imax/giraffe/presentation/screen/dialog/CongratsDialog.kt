@@ -98,7 +98,7 @@ fun CongratsDialog(onDismiss: () -> Unit) {
 
                 Spacer(modifier = Modifier.weight(1f)) // Отступ снизу перед кнопкой
 
-                StandardButtonWithoutPadding(text = "Home") {
+                StandardButtonWithoutPadding(text = "Continue") {
                     onDismiss()
                 }
 
