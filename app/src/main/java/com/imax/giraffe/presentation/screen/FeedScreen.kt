@@ -44,6 +44,7 @@ import com.imax.giraffe.presentation.ui.components.StandardButtonWithoutPadding
 import com.imax.giraffe.presentation.ui.theme.grayTypography
 import com.imax.giraffe.presentation.ui.theme.primaryColor
 import com.imax.giraffe.presentation.utils.LionLevelPic
+import com.imax.giraffe.presentation.utils.RabbitLevelPic
 import com.imax.giraffe.presentation.utils.TigerLevelPic
 
 @Composable
@@ -58,8 +59,21 @@ fun FeedScreen(
     var feedCount by remember { mutableIntStateOf(userViewModel.getFeedCount()) }
     var feedLevel by remember { mutableIntStateOf(userViewModel.getFeedLevel()) }
 
-    val picAnimal = if (userViewModel.getGradeId() == 4) {
-        when (feedLevel) {
+    val picAnimal = when (userViewModel.getGradeId()) {
+
+        1 -> when (feedLevel) {
+            1 -> RabbitLevelPic.LEVEL1.resId
+            2 -> RabbitLevelPic.LEVEL2.resId
+            3 -> RabbitLevelPic.LEVEL3.resId
+            4 -> RabbitLevelPic.LEVEL4.resId
+            5 -> RabbitLevelPic.LEVEL5.resId
+            6 -> RabbitLevelPic.LEVEL6.resId
+            7 -> RabbitLevelPic.LEVEL7.resId
+            8 -> RabbitLevelPic.LEVEL8.resId
+            9 -> RabbitLevelPic.LEVEL9.resId
+            else -> RabbitLevelPic.LEVEL10.resId
+        }
+        2 -> when (feedLevel) {
             1 -> LionLevelPic.LEVEL1.resId
             2 -> LionLevelPic.LEVEL2.resId
             3 -> LionLevelPic.LEVEL3.resId
@@ -71,8 +85,7 @@ fun FeedScreen(
             9 -> LionLevelPic.LEVEL9.resId
             else -> LionLevelPic.LEVEL10.resId
         }
-    } else {
-        when (feedLevel) {
+        3 -> when (feedLevel) {
             1 -> TigerLevelPic.LEVEL1.resId
             2 -> TigerLevelPic.LEVEL2.resId
             3 -> TigerLevelPic.LEVEL3.resId
@@ -83,6 +96,18 @@ fun FeedScreen(
             8 -> TigerLevelPic.LEVEL8.resId
             9 -> TigerLevelPic.LEVEL9.resId
             else -> TigerLevelPic.LEVEL10.resId
+        }
+        else -> when (feedLevel) {
+            1 -> LionLevelPic.LEVEL1.resId
+            2 -> LionLevelPic.LEVEL2.resId
+            3 -> LionLevelPic.LEVEL3.resId
+            4 -> LionLevelPic.LEVEL4.resId
+            5 -> LionLevelPic.LEVEL5.resId
+            6 -> LionLevelPic.LEVEL6.resId
+            7 -> LionLevelPic.LEVEL7.resId
+            8 -> LionLevelPic.LEVEL8.resId
+            9 -> LionLevelPic.LEVEL9.resId
+            else -> LionLevelPic.LEVEL10.resId
         }
     }
 
@@ -194,6 +219,7 @@ fun FeedScreen(
                     userViewModel.resetFeedCount()
                     if (feedLevel > 10) {
                         onNavigateToScreen(Screen.SetNameToPet)
+                        userViewModel.setFeedLevel(0)
                     } else {
                         userViewModel.setFeedLevel(feedLevel)
                     }

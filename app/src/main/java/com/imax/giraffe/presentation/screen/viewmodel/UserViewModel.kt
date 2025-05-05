@@ -94,6 +94,7 @@ class UserViewModel @Inject constructor(
         localStorage.isFirstTopicCompleted = false
         resetCompletedStatus()
         localStorage.levelIndex = 0
+        localStorage.feedLevel = 0
     }
 
     fun setGradeChosen(isGradeChosen: Boolean) {
