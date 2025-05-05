@@ -43,6 +43,7 @@ import com.imax.giraffe.presentation.screen.viewmodel.UserViewModel
 import com.imax.giraffe.presentation.ui.components.StandardButtonWithoutPadding
 import com.imax.giraffe.presentation.ui.theme.grayTypography
 import com.imax.giraffe.presentation.ui.theme.primaryColor
+import com.imax.giraffe.presentation.utils.FoxLevelPic
 import com.imax.giraffe.presentation.utils.LionLevelPic
 import com.imax.giraffe.presentation.utils.RabbitLevelPic
 import com.imax.giraffe.presentation.utils.TigerLevelPic
@@ -74,16 +75,16 @@ fun FeedScreen(
             else -> RabbitLevelPic.LEVEL10.resId
         }
         2 -> when (feedLevel) {
-            1 -> LionLevelPic.LEVEL1.resId
-            2 -> LionLevelPic.LEVEL2.resId
-            3 -> LionLevelPic.LEVEL3.resId
-            4 -> LionLevelPic.LEVEL4.resId
-            5 -> LionLevelPic.LEVEL5.resId
-            6 -> LionLevelPic.LEVEL6.resId
-            7 -> LionLevelPic.LEVEL7.resId
-            8 -> LionLevelPic.LEVEL8.resId
-            9 -> LionLevelPic.LEVEL9.resId
-            else -> LionLevelPic.LEVEL10.resId
+            1 -> FoxLevelPic.LEVEL1.resId
+            2 -> FoxLevelPic.LEVEL2.resId
+            3 -> FoxLevelPic.LEVEL3.resId
+            4 -> FoxLevelPic.LEVEL4.resId
+            5 -> FoxLevelPic.LEVEL5.resId
+            6 -> FoxLevelPic.LEVEL6.resId
+            7 -> FoxLevelPic.LEVEL7.resId
+            8 -> FoxLevelPic.LEVEL8.resId
+            9 -> FoxLevelPic.LEVEL9.resId
+            else -> FoxLevelPic.LEVEL10.resId
         }
         3 -> when (feedLevel) {
             1 -> TigerLevelPic.LEVEL1.resId

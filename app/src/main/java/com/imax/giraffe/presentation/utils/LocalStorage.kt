@@ -22,7 +22,7 @@ class LocalStorage(preference: SharedPreferences) {
     var isListeningTestCompleted by BooleanPreference(preference, false)
 
     var isFirstGradeLocked by BooleanPreference(preference, false)
-    var isSecondGradeLocked by BooleanPreference(preference, true)
+    var isSecondGradeLocked by BooleanPreference(preference, false)
     var isThirdGradeLocked by BooleanPreference(preference, false)
     var isFourthGradeLocked by BooleanPreference(preference, false)
 
