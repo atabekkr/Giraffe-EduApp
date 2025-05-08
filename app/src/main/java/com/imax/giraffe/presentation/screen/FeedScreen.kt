@@ -1,5 +1,6 @@
 package com.imax.giraffe.presentation.screen
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -23,6 +24,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -74,6 +76,7 @@ fun FeedScreen(
             9 -> RabbitLevelPic.LEVEL9.resId
             else -> RabbitLevelPic.LEVEL10.resId
         }
+
         2 -> when (feedLevel) {
             1 -> FoxLevelPic.LEVEL1.resId
             2 -> FoxLevelPic.LEVEL2.resId
@@ -86,6 +89,7 @@ fun FeedScreen(
             9 -> FoxLevelPic.LEVEL9.resId
             else -> FoxLevelPic.LEVEL10.resId
         }
+
         3 -> when (feedLevel) {
             1 -> TigerLevelPic.LEVEL1.resId
             2 -> TigerLevelPic.LEVEL2.resId
@@ -98,6 +102,7 @@ fun FeedScreen(
             9 -> TigerLevelPic.LEVEL9.resId
             else -> TigerLevelPic.LEVEL10.resId
         }
+
         else -> when (feedLevel) {
             1 -> LionLevelPic.LEVEL1.resId
             2 -> LionLevelPic.LEVEL2.resId
@@ -112,7 +117,7 @@ fun FeedScreen(
         }
     }
 
-    val buttonLabel = if (feedLevel == 10) "Finish" else "Feed"
+    var buttonLabel by remember { mutableStateOf(if (feedLevel == 10) "Finish" else "Feed") }
 
     Box(
         modifier = Modifier
@@ -215,7 +220,12 @@ fun FeedScreen(
                     modifier = Modifier.padding(bottom = 32.dp),
                     buttonLabel
                 ) {
+
+                    if (feedCount == 0)
+                        onNavigateToScreen.invoke(Screen.Topic)
+
                     feedLevel += feedCount
+                    Log.d("FeedLevel", "$feedLevel")
                     feedCount = 0
                     userViewModel.resetFeedCount()
                     if (feedLevel > 10) {
@@ -224,6 +234,7 @@ fun FeedScreen(
                     } else {
                         userViewModel.setFeedLevel(feedLevel)
                     }
+                    buttonLabel = "Back"
                 }
             }
         }
