@@ -52,6 +52,7 @@ import com.imax.giraffe.presentation.ui.components.StandardButtonWithoutPadding
 import com.imax.giraffe.presentation.ui.components.TestProgress
 import com.imax.giraffe.presentation.ui.components.WritingTestInput
 import com.imax.giraffe.presentation.ui.theme.grayTypography
+import com.imax.giraffe.presentation.utils.isWritingTextCorrect
 
 @Composable
 fun WritingTestScreen(
@@ -134,7 +135,6 @@ fun WritingTestScreen(
                 ErrorDialog { showWrongDialog = false }
             }
             if (showCorrectDialog) {
-                mediaPlayer?.release()
                 if (tests?.getOrNull(index + 1) != null)
                     CorrectDialog {
                         showCorrectDialog = false
@@ -242,17 +242,16 @@ fun WritingTestScreen(
                 modifier = Modifier.padding(bottom = 48.dp),
                 text = "Check"
             ) {
-                showCorrectDialog = true
-//                if (inputText.isNotBlank()) {
-//                    if (isWritingTextCorrect(
-//                            inputText,
-//                            writingTest?.text.toString()
-//                        )
-//                    )
-//                        showCorrectDialog = true
-//                    else
-//                        showWrongDialog = true
-//                }
+                if (inputText.isNotBlank()) {
+                    if (isWritingTextCorrect(
+                            inputText,
+                            writingTest?.text.toString()
+                        )
+                    )
+                        showCorrectDialog = true
+                    else
+                        showWrongDialog = true
+                }
             }
         }
     }

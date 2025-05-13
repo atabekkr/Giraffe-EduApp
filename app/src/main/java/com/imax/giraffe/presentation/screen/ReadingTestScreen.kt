@@ -72,91 +72,90 @@ fun ReadingTestScreen(
     var showWrongDialog by remember { mutableStateOf(false) }
     var showCorrectDialog by remember { mutableStateOf(false) }
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .paint(
-                    painterResource(R.drawable.background2),
-                    contentScale = ContentScale.Crop
-                )
-                .padding(horizontal = 24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .paint(
+                painterResource(R.drawable.background2),
+                contentScale = ContentScale.Crop
+            )
+            .padding(horizontal = 24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
 
-            if (showWrongDialog) {
-                ErrorDialog { showWrongDialog = false }
-            }
-            if (showCorrectDialog) {
-                selectedOption = ""
-                if (tests?.getOrNull(index + 1) != null)
-                    CorrectDialog {
-                        showCorrectDialog = false
-                        index++
-                    }
-                else
-                    CongratsDialog {
-                        userViewModel.setReadingTestCompleted()
-                        userViewModel.incrementLevelIndex()
-                        onNavigateToScreen(Screen.Feed)
-                    }
-            }
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 60.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Column {
-                    Text(
-                        text = "Reading! \uD83D\uDCD9 ",
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Black
-                    )
-                    Text(
-                        text = "Boost your listening with Saribek.",
-                        fontSize = 14.sp,
-                        color = grayTypography
-                    )
+        if (showWrongDialog) {
+            ErrorDialog { showWrongDialog = false }
+        }
+        if (showCorrectDialog) {
+            selectedOption = ""
+            if (tests?.getOrNull(index + 1) != null)
+                CorrectDialog {
+                    showCorrectDialog = false
+                    index++
                 }
-                Image(
-                    painter = painterResource(id = R.drawable.pic_giraffe),
-                    contentDescription = "Avatar",
-                    modifier = Modifier.size(50.dp)
+            else
+                CongratsDialog {
+                    userViewModel.setReadingTestCompleted()
+                    userViewModel.incrementLevelIndex()
+                    onNavigateToScreen(Screen.Feed)
+                }
+        }
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 60.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column {
+                Text(
+                    text = "Reading! \uD83D\uDCD9 ",
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+                Text(
+                    text = "Boost your listening with Saribek.",
+                    fontSize = 14.sp,
+                    color = grayTypography
                 )
             }
-
-            TestProgress(
-                modifier = Modifier.padding(top = 50.dp, start = 12.dp, end = 12.dp),
-                currentQuestion = index + 1,
-                totalQuestions = tests?.size ?: 0
+            Image(
+                painter = painterResource(id = R.drawable.pic_giraffe),
+                contentDescription = "Avatar",
+                modifier = Modifier.size(50.dp)
             )
+        }
 
-            ReadingSentenceCard(
-                modifier = Modifier.padding(top = 26.dp),
-                firstPart = readingTest?.firstPart,
-                secondPart = readingTest?.secondPart
-            )
+        TestProgress(
+            modifier = Modifier.padding(top = 50.dp, start = 12.dp, end = 12.dp),
+            currentQuestion = index + 1,
+            totalQuestions = tests?.size ?: 0
+        )
 
-            SelectableButtons(
-                options = answers,
-                selectedOption = selectedOption,
-                onOptionSelected = { selectedOption = it })
+        ReadingSentenceCard(
+            modifier = Modifier.padding(top = 26.dp),
+            firstPart = readingTest?.firstPart,
+            secondPart = readingTest?.secondPart
+        )
 
-            Spacer(modifier = Modifier.weight(1f))
+        SelectableButtons(
+            options = answers,
+            selectedOption = selectedOption,
+            onOptionSelected = { selectedOption = it })
 
-            StandardButtonWithoutPadding(
-                modifier = Modifier.padding(bottom = 48.dp),
-                text = "Check"
-            ) {
-                showCorrectDialog = true
-//                if (selectedOption == readingTest?.key) showCorrectDialog = true
-//                else showWrongDialog = true
-            }
+        Spacer(modifier = Modifier.weight(1f))
+
+        StandardButtonWithoutPadding(
+            modifier = Modifier.padding(bottom = 48.dp),
+            text = "Check"
+        ) {
+            if (selectedOption == readingTest?.key) showCorrectDialog = true
+            else showWrongDialog = true
         }
     }
+}
 
 @Composable
 fun SelectableButtons(

@@ -231,7 +231,8 @@ fun SpeakingTestScreen(
                                 "android.resource://" + context.packageName + "/raw/$audioFileName";
                             mediaPlayer.setDataSource(context, Uri.parse(filename))
                             mediaPlayer.prepare()
-                            mediaPlayer.playbackParams = mediaPlayer.playbackParams?.setSpeed(0.5f) ?: mediaPlayer.playbackParams
+                            mediaPlayer.playbackParams = mediaPlayer.playbackParams?.setSpeed(0.5f)
+                                ?: mediaPlayer.playbackParams
                             mediaPlayer.seekTo(0)
                             mediaPlayer.start()
                         } ?: run {
@@ -268,21 +269,20 @@ fun SpeakingTestScreen(
                 text = if (state.value.spokenText.isNotBlank()) "Check" else "Start record audio",
                 enabled = state.value.spokenText.isNotBlank()
             ) {
-                showCorrectDialog = true
-//                if (state.value.spokenText.isNotBlank()) {
-//                    if (isTextCorrect(
-//                            recognizedText = state.value.spokenText,
-//                            correctAnswer = speakingTest?.text.toString()
-//                        )
-//                    ) {
-//                        showCorrectDialog = true
-//                    } else {
-//                        showWrongDialog = true
-//                    }
-//                    voiceViewModel.setDefaultText()
-//                } else {
-//                    errorMessage = "Please start recording audio"
-//                }
+                if (state.value.spokenText.isNotBlank()) {
+                    if (isTextCorrect(
+                            recognizedText = state.value.spokenText,
+                            correctAnswer = speakingTest?.text.toString()
+                        )
+                    ) {
+                        showCorrectDialog = true
+                    } else {
+                        showWrongDialog = true
+                    }
+                    voiceViewModel.setDefaultText()
+                } else {
+                    errorMessage = "Please start recording audio"
+                }
             }
         }
     }

@@ -2,6 +2,7 @@ package com.imax.giraffe.presentation.screen
 
 import android.media.MediaPlayer
 import android.net.Uri
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -149,7 +150,6 @@ fun ListeningTestScreen(
                 ErrorDialog { showWrongDialog = false }
             }
             if (showCorrectDialog) {
-                mediaPlayer?.release()
                 if (tests?.getOrNull(index + 1) != null)
                     CorrectDialog {
                         showCorrectDialog = false
@@ -206,6 +206,7 @@ fun ListeningTestScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 SoundCard(iconRes = R.drawable.ic_sound, size = 132.dp) {
+                    Log.d("ListeningTest", listeningTest.toString())
                     try {
                         mediaPlayer.reset()
                         listeningTest?.audio?.let { audioFileName ->
@@ -221,6 +222,7 @@ fun ListeningTestScreen(
                             errorMessage = "Audio file name is null"
                         }
                     } catch (e: Exception) {
+                        Log.e("ListeningTest", e.localizedMessage, e)
                         errorMessage = "Error playing audio"
                     }
                 }
@@ -287,10 +289,9 @@ fun ListeningTestScreen(
                 modifier = Modifier.padding(bottom = 48.dp, top = 12.dp),
                 text = "Check"
             ) {
-                showCorrectDialog = true
-//                val correctText = answer.joinToString(" ")
-//                if (correctText == listeningTest?.text) showCorrectDialog = true
-//                else showWrongDialog = true
+                val correctText = answer.joinToString(" ")
+                if (correctText == listeningTest?.text) showCorrectDialog = true
+                else showWrongDialog = true
             }
         }
     }

@@ -224,7 +224,7 @@ fun TopicScreen(
                     .fillMaxWidth()
                     .padding(top = 24.dp, bottom = 48.dp)
                     .clip(RoundedCornerShape(20.dp))
-                    .background(cardColor)
+                    .background(Color.White)
                     .clickable(enabled = userViewModel.isFirstTopicCompleted()) {
                         if (levelIndex != 5)
                             onNavigateToScreen.invoke(Screen.Home)

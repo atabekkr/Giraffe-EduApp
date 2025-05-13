@@ -92,7 +92,9 @@ fun MainNav(
         }
         composable<Screen.Welcome> {
             WelcomeScreen { navigateTo ->
-                navHostController.navigate(navigateTo)
+                navHostController.navigate(navigateTo) {
+                    popUpTo(Screen.Splash) { inclusive = true }
+                }
             }
         }
         composable<Screen.Login> {
@@ -108,7 +110,9 @@ fun MainNav(
         }
         composable<Screen.ChooseGrade> {
             ChooseGradeScreen { navigateTo ->
-                navHostController.navigate(navigateTo)
+                navHostController.navigate(navigateTo) {
+                    popUpTo(Screen.Welcome) { inclusive = true }
+                }
             }
         }
         composable<Screen.AfterChooseGrade> {
