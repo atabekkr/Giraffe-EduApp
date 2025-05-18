@@ -16,6 +16,11 @@ class LocalStorage(preference: SharedPreferences) {
     var isThirdGradeCompleted by BooleanPreference(preference, false)
     var isFourthGradeCompleted by BooleanPreference(preference, false)
 
+    var isListeningExplanationShowed by BooleanPreference(preference, false)
+    var isReadingExplanationShowed by BooleanPreference(preference, false)
+    var isWritingExplanationShowed by BooleanPreference(preference, false)
+    var isSpeakingExplanationShowed by BooleanPreference(preference, false)
+
     var isAfterChooseGradeShowed by BooleanPreference(preference, false)
 
 }

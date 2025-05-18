@@ -47,7 +47,6 @@ import com.imax.giraffe.presentation.screen.dialog.CorrectDialog
 import com.imax.giraffe.presentation.screen.dialog.ErrorDialog
 import com.imax.giraffe.presentation.screen.viewmodel.GradeDataViewModel
 import com.imax.giraffe.presentation.screen.viewmodel.MainViewModel
-import com.imax.giraffe.presentation.screen.viewmodel.UserViewModel
 import com.imax.giraffe.presentation.ui.components.SoundCard
 import com.imax.giraffe.presentation.ui.components.StandardButtonWithoutPadding
 import com.imax.giraffe.presentation.ui.components.TestProgress
@@ -59,7 +58,6 @@ import com.imax.giraffe.presentation.utils.isWritingTextCorrect
 fun WritingTestScreen(
     modifier: Modifier = Modifier,
     viewModel: MainViewModel = hiltViewModel(),
-    userViewModel: UserViewModel = hiltViewModel(),
     gradeDataViewModel: GradeDataViewModel = hiltViewModel(),
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
     onNavigateToScreen: (Screen) -> Unit
@@ -136,18 +134,11 @@ fun WritingTestScreen(
             }
             if (showCorrectDialog) {
                 if (tests?.getOrNull(index + 1) != null)
-                    CongratsDialog {
-                        gradeDataViewModel.incrementFeedCount()
-                        gradeDataViewModel.incrementTopicCompletedPercent()
-                        gradeDataViewModel.updateWritingTestCompleted()
-
-                        onNavigateToScreen(Screen.Feed)
+                    CorrectDialog {
+                        showCorrectDialog = false
+                        inputText = ""
+                        index++
                     }
-//                    CorrectDialog {
-//                        showCorrectDialog = false
-//                        inputText = ""
-//                        index++
-//                    }
                 else
                     CongratsDialog {
                         gradeDataViewModel.incrementFeedCount()
@@ -251,17 +242,16 @@ fun WritingTestScreen(
                 modifier = Modifier.padding(bottom = 48.dp),
                 text = "Check"
             ) {
-                showCorrectDialog = true
-//                if (inputText.isNotBlank()) {
-//                    if (isWritingTextCorrect(
-//                            inputText,
-//                            writingTest?.text.toString()
-//                        )
-//                    )
-//                        showCorrectDialog = true
-//                    else
-//                        showWrongDialog = true
-//                }
+                if (inputText.isNotBlank()) {
+                    if (isWritingTextCorrect(
+                            inputText,
+                            writingTest?.text.toString()
+                        )
+                    )
+                        showCorrectDialog = true
+                    else
+                        showWrongDialog = true
+                }
             }
         }
     }

@@ -147,9 +147,16 @@ fun HomeScreen(
                 shape = RoundedCornerShape(20.dp),
                 enabled = !listeningCardEnabled,
                 onClick = {
-                    onNavigateToScreen.invoke(
-                        Screen.ListeningTest
-                    )
+                    if (userViewModel.getIsListeningExplanationShowed())
+                        onNavigateToScreen.invoke(
+                            Screen.ListeningTest
+                        )
+                    else
+                        onNavigateToScreen.invoke(
+                            Screen.ListeningExplanation
+                        )
+
+                    userViewModel.setTrueToIsListeningExplanationShowed()
                 }
             ) {
                 Column(
@@ -193,9 +200,16 @@ fun HomeScreen(
                 shape = RoundedCornerShape(20.dp),
                 enabled = !readingCardEnabled,
                 onClick = {
-                    onNavigateToScreen.invoke(
-                        Screen.ReadingTest
-                    )
+                    if (userViewModel.getIsReadingExplanationShowed())
+                        onNavigateToScreen.invoke(
+                            Screen.ReadingTest
+                        )
+                    else
+                        onNavigateToScreen.invoke(
+                            Screen.ReadingExplanation
+                        )
+
+                    userViewModel.setTrueToIsReadingExplanationShowed()
                 }
             ) {
                 Column(
@@ -246,9 +260,16 @@ fun HomeScreen(
                 shape = RoundedCornerShape(20.dp),
                 enabled = !writingCardEnabled,
                 onClick = {
-                    onNavigateToScreen.invoke(
-                        Screen.WritingTest
-                    )
+                    if (userViewModel.getIsWritingExplanationShowed())
+                        onNavigateToScreen.invoke(
+                            Screen.WritingTest
+                        )
+                    else
+                        onNavigateToScreen.invoke(
+                            Screen.WritingExplanation
+                        )
+
+                    userViewModel.setTrueToIsWritingExplanationShowed()
                 }
             ) {
                 Column(
@@ -289,9 +310,16 @@ fun HomeScreen(
                 shape = RoundedCornerShape(20.dp),
                 enabled = !speakingCardEnabled,
                 onClick = {
-                    onNavigateToScreen.invoke(
-                        Screen.SpeakingTest
-                    )
+                    if (userViewModel.getIsSpeakingExplanationShowed())
+                        onNavigateToScreen.invoke(
+                            Screen.SpeakingTest
+                        )
+                    else
+                        onNavigateToScreen.invoke(
+                            Screen.SpeakingExplanation
+                        )
+
+                    userViewModel.setTrueToIsSpeakingExplanationShowed()
                 }
             ) {
                 Column(

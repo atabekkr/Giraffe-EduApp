@@ -37,6 +37,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.imax.giraffe.R
 import com.imax.giraffe.presentation.navigation.Screen
 import com.imax.giraffe.presentation.screen.dialog.CongratsDialog
+import com.imax.giraffe.presentation.screen.dialog.CorrectDialog
 import com.imax.giraffe.presentation.screen.dialog.ErrorDialog
 import com.imax.giraffe.presentation.screen.viewmodel.GradeDataViewModel
 import com.imax.giraffe.presentation.screen.viewmodel.MainViewModel
@@ -88,17 +89,10 @@ fun ReadingTestScreen(
         if (showCorrectDialog) {
             selectedOption = ""
             if (tests?.getOrNull(index + 1) != null)
-                CongratsDialog {
-                    gradeDataViewModel.incrementFeedCount()
-                    gradeDataViewModel.incrementTopicCompletedPercent()
-                    gradeDataViewModel.updateReadingTestCompleted()
-
-                    onNavigateToScreen(Screen.Feed)
+                CorrectDialog {
+                    showCorrectDialog = false
+                    index++
                 }
-//                CorrectDialog {
-//                    showCorrectDialog = false
-//                    index++
-//                }
             else
                 CongratsDialog {
                     gradeDataViewModel.incrementFeedCount()
@@ -159,9 +153,8 @@ fun ReadingTestScreen(
             modifier = Modifier.padding(bottom = 48.dp),
             text = "Check"
         ) {
-            showCorrectDialog = true
-//            if (selectedOption == readingTest?.key) showCorrectDialog = true
-//            else showWrongDialog = true
+            if (selectedOption == readingTest?.key) showCorrectDialog = true
+            else showWrongDialog = true
         }
     }
 }

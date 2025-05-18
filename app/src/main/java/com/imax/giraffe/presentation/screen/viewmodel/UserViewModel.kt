@@ -31,6 +31,26 @@ class UserViewModel @Inject constructor(
         localStorage.isAfterChooseGradeShowed = true
     }
 
+    fun getIsListeningExplanationShowed() = localStorage.isListeningExplanationShowed
+    fun setTrueToIsListeningExplanationShowed() {
+        localStorage.isListeningExplanationShowed = true
+    }
+
+    fun getIsReadingExplanationShowed() = localStorage.isReadingExplanationShowed
+    fun setTrueToIsReadingExplanationShowed() {
+        localStorage.isReadingExplanationShowed = true
+    }
+
+    fun getIsSpeakingExplanationShowed() = localStorage.isSpeakingExplanationShowed
+    fun setTrueToIsSpeakingExplanationShowed() {
+        localStorage.isSpeakingExplanationShowed = true
+    }
+
+    fun getIsWritingExplanationShowed() = localStorage.isWritingExplanationShowed
+    fun setTrueToIsWritingExplanationShowed() {
+        localStorage.isWritingExplanationShowed = true
+    }
+
     fun setCompletedStatus() {
         when (localStorage.gradeId) {
             1 -> localStorage.isFirstGradeCompleted = true

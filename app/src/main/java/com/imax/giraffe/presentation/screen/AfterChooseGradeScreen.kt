@@ -1,5 +1,7 @@
 package com.imax.giraffe.presentation.screen
 
+import android.media.MediaPlayer
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,12 +19,19 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -30,6 +39,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.imax.giraffe.R
 import com.imax.giraffe.presentation.navigation.Screen
 import com.imax.giraffe.presentation.screen.viewmodel.UserViewModel
@@ -40,10 +53,73 @@ import com.imax.giraffe.presentation.ui.theme.primaryColor
 fun AfterGradeChooseScreen(
     modifier: Modifier = Modifier,
     viewModel: UserViewModel = hiltViewModel(),
+    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
     onNavigateToScreen: (Screen) -> Unit
 ) {
 
     val name = viewModel.getUserName()
+
+    val context = LocalContext.current
+
+    var mediaPlayer: MediaPlayer? by remember { mutableStateOf(null) }
+
+    var lifecycleEvent by remember { mutableStateOf(Lifecycle.Event.ON_ANY) }
+
+    DisposableEffect(lifecycleOwner) {
+        val lifecycleObserver = LifecycleEventObserver { _, event ->
+            lifecycleEvent = event
+        }
+        lifecycleOwner.lifecycle.addObserver(lifecycleObserver)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(lifecycleObserver)
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        val player = MediaPlayer()
+        mediaPlayer = player
+
+        try {
+            val filename = "android.resource://${context.packageName}/raw/after_choose_grade"
+            player.setDataSource(context, Uri.parse(filename))
+            player.prepare()
+            player.playbackParams = player.playbackParams.setSpeed(1f)
+            player.seekTo(0)
+            player.start()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    LaunchedEffect(lifecycleEvent) {
+        if (lifecycleEvent == Lifecycle.Event.ON_STOP) {
+            mediaPlayer?.let { player ->
+                try {
+                    if (player.isPlaying) {
+                        player.stop()
+                    }
+                    player.release()
+                } catch (e: IllegalStateException) {
+                    e.printStackTrace()
+                }
+            }
+            mediaPlayer = null
+        }
+    }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            mediaPlayer?.let {
+                try {
+                    it.stop()
+                    it.release()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+            mediaPlayer = null
+        }
+    }
 
     Column(
         modifier = modifier

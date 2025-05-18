@@ -10,16 +10,20 @@ import com.imax.giraffe.presentation.screen.ChooseGradeExplanationScreen
 import com.imax.giraffe.presentation.screen.ChooseGradeScreen
 import com.imax.giraffe.presentation.screen.FeedScreen
 import com.imax.giraffe.presentation.screen.HomeScreen
+import com.imax.giraffe.presentation.screen.ListeningExplanationScreen
 import com.imax.giraffe.presentation.screen.ListeningTestScreen
 import com.imax.giraffe.presentation.screen.LoginScreen
 import com.imax.giraffe.presentation.screen.MatchingScreen
+import com.imax.giraffe.presentation.screen.ReadingExplanationScreen
 import com.imax.giraffe.presentation.screen.ReadingTestScreen
 import com.imax.giraffe.presentation.screen.SetNameToPetScreen
+import com.imax.giraffe.presentation.screen.SpeakingExplanationScreen
 import com.imax.giraffe.presentation.screen.SpeakingTestScreen
 import com.imax.giraffe.presentation.screen.SplashScreen
 import com.imax.giraffe.presentation.screen.TopicOverviewScreen
 import com.imax.giraffe.presentation.screen.TopicScreen
 import com.imax.giraffe.presentation.screen.WelcomeScreen
+import com.imax.giraffe.presentation.screen.WritingExplanationScreen
 import com.imax.giraffe.presentation.screen.WritingTestScreen
 import kotlinx.serialization.Serializable
 
@@ -71,6 +75,18 @@ sealed class Screen {
 
     @Serializable
     data object SetNameToPet : Screen()
+
+    @Serializable
+    data object ListeningExplanation : Screen()
+
+    @Serializable
+    data object ReadingExplanation : Screen()
+
+    @Serializable
+    data object WritingExplanation : Screen()
+
+    @Serializable
+    data object SpeakingExplanation : Screen()
 }
 
 @Composable
@@ -105,20 +121,22 @@ fun MainNav(
         composable<Screen.ChooseGradeExplanation> { backStackEntry ->
             val name = backStackEntry.arguments?.getString("name") ?: "No message"
             ChooseGradeExplanationScreen(name = name) { navigateTo ->
-                navHostController.navigate(navigateTo)
+                navHostController.navigate(navigateTo) {
+                    popUpTo(Screen.Welcome) { inclusive = true }
+                }
             }
         }
         composable<Screen.ChooseGrade> {
             ChooseGradeScreen { navigateTo ->
                 navHostController.navigate(navigateTo) {
-                    popUpTo(Screen.Welcome) { inclusive = true }
+                    popUpTo(Screen.ChooseGrade) { inclusive = false }
                 }
             }
         }
         composable<Screen.AfterChooseGrade> {
             AfterGradeChooseScreen { navigateTo ->
                 navHostController.navigate(navigateTo) {
-                    popUpTo<Screen.AfterChooseGrade> { inclusive = true }
+                    popUpTo<Screen.Topic> { inclusive = true }
                 }
             }
         }
@@ -148,13 +166,10 @@ fun MainNav(
             FeedScreen(
                 onNavigateToScreen = { navigateTo ->
                     navHostController.navigate(navigateTo) {
-                        popUpTo(Screen.Topic) { inclusive = false }
+                        popUpTo(Screen.ChooseGrade) { inclusive = false }
                     }
 
                 },
-                onNavigateUp = {
-                    navHostController.popBackStack()
-                }
             )
         }
         composable<Screen.ListeningTest> {
@@ -188,9 +203,38 @@ fun MainNav(
         composable<Screen.SetNameToPet> {
             SetNameToPetScreen { navigateTo ->
                 navHostController.navigate(navigateTo) {
-                    popUpTo(Screen.ChooseGrade) { inclusive = false }
+                    popUpTo(Screen.ChooseGrade) { inclusive = true }
                 }
             }
         }
+        composable<Screen.ListeningExplanation> {
+            ListeningExplanationScreen { navigateTo ->
+                navHostController.navigate(navigateTo) {
+                    popUpTo(Screen.ListeningExplanation) { inclusive = true }
+                }
+            }
+        }
+        composable<Screen.ReadingExplanation> {
+            ReadingExplanationScreen { navigateTo ->
+                navHostController.navigate(navigateTo) {
+                    popUpTo(Screen.ReadingExplanation) { inclusive = true }
+                }
+            }
+        }
+        composable<Screen.WritingExplanation> {
+            WritingExplanationScreen { navigateTo ->
+                navHostController.navigate(navigateTo) {
+                    popUpTo(Screen.WritingExplanation) { inclusive = true }
+                }
+            }
+        }
+        composable<Screen.SpeakingExplanation> {
+            SpeakingExplanationScreen { navigateTo ->
+                navHostController.navigate(navigateTo) {
+                    popUpTo(Screen.SpeakingExplanation) { inclusive = true }
+                }
+            }
+        }
+
     }
 }

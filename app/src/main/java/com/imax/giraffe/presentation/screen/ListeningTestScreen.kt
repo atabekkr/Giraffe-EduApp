@@ -151,18 +151,11 @@ fun ListeningTestScreen(
             }
             if (showCorrectDialog) {
                 if (tests?.getOrNull(index + 1) != null)
-                    CongratsDialog {
-                        gradeDataViewModel.updateListeningTestCompleted()
-                        gradeDataViewModel.incrementFeedCount()
-                        gradeDataViewModel.incrementTopicCompletedPercent()
-
-                        onNavigateToScreen(Screen.Feed)
+                    CorrectDialog {
+                        showCorrectDialog = false
+                        answer.clear()
+                        index++
                     }
-//                    CorrectDialog {
-//                        showCorrectDialog = false
-//                        answer.clear()
-//                        index++
-//                    }
                 else
                     CongratsDialog {
                         gradeDataViewModel.updateListeningTestCompleted()
@@ -273,7 +266,7 @@ fun ListeningTestScreen(
                     .padding(horizontal = 12.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                availableWords.forEach { word ->
+                availableWords.shuffled().forEach { word ->
                     Button(
                         onClick = {
                             answer.add(word)
@@ -297,10 +290,9 @@ fun ListeningTestScreen(
                 modifier = Modifier.padding(bottom = 48.dp, top = 12.dp),
                 text = "Check"
             ) {
-                showCorrectDialog = true
-//                val correctText = answer.joinToString(" ")
-//                if (correctText == listeningTest?.text) showCorrectDialog = true
-//                else showWrongDialog = true
+                val correctText = answer.joinToString(" ")
+                if (correctText == listeningTest?.text) showCorrectDialog = true
+                else showWrongDialog = true
             }
         }
     }

@@ -55,7 +55,6 @@ fun FeedScreen(
     userViewModel: UserViewModel = hiltViewModel(),
     gradeDataViewModel: GradeDataViewModel = hiltViewModel(),
     onNavigateToScreen: (Screen) -> Unit,
-    onNavigateUp: () -> Unit,
 ) {
 
     gradeDataViewModel.getGrade()
@@ -230,7 +229,7 @@ fun FeedScreen(
                 ) {
 
                     if (feedCount == 0) {
-                        onNavigateUp.invoke()
+                        onNavigateToScreen.invoke(Screen.Topic)
                     } else {
                         Log.d("FeedScreen", "$level")
                         val nonNullFeedCount = feedCount ?: 0

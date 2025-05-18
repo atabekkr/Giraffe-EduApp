@@ -61,7 +61,6 @@ import com.imax.giraffe.presentation.utils.isTextCorrect
 @Composable
 fun SpeakingTestScreen(
     viewModel: MainViewModel = hiltViewModel(),
-    userViewModel: UserViewModel = hiltViewModel(),
     voiceViewModel: VoiceViewModel = hiltViewModel(),
     gradeDataViewModel: GradeDataViewModel = hiltViewModel(),
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
@@ -152,17 +151,10 @@ fun SpeakingTestScreen(
             }
             if (showCorrectDialog) {
                 if (tests?.getOrNull(index + 1) != null)
-                    CongratsDialog {
-                        gradeDataViewModel.incrementFeedCount()
-                        gradeDataViewModel.incrementTopicCompletedPercent()
-                        gradeDataViewModel.updateSpeakingTestCompleted()
-
-                        onNavigateToScreen(Screen.Feed)
+                    CorrectDialog {
+                        showCorrectDialog = false
+                        index++
                     }
-//                    CorrectDialog {
-//                        showCorrectDialog = false
-//                        index++
-//                    }
                 else
                     CongratsDialog {
                         gradeDataViewModel.incrementFeedCount()
@@ -276,23 +268,22 @@ fun SpeakingTestScreen(
             StandardButtonWithoutPadding(
                 modifier = Modifier.padding(bottom = 48.dp),
                 text = if (state.value.spokenText.isNotBlank()) "Check" else "Start record audio",
-                enabled = true //state.value.spokenText.isNotBlank()
+                enabled = state.value.spokenText.isNotBlank()
             ) {
-                showCorrectDialog = true
-//                if (state.value.spokenText.isNotBlank()) {
-//                    if (isTextCorrect(
-//                            recognizedText = state.value.spokenText,
-//                            correctAnswer = speakingTest?.text.toString()
-//                        )
-//                    ) {
-//                        showCorrectDialog = true
-//                    } else {
-//                        showWrongDialog = true
-//                    }
-//                    voiceViewModel.setDefaultText()
-//                } else {
-//                    errorMessage = "Please start recording audio"
-//                }
+                if (state.value.spokenText.isNotBlank()) {
+                    if (isTextCorrect(
+                            recognizedText = state.value.spokenText,
+                            correctAnswer = speakingTest?.text.toString()
+                        )
+                    ) {
+                        showCorrectDialog = true
+                    } else {
+                        showWrongDialog = true
+                    }
+                    voiceViewModel.setDefaultText()
+                } else {
+                    errorMessage = "Please start recording audio"
+                }
             }
         }
     }

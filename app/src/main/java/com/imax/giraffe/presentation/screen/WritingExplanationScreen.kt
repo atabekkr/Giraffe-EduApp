@@ -36,7 +36,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
@@ -49,9 +48,8 @@ import com.imax.giraffe.presentation.ui.theme.mainTypography
 import com.imax.giraffe.presentation.ui.theme.primaryColor
 
 @Composable
-fun ChooseGradeExplanationScreen(
+fun WritingExplanationScreen(
     modifier: Modifier = Modifier,
-    name: String,
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
     onNavigateToScreen: (Screen) -> Unit
 ) {
@@ -77,7 +75,7 @@ fun ChooseGradeExplanationScreen(
         mediaPlayer = player
 
         try {
-            val filename = "android.resource://${context.packageName}/raw/choose_grade_explanation"
+            val filename = "android.resource://${context.packageName}/raw/writing"
             player.setDataSource(context, Uri.parse(filename))
             player.prepare()
             player.playbackParams = player.playbackParams.setSpeed(1f)
@@ -118,7 +116,6 @@ fun ChooseGradeExplanationScreen(
         }
     }
 
-
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -148,39 +145,22 @@ fun ChooseGradeExplanationScreen(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        "Nice to meet you!\n$name \u263A\uFE0F",
+                        "Writing! \uD83D\uDD8B\n" +
+                                "\n" +
+                                "Here you can improve your understanding of English by solving exciting tasks. That's how it works:\n" +
+                                "\n" +
+                                "1. Listen to the audio.\n" +
+                                "2. Understand the audio.\n" +
+                                "3. Write it correctly.\n" +
+                                "\n" +
+                                "It's not only interesting, but it will also help you understand English better by writing!\n" +
+                                "\n" +
+                                "I'm always here to help!\uD83D\uDE0A\n" +
+                                "\n" +
+                                "Are you ready to try?",
                         style = TextStyle(color = Color(0xFF333333), fontSize = 22.sp)
                     )
                 }
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 36.dp),
-                    text = "I think that people with such names must have something special. I am very glad that we are acquainted now!",
-                    style = TextStyle(color = Color(0xFF333333), fontSize = 22.sp)
-                )
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 36.dp),
-                    text = "You know, I'm in 5th grade.\n" +
-                            "At school, we often discuss new topics, play during breakings, and even come up with funny stories.",
-                    style = TextStyle(color = Color(0xFF333333), fontSize = 22.sp)
-                )
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 36.dp),
-                    text = "What grade are you in? \uD83E\uDD14",
-                    style = TextStyle(color = Color(0xFF333333), fontSize = 22.sp)
-                )
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 36.dp),
-                    text = "Please choose, I'm very interested to find out!",
-                    style = TextStyle(color = Color(0xFF333333), fontSize = 22.sp)
-                )
             }
         }
         Row(
@@ -210,7 +190,7 @@ fun ChooseGradeExplanationScreen(
             Button(
                 modifier = Modifier.padding(end = 24.dp),
                 onClick = {
-                    onNavigateToScreen.invoke(Screen.ChooseGrade)
+                    onNavigateToScreen.invoke(Screen.WritingTest)
                 },
                 shape = RoundedCornerShape(8.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = primaryColor),
@@ -224,10 +204,4 @@ fun ChooseGradeExplanationScreen(
             }
         }
     }
-}
-
-@Composable
-@Preview
-fun GradeExplanationScreenPreview() {
-    ChooseGradeExplanationScreen(name = "Saribek", onNavigateToScreen = {})
 }
