@@ -6,25 +6,10 @@ class LocalStorage(preference: SharedPreferences) {
 
     var isLogin by BooleanPreference(preference, false)
 
-    var isFirstTopicCompleted by BooleanPreference(preference, false)
-    var topicCompletedPercent by IntPreference(preference, 0)
-    var feedCount by IntPreference(preference, 0)
-    var levelIndex by IntPreference(preference, 0)
-    var feedLevel by IntPreference(preference, 1)
-
     var userName by StringPreference(preference, "")
 
-    var gradeId by IntPreference(preference, 0)
-
-    var isWritingTestCompleted by BooleanPreference(preference, false)
-    var isSpeakingTestCompleted by BooleanPreference(preference, false)
-    var isReadingTestCompleted by BooleanPreference(preference, false)
-    var isListeningTestCompleted by BooleanPreference(preference, false)
-
-    var isFirstGradeLocked by BooleanPreference(preference, false)
-    var isSecondGradeLocked by BooleanPreference(preference, false)
-    var isThirdGradeLocked by BooleanPreference(preference, false)
-    var isFourthGradeLocked by BooleanPreference(preference, false)
+    var gradeId by IntPreference(preference, 1)
+    var topicId by IntPreference(preference, 1)
 
     var isFirstGradeCompleted by BooleanPreference(preference, false)
     var isSecondGradeCompleted by BooleanPreference(preference, false)
@@ -32,7 +17,5 @@ class LocalStorage(preference: SharedPreferences) {
     var isFourthGradeCompleted by BooleanPreference(preference, false)
 
     var isAfterChooseGradeShowed by BooleanPreference(preference, false)
-
-    var isGradeChosen by BooleanPreference(preference, false)
 
 }

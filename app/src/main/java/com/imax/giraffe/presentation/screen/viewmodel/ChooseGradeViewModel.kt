@@ -10,26 +10,6 @@ class ChooseGradeViewModel @Inject constructor(
     private val localStorage: LocalStorage
 ) : ViewModel() {
 
-    fun getIsFirstGradeLocked() = localStorage.isFirstGradeLocked
-    fun setIsFirstGradeLocked(value: Boolean) {
-        localStorage.isFirstGradeLocked = value
-    }
-
-    fun getIsSecondGradeLocked() = localStorage.isSecondGradeLocked
-    fun setIsSecondGradeLocked(value: Boolean) {
-        localStorage.isSecondGradeLocked = value
-    }
-
-    fun getIsThirdGradeLocked() = localStorage.isThirdGradeLocked
-    fun setIsThirdGradeLocked(value: Boolean) {
-        localStorage.isThirdGradeLocked = value
-    }
-
-    fun getIsFourthGradeLocked() = localStorage.isFourthGradeLocked
-    fun setIsFourthGradeLocked(value: Boolean) {
-        localStorage.isFourthGradeLocked = value
-    }
-
     fun getIsFirstGradeCompleted() = localStorage.isFirstGradeCompleted
     fun setIsFirstGradeCompleted(value: Boolean) {
         localStorage.isFirstGradeCompleted = value

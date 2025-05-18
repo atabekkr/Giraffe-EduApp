@@ -41,8 +41,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.imax.giraffe.R
 import com.imax.giraffe.presentation.navigation.Screen
 import com.imax.giraffe.presentation.screen.dialog.CongratsDialog
+import com.imax.giraffe.presentation.screen.viewmodel.GradeDataViewModel
 import com.imax.giraffe.presentation.screen.viewmodel.MainViewModel
-import com.imax.giraffe.presentation.screen.viewmodel.UserViewModel
 import com.imax.giraffe.presentation.ui.theme.grayTypography
 import com.imax.giraffe.presentation.ui.theme.primaryColor
 import com.imax.giraffe.presentation.utils.parseVocabularyJson
@@ -57,19 +57,14 @@ import kotlinx.coroutines.launch
 fun MatchingScreen(
     modifier: Modifier = Modifier,
     viewModel: MainViewModel = hiltViewModel(),
-    userViewModel: UserViewModel = hiltViewModel(),
+    gradeDataViewModel: GradeDataViewModel = hiltViewModel(),
     onNavigateToScreen: (Screen) -> Unit
 ) {
 
     val context = LocalContext.current
 
-    val gradeId = userViewModel.getGradeId()
-    val topicId = userViewModel.getTopicId()
     LaunchedEffect(viewModel) {
-        viewModel.getVocabulary(
-            gradeId,
-            topicId
-        )
+        viewModel.getVocabulary()
     }
 
     val vocabulary = viewModel.getVocabularyResult.collectAsState().value
@@ -96,6 +91,7 @@ fun MatchingScreen(
             val isCorrect = words.indexOf(selectedWord) == translations.indexOf(selectedTranslation)
 
             if (isCorrect) {
+                showCongratsDialog = true
                 matchedPairs += selectedWord!!
                 matchedPairs += selectedTranslation!!
                 Log.d("MatchedPairs", matchedPairs.size.toString())
@@ -139,7 +135,9 @@ fun MatchingScreen(
 
         if (showCongratsDialog) {
             CongratsDialog {
-                userViewModel.incrementLevelIndex()
+//                userViewModel.incrementLevelIndex()
+                gradeDataViewModel.incrementFeedCount()
+                gradeDataViewModel.incrementTopicCompletedPercent()
                 onNavigateToScreen.invoke(Screen.Feed)
                 showCongratsDialog = false
             }

@@ -1,6 +1,5 @@
 package com.imax.giraffe.presentation.screen
 
-
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -60,8 +59,6 @@ fun SetNameToPetScreen(
         if (showCongratsDialog) {
             CongratsDialog {
                 viewModel.setCompletedStatus()
-                viewModel.resetGradeCompletionData()
-                viewModel.setGradeChosen(false)
                 onNavigateToHome.invoke(Screen.ChooseGrade)
                 showCongratsDialog = false
             }

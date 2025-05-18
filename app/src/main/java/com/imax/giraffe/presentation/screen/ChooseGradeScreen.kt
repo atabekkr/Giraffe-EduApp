@@ -96,34 +96,28 @@ fun ChooseGradeScreen(
             grades?.let {
                 items(it) { grade ->
                     var isCompleted = false
-                    val isLocked: Boolean
                     val gradeContent = when (grade.id) {
                         1 -> {
-                            isLocked = chooseGradeViewModel.getIsFirstGradeLocked()
                             isCompleted = chooseGradeViewModel.getIsFirstGradeCompleted()
                             GradeContent.GRADE1
                         }
 
                         2 -> {
-                            isLocked = chooseGradeViewModel.getIsSecondGradeLocked()
                             isCompleted = chooseGradeViewModel.getIsSecondGradeCompleted()
                             GradeContent.GRADE2
                         }
 
                         3 -> {
-                            isLocked = chooseGradeViewModel.getIsThirdGradeLocked()
                             isCompleted = chooseGradeViewModel.getIsThirdGradeCompleted()
                             GradeContent.GRADE3
                         }
 
                         4 -> {
-                            isLocked = chooseGradeViewModel.getIsFourthGradeLocked()
                             isCompleted = chooseGradeViewModel.getIsFourthGradeCompleted()
                             GradeContent.GRADE4
                         }
 
                         else -> {
-                            isLocked = chooseGradeViewModel.getIsFourthGradeLocked()
                             GradeContent.GRADE4
                         }
                     }
@@ -131,7 +125,6 @@ fun ChooseGradeScreen(
                         grade,
                         gradeContent.color,
                         gradeContent.picId,
-                        isLocked,
                         isCompleted
                     ) {
                         userViewModel.setGradeId(grade.id)
@@ -145,7 +138,6 @@ fun ChooseGradeScreen(
                             )
 
                         userViewModel.setTrueToIsAfterChooseGradeShowed()
-                        userViewModel.setGradeChosen(true)
                     }
                 }
             }

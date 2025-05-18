@@ -47,6 +47,7 @@ import com.imax.giraffe.presentation.navigation.Screen
 import com.imax.giraffe.presentation.screen.dialog.CongratsDialog
 import com.imax.giraffe.presentation.screen.dialog.CorrectDialog
 import com.imax.giraffe.presentation.screen.dialog.ErrorDialog
+import com.imax.giraffe.presentation.screen.viewmodel.GradeDataViewModel
 import com.imax.giraffe.presentation.screen.viewmodel.MainViewModel
 import com.imax.giraffe.presentation.screen.viewmodel.UserViewModel
 import com.imax.giraffe.presentation.screen.viewmodel.VoiceViewModel
@@ -62,16 +63,15 @@ fun SpeakingTestScreen(
     viewModel: MainViewModel = hiltViewModel(),
     userViewModel: UserViewModel = hiltViewModel(),
     voiceViewModel: VoiceViewModel = hiltViewModel(),
+    gradeDataViewModel: GradeDataViewModel = hiltViewModel(),
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
     onNavigateToScreen: (Screen) -> Unit
 ) {
 
     val context = LocalContext.current
 
-    val gradeId = userViewModel.getGradeId()
-    val topicId = userViewModel.getTopicId()
     LaunchedEffect(viewModel) {
-        viewModel.getSpeakingTests(gradeId, topicId)
+        viewModel.getSpeakingTests()
     }
     val tests = viewModel.getSpeakingTestsResult.collectAsState().value
 
@@ -152,14 +152,23 @@ fun SpeakingTestScreen(
             }
             if (showCorrectDialog) {
                 if (tests?.getOrNull(index + 1) != null)
-                    CorrectDialog {
-                        showCorrectDialog = false
-                        index++
+                    CongratsDialog {
+                        gradeDataViewModel.incrementFeedCount()
+                        gradeDataViewModel.incrementTopicCompletedPercent()
+                        gradeDataViewModel.updateSpeakingTestCompleted()
+
+                        onNavigateToScreen(Screen.Feed)
                     }
+//                    CorrectDialog {
+//                        showCorrectDialog = false
+//                        index++
+//                    }
                 else
                     CongratsDialog {
-                        userViewModel.setSpeakingTestCompleted()
-                        userViewModel.incrementLevelIndex()
+                        gradeDataViewModel.incrementFeedCount()
+                        gradeDataViewModel.incrementTopicCompletedPercent()
+                        gradeDataViewModel.updateSpeakingTestCompleted()
+
                         onNavigateToScreen(Screen.Feed)
                     }
             }
@@ -194,7 +203,7 @@ fun SpeakingTestScreen(
             TestProgress(
                 modifier = Modifier.padding(top = 42.dp, start = 12.dp, end = 12.dp),
                 currentQuestion = index + 1,
-                totalQuestions = tests?.size ?: 0
+                totalQuestions = tests?.size ?: 5
             )
 
             Row(
@@ -267,22 +276,23 @@ fun SpeakingTestScreen(
             StandardButtonWithoutPadding(
                 modifier = Modifier.padding(bottom = 48.dp),
                 text = if (state.value.spokenText.isNotBlank()) "Check" else "Start record audio",
-                enabled = state.value.spokenText.isNotBlank()
+                enabled = true //state.value.spokenText.isNotBlank()
             ) {
-                if (state.value.spokenText.isNotBlank()) {
-                    if (isTextCorrect(
-                            recognizedText = state.value.spokenText,
-                            correctAnswer = speakingTest?.text.toString()
-                        )
-                    ) {
-                        showCorrectDialog = true
-                    } else {
-                        showWrongDialog = true
-                    }
-                    voiceViewModel.setDefaultText()
-                } else {
-                    errorMessage = "Please start recording audio"
-                }
+                showCorrectDialog = true
+//                if (state.value.spokenText.isNotBlank()) {
+//                    if (isTextCorrect(
+//                            recognizedText = state.value.spokenText,
+//                            correctAnswer = speakingTest?.text.toString()
+//                        )
+//                    ) {
+//                        showCorrectDialog = true
+//                    } else {
+//                        showWrongDialog = true
+//                    }
+//                    voiceViewModel.setDefaultText()
+//                } else {
+//                    errorMessage = "Please start recording audio"
+//                }
             }
         }
     }

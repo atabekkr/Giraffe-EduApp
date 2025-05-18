@@ -36,65 +36,65 @@ class MainViewModel @Inject constructor(
     }
 
     val getGradeResult = MutableStateFlow<Grade?>(null)
-    suspend fun getGrade(gradeId: Int) {
-        getGradeResult.emit(repository.getGrade(gradeId))
+    suspend fun getGrade() {
+        getGradeResult.emit(repository.getGrade())
     }
 
     val getGradeTopicResult = MutableStateFlow<GradeTopic?>(null)
-    suspend fun getGradeTopics(gradeId: Int) {
-        getGradeTopicResult.value = repository.getGradeTopics(gradeId)
+    suspend fun getGradeTopics() {
+        getGradeTopicResult.value = repository.getGradeTopics()
     }
 
     val getGradeLevelsResult = MutableStateFlow<Levels?>(null)
-    suspend fun getGradeLevels(gradeId: Int) {
-        getGradeLevelsResult.value = repository.getGradeLevels(gradeId)
+    suspend fun getGradeLevels() {
+        getGradeLevelsResult.value = repository.getGradeLevels()
     }
 
     private val _getListeningTestsResult = MutableStateFlow<List<Listening>?>(null)
     val getListeningTestsResult: StateFlow<List<Listening>?> = _getListeningTestsResult
-    fun getListeningTests(gradeId: Int, topicId: Int) {
+    fun getListeningTests() {
         viewModelScope.launch {
-            _getListeningTestsResult.value = repository.getListeningTests(gradeId, topicId)
+            _getListeningTestsResult.value = repository.getListeningTests()
         }
     }
 
     private val _getSpeakingTestsResult = MutableStateFlow<List<Speaking>?>(null)
     val getSpeakingTestsResult: StateFlow<List<Speaking>?> = _getSpeakingTestsResult
-    fun getSpeakingTests(gradeId: Int, topicId: Int) {
+    fun getSpeakingTests() {
         viewModelScope.launch {
-            _getSpeakingTestsResult.value = repository.getSpeakingTests(gradeId, topicId)
+            _getSpeakingTestsResult.value = repository.getSpeakingTests()
         }
     }
 
     private val _getWritingTestsResult = MutableStateFlow<List<Writing>?>(null)
     val getWritingTestsResult: StateFlow<List<Writing>?> = _getWritingTestsResult
-    fun getWritingTests(gradeId: Int, topicId: Int) {
+    fun getWritingTests() {
         viewModelScope.launch {
-            _getWritingTestsResult.value = repository.getWritingTests(gradeId, topicId)
+            _getWritingTestsResult.value = repository.getWritingTests()
         }
     }
 
     private val _getReadingTestsResult = MutableStateFlow<List<Reading>?>(null)
     val getReadingTestsResult: StateFlow<List<Reading>?> = _getReadingTestsResult
-    fun getReadingTests(gradeId: Int, topicId: Int) {
+    fun getReadingTests() {
         viewModelScope.launch(Dispatchers.IO) {
-            _getReadingTestsResult.value = repository.getReadingTests(gradeId, topicId)
+            _getReadingTestsResult.value = repository.getReadingTests()
         }
     }
 
     private val _getVocabularyResult = MutableStateFlow<Vocabulary?>(null)
     val getVocabularyResult: StateFlow<Vocabulary?> = _getVocabularyResult
-    fun getVocabulary(gradeId: Int, topicId: Int) {
+    fun getVocabulary() {
         viewModelScope.launch {
-            _getVocabularyResult.value = repository.getVocabulary(gradeId, topicId)
+            _getVocabularyResult.value = repository.getVocabulary()
         }
     }
 
     private val _getTopicContentResult = MutableStateFlow<TopicOverview?>(null)
     val getTopicContentResult: StateFlow<TopicOverview?> = _getTopicContentResult
-    fun getTopicContent(gradeId: Int, topicId: Int) {
+    fun getTopicContent() {
         viewModelScope.launch {
-            _getTopicContentResult.value = repository.getTopicContent(gradeId, topicId)
+            _getTopicContentResult.value = repository.getTopicContent()
         }
     }
 

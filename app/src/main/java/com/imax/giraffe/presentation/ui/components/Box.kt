@@ -44,7 +44,6 @@ fun Grade(
     grade: Grade,
     color: Color,
     picId: Int,
-    isLocked: Boolean,
     isCompleted: Boolean,
     onClick: () -> Unit
 ) {
@@ -59,11 +58,14 @@ fun Grade(
             shape = RoundedCornerShape(
                 28.dp
             ),
-            enabled = !isLocked && !isCompleted,
+            enabled = !isCompleted,
             onClick = {
                 onClick()
             },
-            colors = CardDefaults.cardColors(containerColor = color, disabledContainerColor = lockedGradeButton)
+            colors = CardDefaults.cardColors(
+                containerColor = color,
+                disabledContainerColor = lockedGradeButton
+            )
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically
@@ -89,17 +91,14 @@ fun Grade(
                 )
             }
         }
-        if (isLocked)
-            Image(
-                painter = painterResource(R.drawable.ic_lock),
-                contentDescription = "lock",
-                modifier = Modifier.align(Alignment.CenterEnd).padding(end = 24.dp, top = 12.dp)
-            )
         if (isCompleted)
             Image(
                 painter = painterResource(R.drawable.ic_completed),
                 contentDescription = "lock",
-                modifier = Modifier.size(80.dp).align(Alignment.CenterEnd).padding(end = 24.dp, top = 12.dp)
+                modifier = Modifier
+                    .size(80.dp)
+                    .align(Alignment.CenterEnd)
+                    .padding(end = 24.dp, top = 12.dp)
             )
     }
 }

@@ -37,8 +37,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.imax.giraffe.R
 import com.imax.giraffe.presentation.navigation.Screen
 import com.imax.giraffe.presentation.screen.dialog.CongratsDialog
-import com.imax.giraffe.presentation.screen.dialog.CorrectDialog
 import com.imax.giraffe.presentation.screen.dialog.ErrorDialog
+import com.imax.giraffe.presentation.screen.viewmodel.GradeDataViewModel
 import com.imax.giraffe.presentation.screen.viewmodel.MainViewModel
 import com.imax.giraffe.presentation.screen.viewmodel.UserViewModel
 import com.imax.giraffe.presentation.ui.components.ReadingSentenceCard
@@ -52,13 +52,12 @@ import com.imax.giraffe.presentation.utils.parseReadingAnswersJson
 fun ReadingTestScreen(
     viewModel: MainViewModel = hiltViewModel(),
     userViewModel: UserViewModel = hiltViewModel(),
+    gradeDataViewModel: GradeDataViewModel = hiltViewModel(),
     onNavigateToScreen: (Screen) -> Unit
 ) {
 
-    val gradeId = userViewModel.getGradeId()
-    val topicId = userViewModel.getTopicId()
     LaunchedEffect(viewModel) {
-        viewModel.getReadingTests(gradeId, topicId)
+        viewModel.getReadingTests()
     }
     val tests = viewModel.getReadingTestsResult.collectAsState().value
 
@@ -89,14 +88,23 @@ fun ReadingTestScreen(
         if (showCorrectDialog) {
             selectedOption = ""
             if (tests?.getOrNull(index + 1) != null)
-                CorrectDialog {
-                    showCorrectDialog = false
-                    index++
+                CongratsDialog {
+                    gradeDataViewModel.incrementFeedCount()
+                    gradeDataViewModel.incrementTopicCompletedPercent()
+                    gradeDataViewModel.updateReadingTestCompleted()
+
+                    onNavigateToScreen(Screen.Feed)
                 }
+//                CorrectDialog {
+//                    showCorrectDialog = false
+//                    index++
+//                }
             else
                 CongratsDialog {
-                    userViewModel.setReadingTestCompleted()
-                    userViewModel.incrementLevelIndex()
+                    gradeDataViewModel.incrementFeedCount()
+                    gradeDataViewModel.incrementTopicCompletedPercent()
+                    gradeDataViewModel.updateReadingTestCompleted()
+
                     onNavigateToScreen(Screen.Feed)
                 }
         }
@@ -131,7 +139,7 @@ fun ReadingTestScreen(
         TestProgress(
             modifier = Modifier.padding(top = 50.dp, start = 12.dp, end = 12.dp),
             currentQuestion = index + 1,
-            totalQuestions = tests?.size ?: 0
+            totalQuestions = tests?.size ?: 5
         )
 
         ReadingSentenceCard(
@@ -151,8 +159,9 @@ fun ReadingTestScreen(
             modifier = Modifier.padding(bottom = 48.dp),
             text = "Check"
         ) {
-            if (selectedOption == readingTest?.key) showCorrectDialog = true
-            else showWrongDialog = true
+            showCorrectDialog = true
+//            if (selectedOption == readingTest?.key) showCorrectDialog = true
+//            else showWrongDialog = true
         }
     }
 }

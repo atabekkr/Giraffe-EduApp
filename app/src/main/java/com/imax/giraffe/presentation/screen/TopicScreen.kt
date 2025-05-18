@@ -44,10 +44,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.imax.giraffe.R
 import com.imax.giraffe.presentation.navigation.Screen
 import com.imax.giraffe.presentation.screen.dialog.StartMatchingDialog
+import com.imax.giraffe.presentation.screen.viewmodel.GradeDataViewModel
 import com.imax.giraffe.presentation.screen.viewmodel.MainViewModel
 import com.imax.giraffe.presentation.screen.viewmodel.UserViewModel
 import com.imax.giraffe.presentation.ui.components.GradeCard
-import com.imax.giraffe.presentation.ui.theme.blockedTopic
 import com.imax.giraffe.presentation.ui.theme.gray
 import com.imax.giraffe.presentation.ui.theme.grayTypography
 import com.imax.giraffe.presentation.ui.theme.greenTypography
@@ -60,23 +60,22 @@ fun TopicScreen(
     modifier: Modifier = Modifier,
     viewModel: MainViewModel = hiltViewModel(),
     userViewModel: UserViewModel = hiltViewModel(),
+    gradeDataViewModel: GradeDataViewModel = hiltViewModel(),
     onNavigateToScreen: (Screen) -> Unit
 ) {
 
     val context = LocalContext.current
 
-    val gradeId = userViewModel.getGradeId()
-
     LaunchedEffect(viewModel) {
-        viewModel.getGradeTopics(gradeId)
-        viewModel.getGradeLevels(gradeId)
-        viewModel.getGrade(gradeId)
+        viewModel.getGradeTopics()
+        viewModel.getGradeLevels()
+        viewModel.getGrade()
     }
+    gradeDataViewModel.getGrade()
 
     val topics = viewModel.getGradeTopicResult.collectAsState().value
-    val level = "Level ${userViewModel.getLevelIndex() + 1}"
     val grade = viewModel.getGradeResult.collectAsState().value
-    val levelIndex = userViewModel.getLevelIndex()
+    val gradeCompletionData = gradeDataViewModel.getGradeDataResult.collectAsState().value
 
     val username = userViewModel.getUserName()
     val gradeContent = when (userViewModel.getGradeId()) {
@@ -143,15 +142,14 @@ fun TopicScreen(
             }
             GradeCard(
                 grade = grade,
-                level = level,
+                level = "Level ${gradeCompletionData?.level}",
                 gradeContent = gradeContent,
-                feedCount = userViewModel.getFeedCount()
+                feedCount = gradeCompletionData?.feed_count ?: 0
             ) {
                 onNavigateToScreen(Screen.Feed)
             }
 
-            val firstTopicCompletedPercent =
-                if (!userViewModel.isFirstTopicCompleted()) userViewModel.getTopicCompletedPercent() else 100
+            val firstTopicCompletedPercent = gradeCompletionData?.first_topic_completed_percent
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -159,14 +157,17 @@ fun TopicScreen(
                     .clip(RoundedCornerShape(20.dp))
                     .background(Color.White)
                     .clickable {
-                        if (userViewModel.isFirstTopicCompleted()) return@clickable
-                        if (levelIndex != 0)
-                            onNavigateToScreen.invoke(Screen.Home)
-                        else
-                            showStartMatchingDialog = true
+                        if (firstTopicCompletedPercent == 100) return@clickable
+                        if (gradeCompletionData != null) {
+                            userViewModel.setTopicId(1)
+                            if (firstTopicCompletedPercent != 0)
+                                onNavigateToScreen.invoke(Screen.Home)
+                            else
+                                showStartMatchingDialog = true
+                        }
                     }
             ) {
-                val resId = getDrawableResourceId(context, topics?.topic1?.pic)
+                val resId = getDrawableResourceId(context, topics.topic1.pic)
                 Image(
                     painter = painterResource(resId),
                     contentDescription = null,
@@ -187,7 +188,7 @@ fun TopicScreen(
                         modifier = Modifier.padding(24.dp)
                     ) {
                         Text(
-                            text = topics?.topic1?.name.toString(),
+                            text = topics.topic1.name,
                             style = TextStyle(
                                 color = mainTypography,
                                 fontSize = 26.sp,
@@ -215,18 +216,19 @@ fun TopicScreen(
                     }
                 }
             }
-            val cardColor =
-                if (userViewModel.isFirstTopicCompleted()) Color.White else blockedTopic.copy(alpha = 0.5f)
-            val secondTopicCompletedPercent =
-                if (userViewModel.isFirstTopicCompleted()) userViewModel.getTopicCompletedPercent() else 0
+//            val cardColor =
+//                if (userViewModel.isFirstTopicCompleted()) Color.White else blockedTopic.copy(alpha = 0.5f)
+            val secondTopicCompletedPercent = gradeCompletionData?.second_topic_completed_percent
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 24.dp, bottom = 48.dp)
                     .clip(RoundedCornerShape(20.dp))
                     .background(Color.White)
-                    .clickable(enabled = userViewModel.isFirstTopicCompleted()) {
-                        if (levelIndex != 5)
+                    .clickable {
+                        if (firstTopicCompletedPercent != 100) return@clickable
+                        userViewModel.setTopicId(2)
+                        if (secondTopicCompletedPercent != 0)
                             onNavigateToScreen.invoke(Screen.Home)
                         else
                             showStartMatchingDialog = true
@@ -244,7 +246,7 @@ fun TopicScreen(
                         .size(200.dp) // Устанавливаем фиксированный размер, если нужно
                 )
 
-                if (!userViewModel.isFirstTopicCompleted())
+                if (firstTopicCompletedPercent != 100)
                     Image(
                         painter = painterResource(R.drawable.ic_lock),
                         contentDescription = "lock",
@@ -262,7 +264,7 @@ fun TopicScreen(
                         modifier = Modifier.padding(24.dp)
                     ) {
                         Text(
-                            text = topics?.topic2?.name.toString(),
+                            text = topics.topic2.name,
                             style = TextStyle(
                                 color = mainTypography,
                                 fontSize = 26.sp,

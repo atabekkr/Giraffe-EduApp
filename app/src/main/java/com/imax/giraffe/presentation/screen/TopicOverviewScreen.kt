@@ -35,7 +35,6 @@ import com.imax.giraffe.R
 import com.imax.giraffe.presentation.models.ContentItem
 import com.imax.giraffe.presentation.navigation.Screen
 import com.imax.giraffe.presentation.screen.viewmodel.MainViewModel
-import com.imax.giraffe.presentation.screen.viewmodel.UserViewModel
 import com.imax.giraffe.presentation.ui.components.YouTubeCard
 import com.imax.giraffe.presentation.ui.theme.mainTypography
 import com.imax.giraffe.presentation.utils.toContentResponseOrNull
@@ -44,19 +43,12 @@ import com.imax.giraffe.presentation.utils.toContentResponseOrNull
 fun TopicOverviewScreen(
     modifier: Modifier = Modifier,
     mainViewModel: MainViewModel = hiltViewModel(),
-    userViewModel: UserViewModel = hiltViewModel(),
     onNavigateToScreen: (Screen) -> Unit
 ) {
 
-    val context = LocalContext.current
 
-    val gradeId = userViewModel.getGradeId()
-    val topicId = userViewModel.getTopicId()
     LaunchedEffect(mainViewModel) {
-        mainViewModel.getTopicContent(
-            gradeId,
-            topicId
-        )
+        mainViewModel.getTopicContent()
     }
 
     val topicOverview = mainViewModel.getTopicContentResult.collectAsState().value

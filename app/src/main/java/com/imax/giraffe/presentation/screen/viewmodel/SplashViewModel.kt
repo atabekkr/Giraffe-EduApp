@@ -18,7 +18,4 @@ class SplashViewModel @Inject constructor(
         localStorage.isLogin = isLogin
     }
 
-    fun isGradeChosen(): Boolean {
-        return localStorage.isGradeChosen
-    }
 }

@@ -22,8 +22,8 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -40,7 +40,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.imax.giraffe.R
 import com.imax.giraffe.presentation.navigation.Screen
-import com.imax.giraffe.presentation.screen.viewmodel.MainViewModel
+import com.imax.giraffe.presentation.screen.viewmodel.GradeDataViewModel
 import com.imax.giraffe.presentation.screen.viewmodel.UserViewModel
 import com.imax.giraffe.presentation.ui.components.StandardButtonWithoutPadding
 import com.imax.giraffe.presentation.ui.theme.grayTypography
@@ -52,19 +52,20 @@ import com.imax.giraffe.presentation.utils.TigerLevelPic
 
 @Composable
 fun FeedScreen(
-    modifier: Modifier = Modifier,
-    mainViewModel: MainViewModel = hiltViewModel(),
     userViewModel: UserViewModel = hiltViewModel(),
+    gradeDataViewModel: GradeDataViewModel = hiltViewModel(),
     onNavigateToScreen: (Screen) -> Unit,
     onNavigateUp: () -> Unit,
 ) {
 
-    var feedCount by remember { mutableIntStateOf(userViewModel.getFeedCount()) }
-    var feedLevel by remember { mutableIntStateOf(userViewModel.getFeedLevel()) }
+    gradeDataViewModel.getGrade()
+    val gradeCompletionData = gradeDataViewModel.getGradeDataResult.collectAsState().value
+    val level = gradeCompletionData?.level ?: 1
+    val feedCount = gradeCompletionData?.feed_count
 
     val picAnimal = when (userViewModel.getGradeId()) {
 
-        1 -> when (feedLevel) {
+        1 -> when (level) {
             1 -> RabbitLevelPic.LEVEL1.resId
             2 -> RabbitLevelPic.LEVEL2.resId
             3 -> RabbitLevelPic.LEVEL3.resId
@@ -77,7 +78,7 @@ fun FeedScreen(
             else -> RabbitLevelPic.LEVEL10.resId
         }
 
-        2 -> when (feedLevel) {
+        2 -> when (level) {
             1 -> FoxLevelPic.LEVEL1.resId
             2 -> FoxLevelPic.LEVEL2.resId
             3 -> FoxLevelPic.LEVEL3.resId
@@ -90,7 +91,7 @@ fun FeedScreen(
             else -> FoxLevelPic.LEVEL10.resId
         }
 
-        3 -> when (feedLevel) {
+        3 -> when (level) {
             1 -> TigerLevelPic.LEVEL1.resId
             2 -> TigerLevelPic.LEVEL2.resId
             3 -> TigerLevelPic.LEVEL3.resId
@@ -103,7 +104,7 @@ fun FeedScreen(
             else -> TigerLevelPic.LEVEL10.resId
         }
 
-        else -> when (feedLevel) {
+        else -> when (level) {
             1 -> LionLevelPic.LEVEL1.resId
             2 -> LionLevelPic.LEVEL2.resId
             3 -> LionLevelPic.LEVEL3.resId
@@ -117,7 +118,7 @@ fun FeedScreen(
         }
     }
 
-    var buttonLabel by remember { mutableStateOf(if (feedLevel == 10) "Finish" else "Feed") }
+    var buttonLabel by remember { mutableStateOf(if (level == 10) "Finish" else "Feed") }
 
     Box(
         modifier = Modifier
@@ -145,7 +146,14 @@ fun FeedScreen(
                         .size(64.dp)
                         .clip(RoundedCornerShape(12.dp)) // Rounded corners
                         .background(primaryColor) // Background color
-                        .clickable { onNavigateToScreen.invoke(Screen.Topic) }
+                        .clickable {
+                            Log.d(
+                                "FeedScreen",
+                                "${gradeCompletionData?.second_topic_completed_percent}"
+                            )
+                            if (gradeCompletionData?.second_topic_completed_percent != 100)
+                                onNavigateToScreen.invoke(Screen.Topic)
+                        }
                 ) {
                     Icon(
                         Icons.Default.Close,
@@ -176,7 +184,7 @@ fun FeedScreen(
                     )
                 }
                 Text(
-                    text = "level $feedLevel",
+                    text = "level $level",
                     fontSize = 16.sp,
                     color = grayTypography
                 )
@@ -221,20 +229,19 @@ fun FeedScreen(
                     buttonLabel
                 ) {
 
-                    if (feedCount == 0)
-                        onNavigateToScreen.invoke(Screen.Topic)
-
-                    feedLevel += feedCount
-                    Log.d("FeedLevel", "$feedLevel")
-                    feedCount = 0
-                    userViewModel.resetFeedCount()
-                    if (feedLevel > 10) {
-                        onNavigateToScreen(Screen.SetNameToPet)
-                        userViewModel.setFeedLevel(0)
+                    if (feedCount == 0) {
+                        onNavigateUp.invoke()
                     } else {
-                        userViewModel.setFeedLevel(feedLevel)
+                        Log.d("FeedScreen", "$level")
+                        val nonNullFeedCount = feedCount ?: 0
+                        if (level >= 10 || level + nonNullFeedCount >= 11) {
+                            onNavigateToScreen(Screen.SetNameToPet)
+                        } else {
+                            gradeDataViewModel.incrementLevel(feedCount ?: 1)
+                        }
+                        gradeDataViewModel.resetFeedCount()
+                        buttonLabel = "Back"
                     }
-                    buttonLabel = "Back"
                 }
             }
         }

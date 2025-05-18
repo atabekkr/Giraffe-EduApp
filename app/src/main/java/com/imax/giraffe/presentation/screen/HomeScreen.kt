@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.imax.giraffe.R
 import com.imax.giraffe.presentation.navigation.Screen
+import com.imax.giraffe.presentation.screen.viewmodel.GradeDataViewModel
 import com.imax.giraffe.presentation.screen.viewmodel.MainViewModel
 import com.imax.giraffe.presentation.screen.viewmodel.UserViewModel
 import com.imax.giraffe.presentation.ui.components.GradeCard
@@ -47,22 +48,23 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     mainViewModel: MainViewModel = hiltViewModel(),
     userViewModel: UserViewModel = hiltViewModel(),
+    gradeDataViewModel: GradeDataViewModel = hiltViewModel(),
     onNavigateToScreen: (Screen) -> Unit
 ) {
 
     val context = LocalContext.current
 
-    val gradeId = userViewModel.getGradeId()
-
     LaunchedEffect(mainViewModel) {
-//        mainViewModel.getGradeTopics(gradeId)
-//        viewModel.getGradeLevels(gradeId)
-        mainViewModel.getGrade(gradeId)
+        mainViewModel.getGrade()
     }
+
+    gradeDataViewModel.getGrade()
 
     val grade = mainViewModel.getGradeResult.collectAsState().value
     val testSectionPic = grade?.test?.let { parseTestSectionCardPicJson(it) }
     val userName = userViewModel.getUserName()
+
+    val gradeCompletionData = gradeDataViewModel.getGradeDataResult.collectAsState().value
 
     val gradeContent = when (userViewModel.getGradeId()) {
         1 -> GradeContent.GRADE1
@@ -115,9 +117,9 @@ fun HomeScreen(
         }
         GradeCard(
             grade = grade,
-            level = "Level ${userViewModel.getLevelIndex() + 1}",
+            level = "Level ${gradeCompletionData?.level}",
             gradeContent = gradeContent,
-            feedCount = userViewModel.getFeedCount()
+            feedCount = gradeCompletionData?.feed_count ?: 0
         ) {
             onNavigateToScreen.invoke(
                 Screen.Feed
@@ -134,8 +136,8 @@ fun HomeScreen(
             )
         ) {
             val containerColor =
-                if (userViewModel.isListeningTestCompleted()) completedColor else Color.White
-            val listeningCardEnabled = !userViewModel.isListeningTestCompleted()
+                if (gradeCompletionData?.isListeningTestCompleted == true) completedColor else Color.White
+            val listeningCardEnabled = gradeCompletionData?.isListeningTestCompleted ?: false
             Card(
                 modifier = Modifier.weight(1f),
                 colors = CardDefaults.cardColors(
@@ -143,7 +145,7 @@ fun HomeScreen(
                     disabledContainerColor = completedColor
                 ),
                 shape = RoundedCornerShape(20.dp),
-                enabled = listeningCardEnabled,
+                enabled = !listeningCardEnabled,
                 onClick = {
                     onNavigateToScreen.invoke(
                         Screen.ListeningTest
@@ -180,8 +182,8 @@ fun HomeScreen(
                 }
             }
             val readingCardContainerColor =
-                if (userViewModel.isReadingTestCompleted()) completedColor else Color.White
-            val readingCardEnabled = !userViewModel.isReadingTestCompleted()
+                if (gradeCompletionData?.isReadingTestCompleted == true) completedColor else Color.White
+            val readingCardEnabled = gradeCompletionData?.isReadingTestCompleted ?: false
             Card(
                 modifier = Modifier.weight(1f),
                 colors = CardDefaults.cardColors(
@@ -189,7 +191,7 @@ fun HomeScreen(
                     disabledContainerColor = completedColor
                 ),
                 shape = RoundedCornerShape(20.dp),
-                enabled = readingCardEnabled,
+                enabled = !readingCardEnabled,
                 onClick = {
                     onNavigateToScreen.invoke(
                         Screen.ReadingTest
@@ -233,8 +235,8 @@ fun HomeScreen(
             )
         ) {
             val writingCardContainerColor =
-                if (userViewModel.isWritingTestCompleted()) completedColor else Color.White
-            val writingCardEnabled = !userViewModel.isWritingTestCompleted()
+                if (gradeCompletionData?.isWritingTestCompleted == true) completedColor else Color.White
+            val writingCardEnabled = gradeCompletionData?.isWritingTestCompleted ?: false
             Card(
                 modifier = Modifier.weight(1f),
                 colors = CardDefaults.cardColors(
@@ -242,7 +244,7 @@ fun HomeScreen(
                     disabledContainerColor = completedColor
                 ),
                 shape = RoundedCornerShape(20.dp),
-                enabled = writingCardEnabled,
+                enabled = !writingCardEnabled,
                 onClick = {
                     onNavigateToScreen.invoke(
                         Screen.WritingTest
@@ -276,8 +278,8 @@ fun HomeScreen(
                 }
             }
             val speakingCardContainerColor =
-                if (userViewModel.isSpeakingTestCompleted()) completedColor else Color.White
-            val speakingCardEnabled = !userViewModel.isSpeakingTestCompleted()
+                if (gradeCompletionData?.isSpeakingTestCompleted == true) completedColor else Color.White
+            val speakingCardEnabled = gradeCompletionData?.isSpeakingTestCompleted ?: false
             Card(
                 modifier = Modifier.weight(1f),
                 colors = CardDefaults.cardColors(
@@ -285,7 +287,7 @@ fun HomeScreen(
                     disabledContainerColor = completedColor
                 ),
                 shape = RoundedCornerShape(20.dp),
-                enabled = speakingCardEnabled,
+                enabled = !speakingCardEnabled,
                 onClick = {
                     onNavigateToScreen.invoke(
                         Screen.SpeakingTest
