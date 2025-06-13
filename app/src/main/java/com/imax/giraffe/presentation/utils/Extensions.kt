@@ -76,8 +76,9 @@ fun isTextCorrect(recognizedText: String, correctAnswer: String): Boolean {
     val maxLen = maxOf(normalizedRecognized.length, normalizedCorrect.length)
 
     val similarity = 1.0 - (distance.toDouble() / maxLen)
+    Log.d("TTTT", similarity.toString())
 
-    return similarity >= 0.8
+    return similarity >= 0.88
 }
 
 fun isWritingTextCorrect(inputText: String, correctAnswer: String): Boolean {
@@ -89,7 +90,7 @@ fun isWritingTextCorrect(inputText: String, correctAnswer: String): Boolean {
 
     val similarity = 1.0 - (distance.toDouble() / maxLen)
 
-    return similarity >= 0.9
+    return similarity >= 0.95
 }
 
 

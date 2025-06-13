@@ -164,7 +164,7 @@ fun WritingTestScreen(
                         color = Color.Black
                     )
                     Text(
-                        "Boost your listening with Saribek.",
+                        "Boost your writing with Saribek.",
                         fontSize = 14.sp,
                         color = grayTypography
                     )

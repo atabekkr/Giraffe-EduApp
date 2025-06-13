@@ -39,7 +39,7 @@ fun SplashScreen(
     ) {
         Image(
             modifier = Modifier.align(alignment = Alignment.Center),
-            painter = painterResource(R.drawable.grade_lion),
+            painter = painterResource(R.drawable.pic_giraffe),
             contentDescription = "Logo"
         )
         LaunchedEffect(lifeCycleOwner) {

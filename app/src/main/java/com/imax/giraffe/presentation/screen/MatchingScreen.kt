@@ -91,7 +91,6 @@ fun MatchingScreen(
             val isCorrect = words.indexOf(selectedWord) == translations.indexOf(selectedTranslation)
 
             if (isCorrect) {
-                showCongratsDialog = true
                 matchedPairs += selectedWord!!
                 matchedPairs += selectedTranslation!!
                 Log.d("MatchedPairs", matchedPairs.size.toString())
@@ -160,7 +159,7 @@ fun MatchingScreen(
                     ),
                 )
                 Text(
-                    text = "Boost your listening with Saribek.",
+                    text = "Boost your vocabulary with Saribek.",
                     modifier = Modifier.padding(top = 6.dp),
                     style = TextStyle(
                         color = grayTypography,

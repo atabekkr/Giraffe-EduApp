@@ -161,7 +161,7 @@ fun WelcomeScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 36.dp),
-                    text = "I am Saribek, your faithful assistant in this application. I will accompany you, prompt and help you at every step.",
+                    text = "My name is associated with Karakalpakstan: \"Sari\" means \"yellow\", like the sun in the steppes, and \"bek\" is a strong and reliable friend.\n",
                     style = TextStyle(color = Color(0xFF333333), fontSize = 22.sp)
                 )
                 Text(

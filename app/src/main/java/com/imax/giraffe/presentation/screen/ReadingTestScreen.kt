@@ -118,7 +118,7 @@ fun ReadingTestScreen(
                     color = Color.Black
                 )
                 Text(
-                    text = "Boost your listening with Saribek.",
+                    text = "Boost your reading with Saribek.",
                     fontSize = 14.sp,
                     color = grayTypography
                 )

@@ -174,13 +174,13 @@ fun FeedScreen(
                         fontWeight = FontWeight.Bold,
                         color = Color.Black
                     )
-                    Icon(
-                        painterResource(R.drawable.ic_edit),
-                        contentDescription = "Edit",
-                        modifier = Modifier
-                            .size(24.dp)
-                            .padding(start = 4.dp)
-                    )
+//                    Icon(
+//                        painterResource(R.drawable.ic_edit),
+//                        contentDescription = "Edit",
+//                        modifier = Modifier
+//                            .size(24.dp)
+//                            .padding(start = 4.dp)
+//                    )
                 }
                 Text(
                     text = "level $level",

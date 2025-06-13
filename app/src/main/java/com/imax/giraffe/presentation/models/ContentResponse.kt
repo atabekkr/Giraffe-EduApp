@@ -5,6 +5,5 @@ data class ContentResponse(
 )
 
 data class ContentItem(
-    val text: String,
-    val image: String? = null
+    val text: String
 )

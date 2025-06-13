@@ -1,8 +1,6 @@
 package com.imax.giraffe.presentation.screen
 
 import android.media.MediaPlayer
-import android.net.Uri
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -37,8 +35,6 @@ import com.imax.giraffe.presentation.ui.components.MyOutlinedTextField
 import com.imax.giraffe.presentation.ui.components.StandardButtonWithoutPadding
 import com.imax.giraffe.presentation.ui.theme.grayTypography
 import com.imax.giraffe.presentation.ui.theme.mainTypography
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(
@@ -96,26 +92,10 @@ fun LoginScreen(
             text = stringResource(R.string.save),
             enabled = saveButtonEnabled
         ) {
-            try {
-                mediaPlayer.reset()
-                val filename =
-                    "android.resource://" + context.packageName + "/raw/login"
-                mediaPlayer.setDataSource(context, Uri.parse(filename))
-                mediaPlayer.prepare()
-                mediaPlayer.playbackParams = mediaPlayer.playbackParams.setSpeed(1f)
-                    ?: mediaPlayer.playbackParams
-                mediaPlayer.seekTo(0)
-                mediaPlayer.start()
-            } catch (e: Exception) {
-                Log.e("ListeningTest", e.localizedMessage, e)
-            }
             splashViewModel.setLogin(true)
             viewModel.setUserName(name)
 
-            coroutineScope.launch {
-                delay(1000) // 1 секунды
-                onNavigateToHome.invoke(Screen.ChooseGradeExplanation(name))
-            }
+            onNavigateToHome.invoke(Screen.ChooseGradeExplanation(name))
         }
     }
 }

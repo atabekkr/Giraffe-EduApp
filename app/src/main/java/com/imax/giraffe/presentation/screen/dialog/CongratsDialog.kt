@@ -83,7 +83,7 @@ fun CongratsDialog(onDismiss: () -> Unit) {
                             )
                             Text(
                                 text = "You did a great job in the test\n" +
-                                        "and earn meat for your pet",
+                                        "and earn feed for your pet",
                                 modifier = Modifier.padding(top = 6.dp),
                                 style = TextStyle(
                                     color = grayTypography,

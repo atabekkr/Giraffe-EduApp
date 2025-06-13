@@ -3,6 +3,7 @@ package com.imax.giraffe.presentation.screen
 import android.Manifest
 import android.media.MediaPlayer
 import android.net.Uri
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -271,6 +272,8 @@ fun SpeakingTestScreen(
                 enabled = state.value.spokenText.isNotBlank()
             ) {
                 if (state.value.spokenText.isNotBlank()) {
+                    Log.d("TTTT", state.value.spokenText)
+                    Log.d("TTTT", speakingTest?.text.toString())
                     if (isTextCorrect(
                             recognizedText = state.value.spokenText,
                             correctAnswer = speakingTest?.text.toString()

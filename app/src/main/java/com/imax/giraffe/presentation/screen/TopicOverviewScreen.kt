@@ -1,7 +1,6 @@
 package com.imax.giraffe.presentation.screen
 
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -23,7 +22,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -46,15 +44,11 @@ fun TopicOverviewScreen(
     onNavigateToScreen: (Screen) -> Unit
 ) {
 
-
     LaunchedEffect(mainViewModel) {
         mainViewModel.getTopicContent()
     }
 
     val topicOverview = mainViewModel.getTopicContentResult.collectAsState().value
-    val content = topicOverview?.content
-
-    val contentResponse = content.toContentResponseOrNull()
 
     LazyColumn(
         modifier = modifier
@@ -103,17 +97,7 @@ fun TopicOverviewScreen(
                     ),
                     textAlign = TextAlign.Center
                 )
-                Text(
-                    modifier = Modifier.padding(top = 16.dp, start = 20.dp),
-                    text = topicOverview?.topic_label2.toString(),
-                    style = TextStyle(
-                        color = mainTypography,
-                        fontSize = 22.sp,
-                        fontWeight = FontWeight.Bold
-                    ),
-                    textAlign = TextAlign.Center
-                )
-                contentResponse?.content?.forEach { item ->
+                topicOverview?.content?.toContentResponseOrNull()?.content?.forEach { item ->
                     ContentItemView(item)
                 }
             }
@@ -138,27 +122,6 @@ fun ContentItemView(item: ContentItem) {
                 fontWeight = FontWeight.Medium
             ),
         )
-
-        // Изображение (если есть)
-        item.image?.let { imageName ->
-            val context = LocalContext.current
-            val resourceId = context.resources.getIdentifier(
-                imageName, "drawable", context.packageName
-            )
-
-            if (resourceId != 0) {
-                // Если изображение найдено в ресурсах
-                Image(
-                    painter = painterResource(resourceId),
-                    contentDescription = "Изображение для ${item.text}",
-                    contentScale = ContentScale.FillWidth,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(200.dp)
-                        .padding(top = 16.dp)
-                )
-            }
-        }
 
         Spacer(modifier = Modifier.height(16.dp))
     }
