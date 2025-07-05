@@ -2,12 +2,6 @@ package com.imax.giraffe.presentation.utils
 
 import com.imax.giraffe.R
 
-sealed interface LevelPic {
-    data object Rabbit: LevelPic
-    data object Fox: LevelPic
-    data object Lion : LevelPic
-    data object Tiger : LevelPic
-}
 enum class RabbitLevelPic(val resId: Int) {
     LEVEL1(R.drawable.pic_rabbit_level_1),
     LEVEL2(R.drawable.pic_rabbit_level_1),

@@ -117,6 +117,12 @@ fun FeedScreen(
         }
     }
 
+    val animalName = when (userViewModel.getGradeId()) {
+        1 -> "Rabbit"
+        2 -> "Fox"
+        3 -> "Tiger"
+        else -> "Lion"
+    }
     var buttonLabel by remember { mutableStateOf(if (level == 10) "Finish" else "Feed") }
 
     Box(
@@ -169,7 +175,7 @@ fun FeedScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "Lion",
+                        text = animalName,
                         fontSize = 32.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color.Black

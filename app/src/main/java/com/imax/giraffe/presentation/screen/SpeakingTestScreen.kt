@@ -83,7 +83,7 @@ fun SpeakingTestScreen(
 
     var state = voiceViewModel.state.collectAsState()
 
-    var mediaPlayer = remember { MediaPlayer() }
+    var mediaPlayer by remember { mutableStateOf<MediaPlayer?>(null) }
 
     val snackbarHostState = remember { SnackbarHostState() }
     var errorMessage by remember { mutableStateOf<String?>(null) }
@@ -115,9 +115,15 @@ fun SpeakingTestScreen(
 
     LaunchedEffect(lifecycleEvent) {
         if (lifecycleEvent == Lifecycle.Event.ON_STOP) {
-            mediaPlayer.stop()
-            mediaPlayer.release()
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
             voiceViewModel.stopListening()
+            mediaPlayer = null
+        }
+        if (lifecycleEvent == Lifecycle.Event.ON_RESUME) {
+            if (mediaPlayer == null) {
+                mediaPlayer = MediaPlayer()
+            }
         }
     }
 
@@ -208,18 +214,20 @@ fun SpeakingTestScreen(
             ) {
                 SoundCard(iconRes = R.drawable.ic_sound, size = 132.dp) {
                     try {
-                        mediaPlayer.reset()
-                        speakingTest?.audio?.let { audioFileName ->
-                            val filename =
-                                "android.resource://" + context.packageName + "/raw/$audioFileName";
-                            mediaPlayer.setDataSource(context, Uri.parse(filename))
-                            mediaPlayer.prepare()
-                            mediaPlayer.playbackParams = mediaPlayer.playbackParams?.setSpeed(1f)
-                                ?: mediaPlayer.playbackParams
-                            mediaPlayer.seekTo(0)
-                            mediaPlayer.start()
-                        } ?: run {
-                            errorMessage = "Audio file name is null"
+                        mediaPlayer?.let { mediaPlayer ->
+                            mediaPlayer.reset()
+                            speakingTest?.audio?.let { audioFileName ->
+                                val filename =
+                                    "android.resource://" + context.packageName + "/raw/$audioFileName";
+                                mediaPlayer.setDataSource(context, Uri.parse(filename))
+                                mediaPlayer.prepare()
+                                mediaPlayer.playbackParams = mediaPlayer.playbackParams?.setSpeed(1f)
+                                    ?: mediaPlayer.playbackParams
+                                mediaPlayer.seekTo(0)
+                                mediaPlayer.start()
+                            } ?: run {
+                                errorMessage = "Audio file name is null"
+                            }
                         }
                     } catch (e: Exception) {
                         errorMessage = "Error playing audio"
@@ -227,18 +235,20 @@ fun SpeakingTestScreen(
                 }
                 SoundCard(iconRes = R.drawable.ic_slow_sound, size = 96.dp) {
                     try {
-                        mediaPlayer.reset()
-                        speakingTest?.audio?.let { audioFileName ->
-                            val filename =
-                                "android.resource://" + context.packageName + "/raw/$audioFileName";
-                            mediaPlayer.setDataSource(context, Uri.parse(filename))
-                            mediaPlayer.prepare()
-                            mediaPlayer.playbackParams = mediaPlayer.playbackParams?.setSpeed(0.5f)
-                                ?: mediaPlayer.playbackParams
-                            mediaPlayer.seekTo(0)
-                            mediaPlayer.start()
-                        } ?: run {
-                            errorMessage = "Audio file name is null"
+                        mediaPlayer?.let { mediaPlayer ->
+                            mediaPlayer.reset()
+                            speakingTest?.audio?.let { audioFileName ->
+                                val filename =
+                                    "android.resource://" + context.packageName + "/raw/$audioFileName";
+                                mediaPlayer.setDataSource(context, Uri.parse(filename))
+                                mediaPlayer.prepare()
+                                mediaPlayer.playbackParams = mediaPlayer.playbackParams?.setSpeed(0.5f)
+                                    ?: mediaPlayer.playbackParams
+                                mediaPlayer.seekTo(0)
+                                mediaPlayer.start()
+                            } ?: run {
+                                errorMessage = "Audio file name is null"
+                            }
                         }
                     } catch (e: Exception) {
                         errorMessage = "Error playing slow audio"
@@ -272,8 +282,6 @@ fun SpeakingTestScreen(
                 enabled = state.value.spokenText.isNotBlank()
             ) {
                 if (state.value.spokenText.isNotBlank()) {
-                    Log.d("TTTT", state.value.spokenText)
-                    Log.d("TTTT", speakingTest?.text.toString())
                     if (isTextCorrect(
                             recognizedText = state.value.spokenText,
                             correctAnswer = speakingTest?.text.toString()
