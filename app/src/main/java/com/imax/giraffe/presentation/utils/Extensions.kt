@@ -82,8 +82,8 @@ fun isTextCorrect(recognizedText: String, correctAnswer: String): Boolean {
 }
 
 fun isWritingTextCorrect(inputText: String, correctAnswer: String): Boolean {
-    val normalizedRecognized = inputText.trim().lowercase()
-    val normalizedCorrect = correctAnswer.trim().lowercase()
+    val normalizedRecognized = normalize(inputText)
+    val normalizedCorrect = normalize(correctAnswer)
 
     val distance = levenshtein(normalizedRecognized, normalizedCorrect)
     val maxLen = maxOf(normalizedRecognized.length, normalizedCorrect.length)
@@ -92,6 +92,16 @@ fun isWritingTextCorrect(inputText: String, correctAnswer: String): Boolean {
 
     return similarity >= 0.95
 }
+
+
+fun normalize(text: String): String {
+    return text
+        .lowercase()
+        .replace(Regex("[^a-z0-9 ]"), "") // удаляет знаки препинания
+        .replace(Regex("\\s+"), " ")      // заменяет несколько пробелов на один
+        .trim()
+}
+
 
 
 fun levenshtein(a: String, b: String): Int {

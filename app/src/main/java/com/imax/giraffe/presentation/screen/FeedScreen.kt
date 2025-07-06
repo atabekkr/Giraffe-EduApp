@@ -123,6 +123,8 @@ fun FeedScreen(
         3 -> "Tiger"
         else -> "Lion"
     }
+    val animalPic =
+        if (userViewModel.getGradeId() != 1) R.drawable.pic_meal else R.drawable.pic_carrot
     var buttonLabel by remember { mutableStateOf(if (level == 10) "Finish" else "Feed") }
 
     Box(
@@ -209,7 +211,7 @@ fun FeedScreen(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier
                         .padding(start = 8.dp)
-                        .width(80.dp)
+//                        .width(80.dp)
                         .height(96.dp)
                         .clip(RoundedCornerShape(12.dp)) // Rounded corners
                         .background(Color(0xFFFFF1CF)) // Background color
@@ -219,12 +221,22 @@ fun FeedScreen(
                             border = BorderStroke(width = 2.dp, color = Color(0xFFFFBF08))
                         )
                 ) {
-                    Text(
-                        text = "$feedCount",
-                        fontSize = 48.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFFFFBF08)
-                    )
+                    Row(
+                        modifier = Modifier.padding(horizontal = 24.dp)
+                    ) {
+                        Image(
+                            contentDescription = "meal",
+                            modifier = Modifier.size(48.dp),
+                            painter = painterResource(animalPic)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp)) // отступ между картинкой и текстом
+                        Text(
+                            text = "$feedCount",
+                            fontSize = 48.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFFFFBF08)
+                        )
+                    }
                 }
 
                 Spacer(modifier = Modifier.weight(1f))

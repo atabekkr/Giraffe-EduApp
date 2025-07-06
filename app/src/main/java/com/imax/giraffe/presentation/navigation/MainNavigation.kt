@@ -87,6 +87,9 @@ sealed class Screen {
 
     @Serializable
     data object SpeakingExplanation : Screen()
+
+    @Serializable
+    data object MatchingExplanation : Screen()
 }
 
 @Composable
