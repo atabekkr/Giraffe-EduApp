@@ -9,6 +9,7 @@ import com.imax.giraffe.presentation.screen.AfterGradeChooseScreen
 import com.imax.giraffe.presentation.screen.ChooseGradeExplanationScreen
 import com.imax.giraffe.presentation.screen.ChooseGradeScreen
 import com.imax.giraffe.presentation.screen.FeedScreen
+import com.imax.giraffe.presentation.screen.GetStartedScreen
 import com.imax.giraffe.presentation.screen.HomeScreen
 import com.imax.giraffe.presentation.screen.ListeningExplanationScreen
 import com.imax.giraffe.presentation.screen.ListeningTestScreen
@@ -33,6 +34,9 @@ sealed class Screen {
 
     @Serializable
     data object Splash : Screen()
+
+    @Serializable
+    data object GetStarted : Screen()
 
     @Serializable
     data object Login : Screen()
@@ -87,9 +91,6 @@ sealed class Screen {
 
     @Serializable
     data object SpeakingExplanation : Screen()
-
-    @Serializable
-    data object MatchingExplanation : Screen()
 }
 
 @Composable
@@ -104,6 +105,13 @@ fun MainNav(
     ) {
         composable<Screen.Splash> {
             SplashScreen { navigateTo ->
+                navHostController.navigate(navigateTo) {
+                    popUpTo(Screen.Splash) { inclusive = true }
+                }
+            }
+        }
+        composable<Screen.GetStarted> {
+            GetStartedScreen { navigateTo ->
                 navHostController.navigate(navigateTo) {
                     popUpTo(Screen.Splash) { inclusive = true }
                 }

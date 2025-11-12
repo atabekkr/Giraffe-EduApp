@@ -166,7 +166,7 @@ fun AfterGradeChooseScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 36.dp),
-                    text = "There you have your own pet a lion. You will earn meat for having success in your tests and you can raise and take care of your pet. \uD83E\uDD81",
+                    text = "There you have your own pet. You will earn food for having success in your tests and you can raise and take care of your pet.",
                     style = TextStyle(color = Color(0xFF333333), fontSize = 22.sp)
                 )
                 Text(

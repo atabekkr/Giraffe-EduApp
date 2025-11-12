@@ -47,7 +47,7 @@ fun SplashScreen(
             if (viewModel.isLogin()) {
                 onNavigateToScreen.invoke(Screen.ChooseGrade)
             } else {
-                onNavigateToScreen.invoke(Screen.Welcome)
+                onNavigateToScreen.invoke(Screen.GetStarted)
             }
         }
     }
