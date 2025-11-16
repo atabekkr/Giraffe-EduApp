@@ -16,6 +16,12 @@ class UserViewModel @Inject constructor(
         localStorage.userName = userName
     }
 
+    fun getFinishedGrade() = localStorage.finishedGrade
+
+    fun setFinishedGrade(finishedGrade: Int) {
+        localStorage.finishedGrade = finishedGrade
+    }
+
     fun getGradeId() = localStorage.gradeId
 
     fun setGradeId(gradeId: Int) {

@@ -11,6 +11,7 @@ import com.imax.giraffe.presentation.screen.ChooseGradeScreen
 import com.imax.giraffe.presentation.screen.FeedScreen
 import com.imax.giraffe.presentation.screen.GetStartedScreen
 import com.imax.giraffe.presentation.screen.HomeScreen
+import com.imax.giraffe.presentation.screen.LevelFinishedScreen
 import com.imax.giraffe.presentation.screen.ListeningExplanationScreen
 import com.imax.giraffe.presentation.screen.ListeningTestScreen
 import com.imax.giraffe.presentation.screen.LoginScreen
@@ -91,6 +92,9 @@ sealed class Screen {
 
     @Serializable
     data object SpeakingExplanation : Screen()
+
+    @Serializable
+    data class LevelFinished(val petName: String) : Screen()
 }
 
 @Composable
@@ -243,6 +247,14 @@ fun MainNav(
             SpeakingExplanationScreen { navigateTo ->
                 navHostController.navigate(navigateTo) {
                     popUpTo(Screen.SpeakingExplanation) { inclusive = true }
+                }
+            }
+        }
+        composable<Screen.LevelFinished> { backStackEntry ->
+            val name = backStackEntry.arguments?.getString("petName") ?: "Empty"
+            LevelFinishedScreen(petName = name) { navigateTo ->
+                navHostController.navigate(navigateTo) {
+                    popUpTo(Screen.ChooseGrade) { inclusive = true }
                 }
             }
         }

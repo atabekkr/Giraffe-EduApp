@@ -7,6 +7,7 @@ class LocalStorage(preference: SharedPreferences) {
     var isLogin by BooleanPreference(preference, false)
 
     var userName by StringPreference(preference, "")
+    var finishedGrade by IntPreference(preference, 1)
 
     var gradeId by IntPreference(preference, 1)
     var topicId by IntPreference(preference, 1)

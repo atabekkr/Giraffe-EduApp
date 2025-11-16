@@ -9,12 +9,12 @@ plugins {
 
 android {
     namespace = "com.imax.giraffe"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.imax.giraffe"
         minSdk = 26
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
@@ -80,5 +80,6 @@ dependencies {
     implementation(libs.gson)
 
     implementation(libs.core)
+    implementation("androidx.compose.material:material-icons-extended:1.7.8")
 
 }

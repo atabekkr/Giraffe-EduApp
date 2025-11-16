@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.imax.giraffe.R
 import com.imax.giraffe.presentation.navigation.Screen
-import com.imax.giraffe.presentation.screen.dialog.CongratsDialog
+import com.imax.giraffe.presentation.screen.dialog.LevelFinishedDialog
 import com.imax.giraffe.presentation.screen.viewmodel.UserViewModel
 import com.imax.giraffe.presentation.ui.components.PetNameTextField
 import com.imax.giraffe.presentation.ui.components.StandardButtonWithoutPadding
@@ -57,9 +57,9 @@ fun SetNameToPetScreen(
     ) {
 
         if (showCongratsDialog) {
-            CongratsDialog {
+            LevelFinishedDialog {
                 viewModel.setCompletedStatus()
-                onNavigateToHome.invoke(Screen.ChooseGrade)
+                onNavigateToHome.invoke(Screen.LevelFinished(name))
                 showCongratsDialog = false
             }
         }
@@ -94,7 +94,6 @@ fun SetNameToPetScreen(
             text = stringResource(R.string.save),
             enabled = saveButtonEnabled
         ) {
-//            viewModel.setUserName(name)
             showCongratsDialog = true
         }
     }
