@@ -282,6 +282,9 @@ fun SpeakingTestScreen(
                 enabled = state.value.spokenText.isNotBlank()
             ) {
                 if (state.value.spokenText.isNotBlank()) {
+                    Log.d("MyLog", state.value.spokenText)
+                    Log.d("MyLog", speakingTest?.text.toString())
+                    Log.d("MyLog", "$speakingTest")
                     if (isTextCorrect(
                             recognizedText = state.value.spokenText,
                             correctAnswer = speakingTest?.text.toString()
